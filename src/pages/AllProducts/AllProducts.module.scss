@@ -1,0 +1,163 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.main {
+  margin-top: 40px;
+  width: 1260px;
+}
+.sideBar {
+  width: 312px;
+  height: auto;
+  background-color: #fff;
+}
+.collectionContainer {
+  background-color: #f7f8f9;
+  width: 100%;
+  height: auto;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+.collectionTitle {
+  color: #000;
+  font-weight: 800;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.collectionLinkContainer {
+}
+.collectionLinkItem {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  height: 32px;
+  align-items: center;
+}
+.highlight {
+  width: 0px;
+  height: 0px;
+  width: 2px;
+  transition: all 0.2s;
+  background-color: transparent;
+}
+.collectionLinkItemLeft {
+  display: flex;
+  height: 30px;
+  align-items: center;
+}
+.collectionLinkItem:hover {
+  cursor: pointer;
+  .collectionLinkTxt {
+    color: #01567f;
+  }
+  .highlight {
+    height: 20px;
+    background-color: #01567f;
+  }
+}
+.collectionLinkTxt {
+  margin-left: 8px;
+  user-select: none;
+}
+.filter {
+  margin-top: 20px;
+  border: 2px solid #eeeeee;
+  width: 100%;
+  height: auto;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+.filterItem {
+  margin-bottom: 10px;
+}
+.filterItemTitle {
+  color: #000;
+  font-weight: 800;
+  font-size: 18px;
+  margin: 16px 0px;
+}
+.filterOpt {
+  max-height: 160px;
+  overflow-x: hidden;
+}
+.filterOpt::-webkit-scrollbar {
+  width: 6px;
+  background: #fff;
+}
+.filterOpt.filterOpt::-webkit-scrollbar-track {
+  border-radius: 6px;
+  background: #f1f1f1;
+  border: #dcdcdc 1px solid;
+}
+.filterOpt.filterOpt::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: #01567f;
+}
+.filterOptItem {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  height: 32px;
+  align-items: center;
+}
+.filterOptItem:hover {
+  cursor: pointer;
+}
+.filterOptItemTxt {
+  margin-left: 30px;
+  user-select: none;
+}
+.selectedContainer {
+  width: 100%;
+}
+.selectedHeading {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.selectedTitle {
+  color: #01567f;
+  font-weight: 1000;
+  font-size: 20px;
+}
+.selectedClearTxt {
+  color: red;
+  user-select: none;
+  font-weight: 500;
+}
+.selectedClear:hover {
+  cursor: pointer;
+}
+.selectedList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.selectedItem {
+  background-color: #01567f;
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 15px;
+}
+.selectedItemIcon {
+  height: 16px;
+}
+.selectedItemIcon:hover {
+  cursor: pointer;
+}
+.selectedItemTxt {
+  color: #fff;
+  font-weight: 500;
+  height: 16px;
+  font-size: 16px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+  user-select: none;
+}
