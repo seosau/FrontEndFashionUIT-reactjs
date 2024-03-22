@@ -1,4 +1,5 @@
 import { Home } from "../pages";
+import AllProducts from "../pages/AllProducts/AllProducts";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 
@@ -22,5 +23,9 @@ export const publicRoutes = [
   {
     path: "/register",
     component: Register,
+  },
+  {
+    path: "/products",
+    component: AllProducts,
   },
 ];

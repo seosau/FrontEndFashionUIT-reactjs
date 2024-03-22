@@ -13,12 +13,7 @@ function Header() {
     <div className={cx("container")}>
       <header className={cx("header")}>
         <div className={cx("header__logo")}>
-          <img
-            className={cx("header__img")}
-            src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/logo.png?1706504358658"
-            alt="logo"
-          />
-         
+          <img className={cx("header__img")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/logo.png?1706504358658" alt="logo" />
         </div>
         <div className={cx("header__navbar")}>
           <div className={cx("header__top")}>
@@ -36,11 +31,7 @@ function Header() {
               </span>
             </div>
             <div className={cx("header__search")}>
-              <input
-                type="text"
-                className={cx("header_searchbox")}
-                placeholder="Tìm sản phẩm"
-              />
+              <input type="text" className={cx("header_searchbox")} placeholder="Tìm sản phẩm" />
               <button className={cx("btn-search")}>
                 <BsSearch className={cx("header__icon")} />
               </button>
@@ -60,7 +51,7 @@ function Header() {
               <Link href="#">Trẻ em</Link>
             </li>
             <li className={cx("header__bot-item")}>
-              <Link href="#">Sản phẩm</Link>
+              <Link to="/products">Sản phẩm</Link>
             </li>
             <li className={cx("header__bot-item")}>
               <Link href="#">Tin tức</Link>
