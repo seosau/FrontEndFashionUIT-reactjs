@@ -1,7 +1,4 @@
-import { Home } from "../pages";
-import AllProducts from "../pages/AllProducts/AllProducts";
-import Login from "../pages/Login/Login";
-import Register from "../pages/Register/Register";
+import { Home, AllProducts, Login, Register } from "../pages";
 
 export const publicRoutes = [
   {
