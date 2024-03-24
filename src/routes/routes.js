@@ -1,6 +1,4 @@
-import { Home } from "../pages";
-import Login from "../pages/Login/Login";
-import Register from "../pages/Register/Register";
+import { Home, AllProducts, Login, Register } from "../pages";
 
 export const publicRoutes = [
   {
@@ -22,5 +20,9 @@ export const publicRoutes = [
   {
     path: "/register",
     component: Register,
+  },
+  {
+    path: "/products",
+    component: AllProducts,
   },
 ];
