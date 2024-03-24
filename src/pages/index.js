@@ -1,3 +1,12 @@
 import Home from "./Home/Home";
-
-export { Home }
+import Login from "./Login/Login";
+import Account from "./Account/Account";
+import Orders from "./Orders/Orders";
+import ChangePass from "./ChangePass/ChangePass";
+import Address from "./Address/Address";
+export { Home };
+export { Login };
+export { Account };
+export { Orders };
+export { ChangePass };
+export { Address };

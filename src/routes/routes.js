@@ -1,4 +1,9 @@
 import { Home } from "../pages";
+import { Login } from "../pages";
+import { Account } from "../pages";
+import { Orders } from "../pages";
+import { ChangePass } from "../pages";
+import { Address } from "../pages";
 
 export const publicRoutes = [
   {
@@ -12,5 +17,25 @@ export const publicRoutes = [
   {
     path: "/cart",
     component: "",
+  },
+  {
+    path: "/login",
+    component: Login,
+  },
+  {
+    path: "/account",
+    component: Account,
+  },
+  {
+    path: "/account/orders",
+    component: Orders,
+  },
+  {
+    path: "/account/changepass",
+    component: ChangePass,
+  },
+  {
+    path: "/account/address",
+    component: Address,
   },
 ];
