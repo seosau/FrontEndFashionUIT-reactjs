@@ -1,12 +1,11 @@
 import React from "react";
-import styles from "./Product.module.scss";
+import styles from "./Product.module.scss"
 import { Link } from "react-router-dom";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CiSettings } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
 import className from "classnames/bind";
 const cx = className.bind(styles);
-
 export default function Product({ ranking, title, oldPrice, newPrice, productCount, productCountSale, discount, index }) {
   return (
     <>
@@ -64,3 +63,4 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
     </>
   );
 }
+

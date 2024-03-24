@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Product from "../../components/Product/Product";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -8,11 +9,13 @@ import "react-tabs/style/react-tabs.css";
 import CountdownTimer from "../../components/CountdownTimer/CountdownTimer";
 import { Navigation } from "swiper/modules";
 import "swiper/scss/navigation";
+
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
 const cx = className.bind(styles);
 
 export default function Home() {
+
   const [tabIndex, setTabIndex] = useState(0);
   const [tabProductIndex, setProductTabIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -379,3 +382,4 @@ export default function Home() {
     </main>
   );
 }
+
