@@ -57,9 +57,20 @@
   font-weight: 900;
 }
 
-.user-info {
+.user-info button {
   font-size: 15px;
   padding-bottom: 20px;
+  background: none;
+  &:hover {
+    color: var(--hight-light-color);
+    cursor: pointer;
+  }
+}
+
+.your-order button {
+  font-size: 14px;
+  padding-bottom: 20px;
+  background: none;
 
   &:hover {
     color: var(--hight-light-color);
@@ -67,19 +78,10 @@
   }
 }
 
-.your-order {
+.address button {
   font-size: 15px;
   padding-bottom: 20px;
-
-  &:hover {
-    color: var(--hight-light-color);
-    cursor: pointer;
-  }
-}
-
-.address {
-  font-size: 15px;
-  padding-bottom: 20px;
+  background: none;
 
   &:hover {
     color: var(--hight-light-color);

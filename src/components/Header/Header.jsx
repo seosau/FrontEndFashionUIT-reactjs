@@ -18,7 +18,6 @@ function Header() {
             src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/logo.png?1706504358658"
             alt="logo"
           />
-         
         </div>
         <div className={cx("header__navbar")}>
           <div className={cx("header__top")}>
@@ -32,7 +31,7 @@ function Header() {
             <div className={cx("header__location", "space-right")}>
               <CiLocationOn className={cx("header__icon")} />
               <span className={cx("header__listlocation")}>
-                <a href="/he-thong-cua-hang">Hệ thống cửa hàng</a>
+                <a href="/chainstore">Hệ thống cửa hàng</a>
               </span>
             </div>
             <div className={cx("header__search")}>

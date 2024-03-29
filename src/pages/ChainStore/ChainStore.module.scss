@@ -1,0 +1,29 @@
+.wrapper {
+  width: 100%;
+  height: 54px;
+  background-color: whitesmoke;
+  padding-left: 165px;
+}
+
+.breadcrumb {
+  display: flex;
+  // padding-top: 20px;
+}
+
+.text3 {
+  padding-right: 20px;
+  font-size: 15px;
+}
+
+.text1 {
+  padding-top: 20px;
+  display: flex;
+}
+
+.text2 {
+  color: var(--hight-light-color);
+  padding-left: 20px;
+  font-size: 15px;
+  padding-top: 19px;
+  font-weight: 300;
+}

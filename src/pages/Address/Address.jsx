@@ -1,10 +1,32 @@
 import style from "./Address.module.scss";
 import className from "classnames/bind";
 import { IoIosArrowForward } from "react-icons/io";
+import React, { useState, useEffect } from "react";
 
 const cx = className.bind(style);
 
 function Address() {
+  const [path, setPath] = useState("");
+
+  useEffect(() => {
+    if (path !== "") {
+      // Chuyển trang đến đường dẫn mới
+      window.location.href = path;
+    }
+  }, [path]);
+
+  const account = () => {
+    // Cập nhật giá trị của path
+    setPath("/account");
+  };
+  const orders = () => {
+    // Cập nhật giá trị của path
+    setPath("/account/orders");
+  };
+  const changepass = () => {
+    // Cập nhật giá trị của path
+    setPath("/account/changepass");
+  };
   return (
     <>
       <div className={cx("wrapper")}>
@@ -21,7 +43,9 @@ function Address() {
               </div>
             </li>
             <li className={cx("account-page")}>
-              <div className={cx("text1")}>Tài khoản</div>
+              <a className={cx("text1")} href="/account">
+                <span>Tài khoản</span>
+              </a>
               <div>
                 <IoIosArrowForward />
               </div>
@@ -40,9 +64,15 @@ function Address() {
             <div className={cx("greeting")}>Xin chào,</div>
             <div className={cx("user-name")}>User Name</div>
           </div>
-          <div className={cx("user-info")}>Thông tin tài khoản</div>
-          <div className={cx("your-order")}>Đơn hàng của bạn</div>
-          <div className={cx("change-pass")}>Đổi mật khẩu</div>
+          <div className={cx("user-info")}>
+            <button onClick={account}>Thông tin tài khoản</button>
+          </div>
+          <div className={cx("your-order")}>
+            <button onClick={orders}>Đơn hàng của bạn</button>
+          </div>
+          <div className={cx("change-pass")}>
+            <button onClick={changepass}>Đổi mật khẩu</button>
+          </div>
           <div className={cx("address")}>Sổ địa chỉ</div>
         </div>
         <div className={cx("content")}>

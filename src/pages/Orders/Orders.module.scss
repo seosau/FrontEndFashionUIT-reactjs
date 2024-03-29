@@ -63,10 +63,10 @@
   font-weight: 900;
 }
 
-.user-info {
+.user-info button {
   font-size: 15px;
   padding-bottom: 20px;
-
+  background: none;
   &:hover {
     color: var(--hight-light-color);
     cursor: pointer;
@@ -74,7 +74,7 @@
 }
 
 .your-order {
-  font-size: 15px;
+  font-size: 16px;
   padding-bottom: 20px;
   color: var(--hight-light-color);
 
@@ -83,9 +83,10 @@
   }
 }
 
-.address {
+.address button {
   font-size: 15px;
   padding-bottom: 20px;
+  background: none;
 
   &:hover {
     color: var(--hight-light-color);
@@ -93,9 +94,10 @@
   }
 }
 
-.change-pass {
+.change-pass button {
   font-size: 15px;
   padding-bottom: 20px;
+  background: none;
 
   &:hover {
     color: var(--hight-light-color);

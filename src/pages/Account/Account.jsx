@@ -1,10 +1,33 @@
 import style from "./Account.module.scss";
 import className from "classnames/bind";
 import { IoIosArrowForward } from "react-icons/io";
+import React, { useState, useEffect } from "react";
 
 const cx = className.bind(style);
 
 function Account() {
+  const [path, setPath] = useState("");
+
+  useEffect(() => {
+    if (path !== "") {
+      // Chuyển trang đến đường dẫn mới
+      window.location.href = path;
+    }
+  }, [path]);
+
+  const orders = () => {
+    // Cập nhật giá trị của path
+    setPath("/account/orders");
+  };
+  const address = () => {
+    // Cập nhật giá trị của path
+    setPath("/account/address");
+  };
+  const changepass = () => {
+    // Cập nhật giá trị của path
+    setPath("/account/changepass");
+  };
+
   return (
     <>
       <div className={cx("wrapper")}>
@@ -35,9 +58,15 @@ function Account() {
             <div className={cx("user-name")}>User Name</div>
           </div>
           <div className={cx("user-info")}>Thông tin tài khoản</div>
-          <div className={cx("your-order")}>Đơn hàng của bạn</div>
-          <div className={cx("change-pass")}>Đổi mật khẩu</div>
-          <div className={cx("address")}>Sổ địa chỉ</div>
+          <div className={cx("your-order")}>
+            <button onClick={orders}>Đơn hàng của bạn</button>
+          </div>
+          <div className={cx("change-pass")}>
+            <button onClick={changepass}>Đổi mật khẩu</button>
+          </div>
+          <div className={cx("address")}>
+            <button onClick={address}>Sổ địa chỉ</button>
+          </div>
         </div>
         <div className={cx("content")}>
           <div className={cx("title2")}>THÔNG TIN TÀI KHOẢN</div>

@@ -4,6 +4,7 @@ import { Account } from "../pages";
 import { Orders } from "../pages";
 import { ChangePass } from "../pages";
 import { Address } from "../pages";
+import { ChainStore } from "../pages";
 
 export const publicRoutes = [
   {
@@ -37,5 +38,9 @@ export const publicRoutes = [
   {
     path: "/account/address",
     component: Address,
+  },
+  {
+    path: "/chainstore",
+    component: ChainStore,
   },
 ];
