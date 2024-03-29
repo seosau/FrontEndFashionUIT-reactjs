@@ -1,5 +1,6 @@
+import AdminLayout from "../layouts/AdminLayout/AdminLayout";
 import { Home, AllProducts, Login, Register } from "../pages";
-
+import { Dashboard, CreateProduct, CreateBlog } from "../pages/Admin";
 export const publicRoutes = [
   {
     path: "/",
@@ -24,5 +25,20 @@ export const publicRoutes = [
   {
     path: "/products",
     component: AllProducts,
+  },
+  {
+    path: "/admin/dashboard",
+    component: Dashboard,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/createproduct",
+    component: CreateProduct,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/createblog",
+    component: CreateBlog,
+    layout: AdminLayout,
   },
 ];
