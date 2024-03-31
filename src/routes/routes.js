@@ -1,4 +1,4 @@
-import { Home, AllProducts, Login, Register } from "../pages";
+import { Home, AllProducts, Login, Register, ProductCart } from "../pages";
 
 export const publicRoutes = [
   {
@@ -11,7 +11,7 @@ export const publicRoutes = [
   },
   {
     path: "/cart",
-    component: "",
+    component: ProductCart,
   },
   {
     path: "/login",

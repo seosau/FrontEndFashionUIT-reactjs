@@ -76,9 +76,12 @@ function Header() {
           </div>
           <div className={cx("header__action-item")}>
             <span className={cx("box-icon")}>
-              <HiOutlineShoppingBag className={cx("header__action-icon")} />
+              <HiOutlineShoppingBag className={cx("header__action-icon")}  />
+              <Link href="/cart"></Link>
             </span>
-            <div className={cx("action-title")}>Giỏ hàng</div>
+            <div className={cx("action-title")}>
+              
+              Giỏ hàng</div>
             <span className={cx("cart-count")}>0</span>
           </div>
         </div>
