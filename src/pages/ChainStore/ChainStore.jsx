@@ -60,9 +60,6 @@ function ChainStore() {
     setSelectedTown(townId);
   };
 
-  const handleSearch = () => {
-    console.log("");
-  };
   return (
     <>
       <div className={cx("wrapper")}>
@@ -87,43 +84,65 @@ function ChainStore() {
 
       <div className={cx("main")}>
         <div className={cx("side-bar")}>
-          <div className={cx("province-sort")}>
-            <select value={selectedProvince} onChange={handleProvinceChange}>
-              <option value={""}>Chọn tỉnh thành</option>
-              {data.provinces.map((province) => (
-                <option key={province.id} value={province.id}>
-                  {province.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={cx("district-sort")}>
-            <select value={selectedDistrict} onChange={handleDistrictChange}>
-              <option value={""}>Chọn quận/huyện</option>
-              {data.districts
-                .filter((district) => district.provinceId === selectedProvince)
-                .map((district) => (
-                  <option key={district.id} value={district.id}>
-                    {district.name}
+          <div className={cx("province")}>
+            <div className={cx("province-sort")}>
+              <select value={selectedProvince} onChange={handleProvinceChange}>
+                <option value={""}>Chọn tỉnh thành</option>
+                {data.provinces.map((province) => (
+                  <option key={province.id} value={province.id}>
+                    {province.name}
                   </option>
                 ))}
-            </select>
+              </select>
+            </div>
           </div>
-          <div className={cx("town-sort")}>
-            <select value={selectedTown} onChange={handleTownChange}>
-              <option value={""}>Chọn phường xã</option>
-              {data.towns
-                .filter((town) => town.districtId === selectedDistrict)
-                .map((town) => (
-                  <option key={town.id} value={town.id}>
-                    {town.name}
-                  </option>
-                ))}
-            </select>
+          <div className={cx("district")}>
+            <div className={cx("district-sort")}>
+              <select value={selectedDistrict} onChange={handleDistrictChange}>
+                <option value={""}>Chọn quận/huyện</option>
+                {data.districts
+                  .filter(
+                    (district) =>
+                      district.provinceId === Number(selectedProvince)
+                  )
+                  .map((district) => (
+                    <option key={district.id} value={district.id}>
+                      {district.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+          <div className={cx("town")}>
+            <div className={cx("town-sort")}>
+              <select value={selectedTown} onChange={handleTownChange}>
+                <option value={""}>Chọn phường xã</option>
+                {data.towns
+                  .filter(
+                    (town) => town.districtId === Number(selectedDistrict)
+                  )
+                  .map((town) => (
+                    <option key={town.id} value={town.id}>
+                      {town.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        <div className={cx("content")}></div>
+        <div className={cx("content")}>
+          <div className={cx("map")}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.2309821348504!2d106.79999857451831!3d10.870028557461255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527e7e8abb0eb%3A0xec43e4b99472c18a!2zVUlUIC0gQ-G7lW5nIEE!5e0!3m2!1svi!2s!4v1711957805181!5m2!1svi!2s"
+              width={900}
+              height={600}
+              allowfullscreen={""}
+              loading={"lazy"}
+              referrerpolicy={"no-referrer-when-downgrade"}
+            ></iframe>
+          </div>
+        </div>
       </div>
     </>
   );
