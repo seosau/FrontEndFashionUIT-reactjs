@@ -1,3 +1,8 @@
+
+import AdminLayout from "../layouts/AdminLayout/AdminLayout";
+import { Home, AllProducts, Login, Register } from "../pages";
+import { Dashboard, CreateProduct, CreateBlog, ListProducts } from "../pages/Admin";
+
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -14,7 +19,6 @@ import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/Sec
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
 import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore  } from "../pages";
-
 
 
 export const publicRoutes = [
@@ -121,5 +125,25 @@ export const publicRoutes = [
   {
     path: "/products",
     component: AllProducts,
+  },
+  {
+    path: "/admin/dashboard",
+    component: Dashboard,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/createproduct",
+    component: CreateProduct,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/createblog",
+    component: CreateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/listproducts",
+    component: ListProducts,
+    layout: AdminLayout,
   },
 ];
