@@ -34,7 +34,7 @@ function Header() {
             <div className={cx("header__location", "space-right")}>
               <CiLocationOn className={cx("header__icon")} />
               <span className={cx("header__listlocation")}>
-                <Link to="/he-thong-cua-hang">Hệ thống cửa hàng</Link>
+                <Link to="/chainstore">Hệ thống cửa hàng</Link>
               </span>
             </div>
             <div className={cx("header__search")}>

@@ -1,4 +1,3 @@
-
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -14,7 +13,8 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register } from "../pages";
+import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore  } from "../pages";
+
 
 
 export const publicRoutes = [
@@ -31,7 +31,30 @@ export const publicRoutes = [
     component: "",
   },
   {
-
+    path: "/login",
+    component: Login,
+  },
+  {
+    path: "/account",
+    component: Account,
+  },
+  {
+    path: "/account/orders",
+    component: Orders,
+  },
+  {
+    path: "/account/changepass",
+    component: ChangePass,
+  },
+  {
+    path: "/account/address",
+    component: Address,
+  },
+  {
+    path: "/chainstore",
+    component: ChainStore,
+  },
+  }
     path: "/contact-support",
     component: Contact,
   },
@@ -90,9 +113,6 @@ export const publicRoutes = [
   {
     path: "stock-policies",
     component: StockPolicies,
-=======
-    path: "/login",
-    component: Login,
   },
   {
     path: "/register",
@@ -101,6 +121,5 @@ export const publicRoutes = [
   {
     path: "/products",
     component: AllProducts,
-
   },
 ];
