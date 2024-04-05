@@ -1,6 +1,6 @@
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
 import { Home, AllProducts, Login, Register } from "../pages";
-import { Dashboard, CreateProduct, CreateBlog } from "../pages/Admin";
+import { Dashboard, CreateProduct, CreateBlog, ListProducts } from "../pages/Admin";
 export const publicRoutes = [
   {
     path: "/",
@@ -39,6 +39,11 @@ export const publicRoutes = [
   {
     path: "/admin/createblog",
     component: CreateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/listproducts",
+    component: ListProducts,
     layout: AdminLayout,
   },
 ];
