@@ -1,6 +1,5 @@
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
-import { Home, AllProducts, Login, Register } from "../pages";
 import { Dashboard, CreateProduct, CreateBlog, ListProducts } from "../pages/Admin";
 
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
@@ -18,7 +17,7 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore  } from "../pages";
+import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact  } from "../pages";
 
 
 export const publicRoutes = [
@@ -58,7 +57,7 @@ export const publicRoutes = [
     path: "/chainstore",
     component: ChainStore,
   },
-  }
+  {
     path: "/contact-support",
     component: Contact,
   },
