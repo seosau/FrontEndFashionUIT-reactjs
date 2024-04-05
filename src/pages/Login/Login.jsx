@@ -1,84 +1,83 @@
+
+import { Link } from "react-router-dom";
 import style from "./Login.module.scss";
 import className from "classnames/bind";
-import { IoIosArrowForward } from "react-icons/io";
-import { FiFacebook } from "react-icons/fi";
-import { ImGooglePlus2 } from "react-icons/im";
+import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
 
 const cx = className.bind(style);
-
 function Login() {
+  const [isPrivate, setIsPrivate] = useState(true);
+  const [isFullFilled, setIsFullFilled] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    pass: "",
+  });
+  const validateForm = () => {
+    const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
+    if (loginInfo.email === "" || loginInfo.pass === "") {
+      setIsFullFilled(false);
+    } else {
+      if (!isFullFilled) setIsFullFilled(true);
+      if (!emailRegex.test(loginInfo.email)) {
+        setIsEmailValid(false);
+      } else {
+        if (!isEmailValid) setIsEmailValid(true);
+      }
+    }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    validateForm();
+  };
   return (
-    <>
-      <div className={cx("wrapper")}>
-        <div className={cx("container")}>
-          <ul className={cx("breadcrumb")}>
-            <li className={cx("Home")}>
-              <div className={cx("text1")}>
-                <a className={cx("text3")} href="/" title="Trang chủ">
-                  <span>Trang chủ</span>
-                </a>
-                <div className={cx("arrow")}>
-                  <IoIosArrowForward />
-                </div>
-              </div>
-            </li>
-            <li className={cx("text2")}>
-              <strong>Đăng nhập tài khoản</strong>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className={cx("header-title")}>
-        <h1 className={cx("title")}>ĐĂNG NHẬP</h1>
-      </div>
-
-      <div className={cx("login-info")}>
-        <div className={cx("info-email")}>
-          <input type="text" placeholder="Email"></input>
-        </div>
-        <div className={cx("info-pass")}>
-          <input type="text" placeholder="Mật khẩu"></input>
-        </div>
-
-        <div className={cx("login-button")}>
-          <button className={cx("btn-login")}>Đăng nhập</button>
-        </div>
-      </div>
-
-      <div className={cx("other-info")}>
-        <div className={cx("forget-sign-up")}>
-          <div className={cx("forget-pass")}>
-            <button className={cx("btn-forget-pass")}>Quên mật khẩu ?</button>
+    <div>
+      <div className={cx("mainContainer")}>
+        <form className={cx("formContainer")}>
+          <div className={cx("title")}>ĐĂNG NHẬP</div>
+          <div className={cx("backLine")}>
+            <div className={cx("frontLine")}></div>
           </div>
-          <div className={cx("sign-up")}>
-            <button className={cx("btn-sign-up")}>Đăng ký tại đây</button>
+          {!isFullFilled ? <div className={cx("warningTxt")}>Vui lòng nhập đầy đủ thông tin!</div> : !isEmailValid ? <div className={cx("warningTxt")}>Email không hợp lệ!</div> : null}
+          <div className={cx("inputLabel")}>Email</div>
+          <div className={cx("inputContainer")}>
+            <input onChange={(e) => setLoginInfo({ ...loginInfo, email: e.target.value })} className={cx("inputField")} placeholder="abc@gmail.com"></input>
           </div>
-        </div>
+          <div className={cx("inputLabel")}>Mật khẩu</div>
+          <div className={cx("inputContainer")}>
+            <input type={isPrivate ? "password" : "text"} onChange={(e) => setLoginInfo({ ...loginInfo, pass: e.target.value })} className={cx("inputField")} placeholder="abc123"></input>
+            <span onClick={() => setIsPrivate(!isPrivate)} className={cx("eye")}>
+              {isPrivate ? <FaEyeSlash color="#01567f" /> : <FaEye color="#01567f" />}
+            </span>
+          </div>
+          <button onClick={(e) => handleSubmit(e)} type="submit" className={cx("btnContainer")}>
+            <div className={cx("btnTxt")}>ĐĂNG NHẬP</div>
+          </button>
+          <div className={cx("linkContainer")}>
+            <div className={cx("forgotLink")}>Quên mật khẩu?</div>
+            <Link to={"/register"} className={cx("registerLink")}>
+              Đăng ký tại đây
+            </Link>
+          </div>
+          <div className={cx("optionTitle")}>hoặc đăng nhập qua</div>
+          <div className={cx("optionContainer")}>
+            <div className={cx("facebookBtn")}>
+              <FaFacebookF color="#fff" />
+              <div className={cx("separate")}></div>
+              <div className={cx("optionTxt")}>FACEBOOK</div>
+            </div>
+            <div className={cx("googleBtn")}>
+              <FaGooglePlusG color="#fff" size={30} />
+              <div className={cx("separate")}></div>
+              <div className={cx("optionTxt")}>GOOGLE</div>
+            </div>
+          </div>
+        </form>
       </div>
+    </div>
 
-      <div className={cx("social-login")}>
-        <div className={cx("break-line")}>Hoặc đăng nhập qua</div>
-        <div className={cx("social-ways")}>
-          <div className={cx("facebook-login")}>
-            <button className={cx("btn-login-facebook")}>
-              <div className={cx("fb-icon")}>
-                <FiFacebook />
-              </div>
-              Facebook
-            </button>
-          </div>
-          <div className={cx("google-login")}>
-            <button className={cx("btn-login-google")}>
-              <div className={cx("gg-icon")}>
-                <ImGooglePlus2 />
-              </div>
-              Google
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
   );
 }
 

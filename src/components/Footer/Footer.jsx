@@ -1,10 +1,13 @@
+import React, { useState } from 'react';
 import style from "./Footer.module.scss";
 import className from "classnames/bind";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
+
 const cx = className.bind(style);
 function Footer() {
+  const [currentPage, setCurrentPage] = useState("/home");
   return (
     <div className={cx("container")}>
       <footer className={cx("footer")}>
@@ -145,25 +148,25 @@ function Footer() {
           <h3>HỖ TRỢ</h3>
           <ul>
             <li>
-              <Link>Giải đáp thắc mắc</Link>
+              <Link className={cx("link")} to={"/inquiries-support"} onClick={() => setCurrentPage('inquiries-support')}>Giải đáp thắc mắc</Link>
             </li>
             <li>
-              <Link>Hướng dẫn đổi trả</Link>
+              <Link className={cx("link")} to={"/exchange-support"} onClick={() => setCurrentPage('exchange-support')}>Hướng dẫn đổi trả</Link>
             </li>
             <li>
-              <Link> Hướng dẫn chọn size</Link>
+              <Link className={cx("link")} to={"/size-support"} onClick={() => setCurrentPage('size-support')}> Hướng dẫn chọn size</Link>
             </li>
             <li>
-              <Link>Hướng dẫn thanh toán</Link>
+              <Link className={cx("link")} to={"/payment-support"} onClick={() => setCurrentPage('payment-support')}>Hướng dẫn thanh toán</Link>
             </li>
             <li>
-              <Link>Chương trình cộng tác viên</Link>
+              <Link className={cx("link")} to={"/collab-support"} onClick={() => setCurrentPage('collab-support')}>Chương trình cộng tác viên</Link>
             </li>
             <li>
-              <Link>Tư vấn bán sĩ</Link>
+              <Link className={cx("link")} to={"/advice-support"} onClick={() => setCurrentPage('advice-support')}>Tư vấn bán sỉ</Link>
             </li>
             <li>
-              <Link>Quà tặng tri ân</Link>
+              <Link className={cx("link")} to={"/gift-support"} onClick={() => setCurrentPage('gift-support')}>Quà tặng tri ân</Link>
             </li>
           </ul>
         </div>
@@ -171,25 +174,25 @@ function Footer() {
           <h3>CHÍNH SÁCH</h3>
           <ul>
             <li>
-              <Link>Chính sách thành viên</Link>
+              <Link className={cx("link")} to={"/membership-policies"} onClick={() => setCurrentPage('membership-policies')}>Chính sách thành viên</Link>
             </li>
             <li>
-              <Link>Chính sách thanh toán</Link>
+              <Link className={cx("link")} to={"/payment-policies"} onClick={() => setCurrentPage('payment-policies')}>Chính sách thanh toán</Link>
             </li>
             <li>
-              <Link>Hướng dẫn mua hàng</Link>
+              <Link className={cx("link")} to={"/purchase-policies"} onClick={() => setCurrentPage('purchase-policies')}>Hướng dẫn mua hàng</Link>
             </li>
             <li>
-              <Link>Chính sách đổi sản phẩm</Link>
+              <Link className={cx("link")} to={"/exchange-policies"} onClick={() => setCurrentPage('exchange-policies')}>Chính sách đổi sản phẩm</Link>
             </li>
             <li>
-              <Link>Bảo mật thông tin cá nhân</Link>
+              <Link className={cx("link")} to={"/security-policies"} onClick={() => setCurrentPage('security-policies')}>Bảo mật thông tin cá nhân</Link>
             </li>
             <li>
-              <Link>Nhập hàng giá sỉ</Link>
+              <Link className={cx("link")} to={"/stock-policies"} onClick={() => setCurrentPage('stock-policies')}>Nhập hàng giá sỉ</Link>
             </li>
             <li>
-              <Link>Chính sách cộng tác viên</Link>
+              <Link className={cx("link")} to={"/collab-policies"} onClick={() => setCurrentPage('collab-policies')}>Chính sách cộng tác viên</Link>
             </li>
           </ul>
         </div>
