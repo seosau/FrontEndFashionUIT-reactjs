@@ -1,5 +1,6 @@
 @import "normalize.css";
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -9,15 +10,18 @@
   text-decoration: none;
   list-style: none;
 }
+
 body {
   font-family: "Quicksand", sans-serif;
   background-repeat: no-repeat;
   background-position: center;
   overflow-x: hidden;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 // Global variables
 :root {
   --hover-color: #01567f;
@@ -33,3 +37,5 @@ html {
   --soft-color: #ddd;
   --dark-color: #2a3447;
 }
+
+
