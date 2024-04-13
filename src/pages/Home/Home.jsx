@@ -9,16 +9,18 @@ import "react-tabs/style/react-tabs.css";
 import CountdownTimer from "../../components/CountdownTimer/CountdownTimer";
 import { Navigation } from "swiper/modules";
 import "swiper/scss/navigation";
-
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css'
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
+import Backtop from "../../components/Backtop/Backtop";
 const cx = className.bind(styles);
 
 export default function Home() {
 
   const [tabIndex, setTabIndex] = useState(0);
   const [tabProductIndex, setProductTabIndex] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const currentTime = new Date();
 
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -29,6 +31,56 @@ export default function Home() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const settings = {
+    autoPlay: true,
+    infinite: true,
+    swipeable: true,
+    draggable: true,
+    interval: 3000,
+    showArrows: true,
+    swipeToSlide: true,
+    transitionDuration: 500,
+    verticalSwiping: false,
+    width: '100%',
+    showDots: true,
+    renderDotsOutside: "renderButtonGroupOutside",
+    responsive: {
+      desktop: {
+        breakpoint: {
+          max: 3000,
+          min: 1024,
+        },
+        items: 1,
+        partialVisibilityGutter: 40,
+      },
+      tablet: {
+        breakpoint: {
+          max: 1024,
+          min: 464,
+        },
+        items: 1,
+        partialVisibilityGutter: 30,
+      },
+      mobile: {
+        breakpoint: {
+          max: 464,
+          min: 0,
+        },
+        items: 1,
+        partialVisibilityGutter: 20,
+      },
+    },
+  };
+
+  const CustomDot = ({ onClick, active }) => (
+    <button
+      type="button"
+      className={cx("custom-dot", active ? "custom-dot-active" : "")} // Sử dụng class CSS tùy chỉnh
+      onClick={() => onClick()}
+    />
+  );
+
 
   useEffect(() => {
     if (currentTime.getHours() >= 0 && currentTime.getHours() < 6) {
@@ -47,9 +99,20 @@ export default function Home() {
       <div className={cx("slider-container")}>
         <div className={cx("slideBox")}>
           <div className={cx("slider")}>
-            <div className={cx("imgBox")}>
-              <img src={require("../../assets/image/slider_1.webp")} alt="slider" />
-            </div>
+            <Carousel
+              {...settings}
+              customDot={<CustomDot />}
+            >
+              <div className={cx("imgBox")}>
+                <img src={require("../../assets/image/slider_1.webp")} alt="slider" />
+              </div>
+              <div className={cx("imgBox")}>
+                <img src={require("../../assets/image/banner2.jpg")} alt="slider" />
+              </div>
+              <div className={cx("imgBox")}>
+                <img src={require("../../assets/image/banner3.webp")} alt="slider" />
+              </div>
+            </Carousel>
           </div>
         </div>
       </div>
@@ -132,9 +195,9 @@ export default function Home() {
                         </div>
                         <div className={cx("text-timing")}>
                           {(index === 0 && currentTime.getHours() >= 0 && currentTime.getHours() < 6) ||
-                          (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
-                          (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
-                          (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
+                            (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
+                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
+                            (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
                             ? "Đang diễn ra"
                             : "Sắp diễn ra"}
                         </div>
@@ -379,6 +442,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <Backtop />
     </main>
   );
                 {[0, 1, 2, 3].map((index) => (

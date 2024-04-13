@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import style from "./Login.module.scss";
 import className from "classnames/bind";
@@ -76,6 +77,7 @@ function Login() {
         </form>
       </div>
     </div>
+
   );
 }
 
