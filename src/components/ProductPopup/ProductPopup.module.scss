@@ -1,0 +1,264 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* CSS cho container chính */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  //   background-color: #f2f2f2;
+  border-radius: 10px;
+}
+
+/* CSS cho container chứa hình ảnh và thông tin sản phẩm */
+.small-container {
+  display: flex;
+  //   flex-wrap: wrap;
+  justify-content: space-between;
+  // max-width: 1200px;
+  // width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  //   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS cho hình ảnh sản phẩm chính */
+.left-image {
+  // flex: 1 1 60%;
+  // padding: 20px;
+  // background-color: #01567f;
+  width: min-content;
+}
+
+.main-image {
+  background-color: #2ecc71;
+  width: fit-content;
+}
+
+.main-image img {
+  // width: 100%;
+  height: auto;
+  //   border-radius: 10px;
+}
+
+/* CSS cho container chứa các hình ảnh nhỏ */
+.small-images {
+  flex: 1 1 40%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.swiper-wrapper {
+  width: 300px;
+  // margin-left: -100px;
+  gap: 60px;
+}
+
+// .each-swiper-wrapper {
+//   width: 90px;
+//   margin-left: -50px;
+// }
+
+.each-small-img {
+  margin: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  width: 60px;
+  height: 60px;
+  gap: 0px;
+}
+
+.each-small-img img {
+  width: 60px;
+  height: 60px;
+  //   border-radius: 5px;
+}
+
+.each-small-img:hover {
+  transform: scale(1.1);
+}
+
+/* CSS cho phần thông tin sản phẩm */
+.right-info {
+  flex: 1 1 100%;
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-code,
+.product-tradeMark,
+.product-stock {
+  margin-bottom: 5px;
+}
+
+.co-tra-st {
+  color: #01567f;
+  margin-left: 5px;
+}
+
+p,
+span {
+  font-weight: 400;
+}
+
+.tradeMark-stock {
+  display: flex;
+  gap: 1em;
+}
+
+.ngan-cach {
+  color: #01567f;
+}
+
+.product-price {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 0.5em;
+  align-items: end;
+  padding-bottom: 1em;
+  border-bottom: 0.05em solid rgb(217, 215, 215);
+}
+
+.new-price,
+.new-price .currency-symbols {
+  color: #d63031;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.old-price,
+.old-price .currency-symbols {
+  color: #b2bec3;
+  font-weight: 500;
+  font-size: 18px;
+  text-decoration: line-through;
+}
+
+.short-descripions {
+  margin-bottom: 15px;
+}
+
+.color-picker {
+  .all-color {
+    display: flex;
+    gap: 0.5em;
+    margin: 0.5em 0;
+    .each-color {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid #b2bec3;
+    }
+    .each-color-picked {
+      border: 4px solid #2ecc71;
+    }
+  }
+}
+
+.size-picker {
+  .all-size {
+    display: flex;
+    gap: 0.5em;
+    margin: 0.5em 0;
+    .each-size {
+      color: #01567f;
+      width: 30px;
+      height: 30px;
+      border-radius: 10%;
+      border: 1px solid #b2bec3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .each-size-picked {
+      color: #fff;
+      background-color: #01567f;
+    }
+  }
+}
+
+.size-recommend {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.size-recommend img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.count-addToCart {
+  display: flex;
+  gap: 2em;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.count-picker {
+  display: flex;
+  align-items: center;
+}
+
+.count-button {
+  width: 30px;
+  height: 30px;
+  //   padding: 5px 5px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  background-color: #01567f;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.count-value {
+  width: 90px;
+  height: 30px;
+  text-align: center;
+  margin: 0 5px;
+  border: 1px solid #01567f;
+  border-radius: 5px;
+  color: #01567f;
+  font-weight: lighter;
+  font-size: 20px;
+}
+
+.add-to-card-button {
+  height: 30px;
+  padding: 0 40px;
+  background-color: #01567f;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.free-ship-tag {
+  color: #fff;
+  background-color: #2ecc71;
+  padding: 5px 0;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+}
