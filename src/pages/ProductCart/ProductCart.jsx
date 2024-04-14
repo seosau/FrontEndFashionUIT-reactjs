@@ -3,10 +3,22 @@ import style from "./ProductCart.module.scss";
 import className from "classnames/bind";
 import { SlArrowRight, SlLike } from "react-icons/sl";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
+import { useState } from "react";
+import Product from "../../components/Product/Product";
 const cx = className.bind(style);
 
 export default function ProductCart() {
-    return <div className={cx("body-wrap")}>
+    const [cartItems, setCartItems] = useState([]);
+
+    const addToCart = (Product) => {
+        setCartItems([...cartItems, Product]);
+    };
+    const removeFromCart = (index) => {
+        const newCartItems = [...cartItems];
+        newCartItems.splice(index, 1);
+        setCartItems(newCartItems);
+    };
+    return <div className={cx("body-wrap")} >
         <div className={cx("bread_crumb")}> 
             <div className={cx("container")}>
                 <ul className={cx("breadcrumb")}>
@@ -38,12 +50,14 @@ export default function ProductCart() {
             </div>
             <div className={cx("body-cart")}>
                 <div className={cx("cart-moblie-page")}>
-                    <div className={cx("cart-empty")}>
+                    {cartItems.length === 0 ? (
+                       <div className={cx("cart-empty")}>
                        <div className={cx("cart-empty-icon")}><HiOutlineShoppingCart/>
                         </div>
                         <p>Không có sản phẩm nào trong giỏ hàng của bạn</p>
-                    </div>
-                    <div className={cx("cartMobilePage")}>
+                    </div> 
+                    ): (
+                        <div className={cx("cartMobilePage")}>
                         <form action = "/cart" method="post" noValidate className={cx("cart-mobile-body")}>
                             <div className={cx("cart-header-info")}>
                                 <div className={cx("cart-header-info-ttsp")}>THÔNG TIN SẢN PHẨM</div>
@@ -112,6 +126,7 @@ export default function ProductCart() {
                            </div>
                         </form>
                     </div>
+                    )} 
                 </div>
                 <div className={cx("discount-main-page")}>
                     <div className={cx("pro-discount")}>

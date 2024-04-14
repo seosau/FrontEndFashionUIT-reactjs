@@ -7,8 +7,22 @@ import { BsSearch } from "react-icons/bs";
 import { SlUser } from "react-icons/sl";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FaGift } from "react-icons/fa6";
+import Search from "../../components/Search/Search";
+import { useState } from "react";
 const cx = className.bind(style);
 function Header() {
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchSuggestions, setSearchsuggestions] = useState([]);
+  const toggleSearch = () => {
+    setSearchVisible(!searchVisible);
+  };
+  const handleInputChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    setSearchVisible(query !== '');
+  };
   return (
     <div className={cx("container")}>
       <header className={cx("header")}>
@@ -31,10 +45,17 @@ function Header() {
               </span>
             </div>
             <div className={cx("header__search")}>
-              <input type="text" className={cx("header_searchbox")} placeholder="Tìm sản phẩm" />
-              <button className={cx("btn-search")}>
+              <input type="text" className={cx("header_searchbox")} placeholder="Tìm sản phẩm" value={searchQuery} 
+              onChange={handleInputChange}/>
+              {searchVisible && (
+                 <div className={cx("search-group")}> <Search/>
+                 </div>
+              )}
+                     
+              <button onClick={toggleSearch} className={cx("btn-search")}>
                 <BsSearch className={cx("header__icon")} />
               </button>
+              
             </div>
           </div>
           <ul className={cx("header__bot")}>
@@ -77,7 +98,6 @@ function Header() {
           <div className={cx("header__action-item")}>
             <span className={cx("box-icon")}>
               <HiOutlineShoppingBag className={cx("header__action-icon")}  />
-              <Link href="/cart"></Link>
             </span>
             <div className={cx("action-title")}>
               
