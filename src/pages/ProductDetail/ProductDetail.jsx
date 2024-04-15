@@ -2,7 +2,7 @@ import React from "react";
 import style from "./ProductDetail.module.scss";
 import classNames from "classnames/bind";
 import ProductPopup from "../../components/ProductPopup/ProductPopup";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
 import { Navigation } from "swiper/modules";
@@ -10,7 +10,10 @@ import "swiper/scss/navigation";
 import Product from "../../components/Product/Product";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronRight,
+  faCaretRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(style);
 
@@ -107,6 +110,16 @@ export default function ProductDetail() {
       liên lạc tối đa tương đương 20% giá trị đơn hàng.
     </div>,
   ];
+
+  const textRefs = [useRef(null), useRef(null), useRef(null)];
+
+  const copyToClipboard = (index) => {
+    if (textRefs[index].current) {
+      const textToCopy = textRefs[index].current.innerText;
+      navigator.clipboard.writeText(textToCopy);
+      // alert("Mã đã được sao chép vào clipboard!");
+    }
+  };
   return (
     <>
       <div className={cx("container")}>
@@ -238,10 +251,13 @@ export default function ProductDetail() {
                     Giảm <b>10%</b> cho đơn hàng từ <b>500k.</b>
                   </div>
                   <div className={cx("copy_discount")}>
-                    <p className={cx("code_zip")}>BFAS10</p>
+                    <p className={cx("code_zip")} ref={textRefs[0]}>
+                      BFAS10
+                    </p>
                     <button
                       className={cx("btn", "dis_copy")}
                       data-copy="BFAS10"
+                      onClick={() => copyToClipboard(0)}
                     >
                       <span>Copy</span>
                     </button>
@@ -263,10 +279,13 @@ export default function ProductDetail() {
                     Giảm <b>15%</b> cho đơn hàng từ <b>900k.</b>
                   </div>
                   <div className={cx("copy_discount")}>
-                    <p className={cx("code_zip")}>BFAS15</p>
+                    <p className={cx("code_zip")} ref={textRefs[1]}>
+                      BFAS15
+                    </p>
                     <button
                       className={cx("btn", "dis_copy")}
                       data-copy="BFAS15"
+                      onClick={() => copyToClipboard(1)}
                     >
                       <span>Copy</span>
                     </button>
@@ -288,10 +307,13 @@ export default function ProductDetail() {
                     <b>Freeship</b> cho đơn hàng <b>nội thành</b>
                   </div>
                   <div className={cx("copy_discount")}>
-                    <p className={cx("code_zip")}>BFASFREE</p>
+                    <p className={cx("code_zip")} ref={textRefs[2]}>
+                      BFASFREE
+                    </p>
                     <button
                       className={cx("btn", "dis_copy")}
                       data-copy="BFASFREE"
+                      onClick={() => copyToClipboard(2)}
                     >
                       <span>Copy</span>
                     </button>
@@ -623,6 +645,14 @@ export default function ProductDetail() {
                   className={cx("view-more")}
                 >
                   Xem thêm
+                  {/* <FontAwesomeIcon
+                    icon={faChevronRight}
+                    className={cx("view-more-arrow")}
+                  /> */}
+                  <FontAwesomeIcon
+                    icon={faCaretRight}
+                    className={cx("view-more-arrow")}
+                  />
                 </Link>
               </div>
             </div>

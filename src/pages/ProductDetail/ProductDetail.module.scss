@@ -372,6 +372,9 @@ legend {
   font-size: 12px;
   float: right;
 }
+.pro-discount .item_discount .copy_discount .dis_copy:hover {
+  background: #f0a800;
+}
 .pro-discount .item_discount .copy_discount .dis_copy span {
   display: block;
   line-height: 22px;
@@ -479,6 +482,7 @@ a {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-weight: 500;
 }
 
 .blog_noibat .blog_content .item .time-post {
@@ -503,6 +507,14 @@ a {
       align-items: center;
       justify-content: center;
       width: 100%;
+      font-style: italic;
+      .view-more-arrow {
+        padding: 0px 3px;
+        color: #333;
+        width: 15px;
+        height: 15px;
+        margin-top: 2px;
+      }
     }
   }
 }
