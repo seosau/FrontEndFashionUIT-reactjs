@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import style from "./ProductPopup.module.scss";
+import style from "./ProductMainInfo.module.scss";
 import className from "classnames/bind";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";

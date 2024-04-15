@@ -1,7 +1,7 @@
 import React from "react";
 import style from "./ProductDetail.module.scss";
 import classNames from "classnames/bind";
-import ProductPopup from "../../components/ProductPopup/ProductPopup";
+import ProductPopup from "../../components/ProductMainInfo/ProductMainInfo";
 import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
@@ -14,12 +14,12 @@ import {
   faChevronRight,
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
+import QuickViewInfo from "../../components/QuickViewInfo/QuickViewInfo";
 
 const cx = classNames.bind(style);
 
 export default function ProductDetail() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
   const openPopup = () => {
     setIsPopupOpen(!isPopupOpen);
   };
@@ -122,7 +122,11 @@ export default function ProductDetail() {
   };
   return (
     <>
+      <div className={cx("test-z-index")}>
+        {isPopupOpen && <QuickViewInfo openPopup={openPopup} />}
+      </div>
       <div className={cx("container")}>
+        {/* Thanh tiêu đề (điều hướng) */}
         <section className={cx("bread-crumb")}>
           <div className={cx("container-this")}>
             <ul className={cx("breadcrumb")}>
@@ -158,14 +162,11 @@ export default function ProductDetail() {
           </div>
         </section>
 
-        <div className={cx("visible-product-popup")}>
-          <div className={cx("product-popup")}>
-            {isPopupOpen && <ProductPopup />}
-          </div>
-        </div>
         <div className={cx("small-container")}>
           <div className={cx("product-detail-side")}>
+            {/* Chi tiết sản phẩm chính */}
             <ProductPopup />
+            {/* Mô tả và chính sách */}
             <div className={cx("description-policy")}>
               <div>
                 <div className={cx("tabs")}>
@@ -187,6 +188,7 @@ export default function ProductDetail() {
               </div>
             </div>
 
+            {/* Các sản phẩm liên quan */}
             <section className={cx("trending")}>
               <div className={cx("container-trending")}>
                 <div className={cx("box-container")}>
@@ -225,6 +227,7 @@ export default function ProductDetail() {
           </div>
 
           <div className={cx("right-features-side")}>
+            {/* Các mã giảm giá */}
             <div className={cx("discount-code")}>
               <fieldset className={cx("pro-discount")}>
                 <legend>

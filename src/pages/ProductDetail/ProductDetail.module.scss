@@ -81,24 +81,29 @@
   color: #fcaf17;
 }
 
-// CSS Popup ===============================================================
-.visible-product-popup {
-  position: absolute;
-  // background-color: rgba(0, 0, 0, 0.08);
-  // background-color: #01567f;
-  // width: 100%;
-  // height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.product-popup {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.08);
-  // background-color: #01567f;
-  // width: 60em;
-  // height: max-content;
-}
+// // CSS Popup ===============================================================
+// .visible-product-popup {
+//   position: fixed;
+//   background-color: rgba(0, 0, 0, 0.6);
+//   // background-color: #01567f;
+//   // width: 100%;
+//   // height: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+
+//   .product-popup {
+//     position: relative;
+//     // background-color: rgba(0, 0, 0, 0.08);
+//     // background-color: #01567f;
+//     width: 60em;
+//     // height: max-content;
+//   }
+// }
 // CSS của Mô tả và chính sách =================================================
 .description-policy {
   .tabs {
@@ -519,3 +524,7 @@ a {
   }
 }
 // Có thể bạn thích và sản phẩm tương tự
+.test-z-index {
+  position: relative;
+  z-index: 9999;
+}
