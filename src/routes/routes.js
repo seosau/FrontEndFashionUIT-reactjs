@@ -1,4 +1,5 @@
 
+
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
 import { Dashboard, CreateProduct, CreateBlog, ListProducts } from "../pages/Admin";
 
@@ -17,7 +18,7 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact  } from "../pages";
+import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart  } from "../pages";
 
 
 export const publicRoutes = [
@@ -31,7 +32,7 @@ export const publicRoutes = [
   },
   {
     path: "/cart",
-    component: "",
+    component: ProductCart,
   },
   {
     path: "/login",

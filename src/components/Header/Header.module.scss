@@ -79,6 +79,7 @@
   background-color: #f3f3f3;
   border-radius: 6px;
   padding: 8px;
+  position: relative;
 }
 
 .header_searchbox {
@@ -86,6 +87,13 @@
   font-size: 15px;
 
   min-width: 350px;
+}
+
+.search-group {
+  position: absolute;
+  top: 100%;
+  padding: 10px;
+  z-index: 999;
 }
 
 .btn-search {
