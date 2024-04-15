@@ -37,23 +37,27 @@ const tempImg = [
 
 const tempColors = [
   {
-    index: 1,
+    index: 0,
     name: "Cam",
     code: "#ffa500",
   },
   {
-    index: 2,
+    index: 1,
     name: "Nâu",
     code: "#a52a2a",
   },
   {
-    index: 3,
+    index: 2,
     name: "Trắng",
     code: "#ffffff",
   },
 ];
 
-const tempSizes = ["S", "M", "L"];
+const tempSizes = [
+  { value: "S", index: 0 },
+  { value: "M", index: 1 },
+  { value: "L", index: 2 },
+];
 
 export default function ProductPopup({
   title,
@@ -78,6 +82,16 @@ export default function ProductPopup({
   };
   const tangSoLuong = () => {
     setCount(count + 1);
+  };
+
+  const [activeColor, setActiveColor] = useState(0);
+  const changeActiveColor = (index) => {
+    setActiveColor(index);
+  };
+
+  const [activeSize, setActiveSize] = useState(0);
+  const changeActiveSize = (index) => {
+    setActiveSize(index);
   };
   return (
     <div className={cx("container")}>
@@ -163,24 +177,48 @@ export default function ProductPopup({
           </p>
           <div className={cx("color-picker")}>
             <p>
-              Màu sắc: <span className={cx("picked-color")}>Trắng</span>
+              Màu sắc:{" "}
+              <span className={cx("picked-color")}>
+                {tempColors[activeColor].name}
+              </span>
             </p>
             <div className={cx("all-color")}>
               {tempColors.map((e) => (
-                <div
+                <button
                   className={cx("each-color")}
                   style={{ backgroundColor: e.code }}
-                ></div>
+                  onClick={() => {
+                    changeActiveColor(e.index);
+                  }}
+                >
+                  <div
+                    className={cx(
+                      activeColor === e.index
+                        ? "active-color"
+                        : "invisible-color"
+                    )}
+                  ></div>
+                </button>
               ))}
             </div>
           </div>
           <div className={cx("size-picker")}>
             <p>
-              Kích thước: <span className={cx("picked-size")}>S</span>
+              Kích thước:{" "}
+              <span className={cx("picked-size")}>
+                {tempSizes[activeSize].value}
+              </span>
             </p>
             <div className={cx("all-size")}>
               {tempSizes.map((e) => (
-                <div className={cx("each-size")}>{e}</div>
+                <div
+                  className={cx(
+                    activeSize === e.index ? "active-size" : "each-size"
+                  )}
+                  onClick={() => changeActiveSize(e.index)}
+                >
+                  {e.value}
+                </div>
               ))}
             </div>
           </div>
