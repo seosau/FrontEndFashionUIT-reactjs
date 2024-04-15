@@ -278,7 +278,7 @@ select {
   padding-left: 25px;
 }
 
-img {
+.article-main .row img {
   margin: 1.7em 0;
 }
 
@@ -328,27 +328,6 @@ img {
     flex: 0 0 100%;
     max-width: 100%;
   }
-}
-
-textarea {
-  min-height: 100px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
-input[type="text"],
-input[type="search"],
-input[type="password"],
-input[type="email"],
-input[type="file"],
-input[type="number"],
-input[type="tel"],
-textarea,
-select {
-  border: 1px solid #ebebeb;
-  padding: 0 110px 0 15px;
-  width: 100%;
-  max-width: 100%;
-  display: block;
 }
 
 .article-main .button_45 {
@@ -438,6 +417,27 @@ button {
 
 .form-row {
   width: 100%;
+
+  textarea {
+    min-height: 100px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  input[type="text"],
+  input[type="search"],
+  input[type="password"],
+  input[type="email"],
+  input[type="file"],
+  input[type="number"],
+  input[type="tel"],
+  textarea,
+  select {
+    border: 1px solid #ebebeb;
+    padding: 0 110px 0 15px;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
 }
 .article-main .form-group input {
   height: 40px;

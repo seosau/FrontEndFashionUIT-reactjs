@@ -120,43 +120,6 @@ export default function ProductPopup({
                 </SwiperSlide>
               ))}
             </Swiper>
-
-            {/* <div className={cx("each-small-img")}>
-              <img
-                src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                alt="Áo cotton nữ cổ trong dáng suông in chữ"
-              />
-            </div>
-            <div className={cx("each-small-img")}>
-              <img
-                src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                alt="Áo cotton nữ cổ trong dáng suông in chữ"
-              />
-            </div>
-            <div className={cx("each-small-img")}>
-              <img
-                src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                alt="Áo cotton nữ cổ trong dáng suông in chữ"
-              />
-            </div>
-            <div className={cx("each-small-img")}>
-              <img
-                src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                alt="Áo cotton nữ cổ trong dáng suông in chữ"
-              />
-            </div>
-            <div className={cx("each-small-img")}>
-              <img
-                src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                alt="Áo cotton nữ cổ trong dáng suông in chữ"
-              />
-            </div>
-            <div className={cx("each-small-img")}>
-              <img
-                src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                alt="Áo cotton nữ cổ trong dáng suông in chữ"
-              />
-            </div> */}
           </div>
         </div>
         <div className={cx("right-info")}>
