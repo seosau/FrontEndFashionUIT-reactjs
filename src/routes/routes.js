@@ -1,8 +1,3 @@
-
-
-import AdminLayout from "../layouts/AdminLayout/AdminLayout";
-import { Dashboard, CreateProduct, CreateBlog, ListProducts } from "../pages/Admin";
-
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -18,8 +13,24 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart  } from "../pages";
+import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore  } from "../pages";
 
+
+=======
+import {
+  Home,
+  AllProducts,
+  Login,
+  Register,
+  Account,
+  Orders,
+  ChangePass,
+  Address,
+  ChainStore,
+  Contact,
+  CheckOut,
+} from "../pages";
+>>>>>>> Stashed changes
 
 export const publicRoutes = [
   {
@@ -58,7 +69,7 @@ export const publicRoutes = [
     path: "/chainstore",
     component: ChainStore,
   },
-  {
+  }
     path: "/contact-support",
     component: Contact,
   },
