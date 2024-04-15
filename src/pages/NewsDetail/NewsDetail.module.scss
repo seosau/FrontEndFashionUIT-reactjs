@@ -204,18 +204,87 @@ p {
   font-weight: 500;
 }
 
-body,
-input,
-textarea,
-button,
-select {
-  line-height: 1.7;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  // color: #333e44;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: 100%;
+.article-main {
+  body,
+  input,
+  textarea,
+  button,
+  select {
+    line-height: 1.7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
+    // color: #333e44;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+  }
+  .btn.btn-primary,
+  input.btn-primary[type="submit"] {
+    height: 46px;
+    display: inline-block;
+    text-align: center;
+    line-height: 45px;
+    background: #ff9247;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 0 38px;
+    border-radius: 6px;
+  }
+  [type="button"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+  .btn,
+  input[type="submit"] {
+    display: inline-block;
+    height: 40px;
+    line-height: 39px;
+    padding: 0 20px;
+    text-align: center;
+    white-space: nowrap;
+    outline: none !important;
+    cursor: pointer;
+    border: none;
+    font-weight: 400;
+    border-radius: 0;
+    letter-spacing: 0;
+  }
+  [type="button"],
+  [type="reset"],
+  [type="submit"],
+  button {
+    -webkit-appearance: button;
+  }
+  button,
+  input[type="submit"] {
+    cursor: pointer;
+  }
+  button,
+  input[type="text"],
+  input[type="search"],
+  input[type="password"],
+  input[type="email"],
+  input[type="file"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="submit"],
+  textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  input,
+  textarea,
+  button,
+  select {
+    font-size: 1em;
+  }
+  button {
+    overflow: visible;
+  }
 }
 
 @media (min-width: 992px) {
@@ -345,74 +414,6 @@ select {
   -o-transition: 0.3s;
   text-transform: uppercase;
   border: 1px solid #01567f;
-}
-
-.btn.btn-primary,
-input.btn-primary[type="submit"] {
-  height: 46px;
-  display: inline-block;
-  text-align: center;
-  line-height: 45px;
-  background: #ff9247;
-  color: #fff;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 700;
-  padding: 0 38px;
-  border-radius: 6px;
-}
-[type="button"]:not(:disabled),
-[type="reset"]:not(:disabled),
-[type="submit"]:not(:disabled),
-button:not(:disabled) {
-  cursor: pointer;
-}
-.btn,
-input[type="submit"] {
-  display: inline-block;
-  height: 40px;
-  line-height: 39px;
-  padding: 0 20px;
-  text-align: center;
-  white-space: nowrap;
-  outline: none !important;
-  cursor: pointer;
-  border: none;
-  font-weight: 400;
-  border-radius: 0;
-  letter-spacing: 0;
-}
-[type="button"],
-[type="reset"],
-[type="submit"],
-button {
-  -webkit-appearance: button;
-}
-button,
-input[type="submit"] {
-  cursor: pointer;
-}
-button,
-input[type="text"],
-input[type="search"],
-input[type="password"],
-input[type="email"],
-input[type="file"],
-input[type="number"],
-input[type="tel"],
-input[type="submit"],
-textarea {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-input,
-textarea,
-button,
-select {
-  font-size: 1em;
-}
-button {
-  overflow: visible;
 }
 
 .form-row {
