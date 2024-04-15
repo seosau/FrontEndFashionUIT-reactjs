@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import style from "./Category.module.scss";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(style);
 
 const data = [
   {
+    index: 1,
     name: "Nữ",
     subcategories: [
       {
@@ -81,6 +84,7 @@ const data = [
     ],
   },
   {
+    index: 2,
     name: "Nam",
     subcategories: [
       {
@@ -143,6 +147,7 @@ const data = [
     ],
   },
   {
+    index: 3,
     name: "Trẻ Em",
     subcategories: [
       {
@@ -184,6 +189,7 @@ const data = [
     ],
   },
   {
+    index: 4,
     name: "Thời Trang Nam",
     subcategories: [
       { name: "Áo Thun", link: "/ao-thun-nam" },
@@ -193,6 +199,7 @@ const data = [
     ],
   },
   {
+    index: 5,
     name: "Thời Trang Nữ",
     subcategories: [
       { name: "Đầm", link: "/dam" },
@@ -202,6 +209,7 @@ const data = [
     ],
   },
   {
+    index: 6,
     name: "Thời Trang Trẻ Em",
     subcategories: [
       { name: "Đồ Sơ Sinh", link: "/do-so-sinh" },
@@ -210,6 +218,7 @@ const data = [
     ],
   },
   {
+    index: 7,
     name: "Thời Trang Tập Gym",
     subcategories: [
       { name: "Áo Tập Gym", link: "/ao-tap-gym" },
@@ -220,25 +229,46 @@ const data = [
 ];
 
 export default function Category() {
-  const [isVisible, setIsVisible] = useState(false);
-  const toggleMenu = () => {
-    setIsVisible(!isVisible);
+  const [isVisible, setIsVisible] = useState(0);
+  const toggleMenu = (index) => {
+    setIsVisible(index);
   };
   return (
     <div className={cx("aside-content-blog")}>
       <div className={cx("title-head")}>Danh mục</div>
       <nav className={cx("nav-category")}>
-        <ul className={cx("nav navbar-pills")}>
+        <ul className={cx("nav", "navbar-pills")}>
           {data.map((e) => (
-            <li className={cx("nav-item", "relative")}>
-              <Link title={e.name} to="" className={cx("nav-link", "pr-5")}>
-                {e.name}
-              </Link>
-              <i className={cx("open_mnu", "down_icon")} onClick={toggleMenu} />
+            <li
+              className={cx(
+                "nav-item",
+                "relative",
+                isVisible === e.index ? "showing-detail" : "not-show-detail"
+              )}
+            >
+              <div className={cx("category-title")}>
+                <Link title={e.name} to="" className={cx("nav-link", "pr-5")}>
+                  {e.name}
+                </Link>
+                {/* <i className={cx("open_mnu", "down_icon")} onClick={toggleMenu} /> */}
+                {isVisible === e.index ? (
+                  <FontAwesomeIcon
+                    icon={faMinus}
+                    onClick={() => toggleMenu(0)}
+                    className={cx("fa-icon", "fa-minus")}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    onClick={() => toggleMenu(e.index)}
+                    className={cx("fa-icon", "fa-plus")}
+                  />
+                )}
+              </div>
               <ul
                 className={cx(
                   "menu_down",
-                  `${isVisible ? `visible` : `hidden`}`
+                  `${isVisible === e.index ? `visible` : `hidden`}`
                 )}
               >
                 {e.subcategories.map((e1) => (

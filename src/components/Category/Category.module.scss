@@ -246,3 +246,30 @@ summary {
 .aside-content-blog .nav-category ul .menu_down {
   padding-left: 10px !important;
 }
+
+.aside-content-blog .category-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Định nghĩa animation */
+// @keyframes rotateIcon {
+//   0% {
+//     transform: rotate(0deg);
+//   }
+//   100% {
+//     transform: rotate(180deg);
+//   }
+// }
+.category-title .fa-icon {
+  transition: transform 0.3s ease-in-out;
+}
+
+.category-title .fa-plus {
+  transform: rotate(0deg);
+}
+
+.category-title .fa-minus {
+  transform: rotate(180deg);
+}
