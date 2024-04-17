@@ -132,17 +132,17 @@ export const publicRoutes = [
     layout: AdminLayout,
   },
   {
-    path: "/admin/createproduct",
+    path: "/admin/product/create",
     component: CreateProduct,
     layout: AdminLayout,
   },
   {
-    path: "/admin/createblog",
+    path: "/admin/blog/create",
     component: CreateBlog,
     layout: AdminLayout,
   },
   {
-    path: "/admin/listproducts",
+    path: "/admin/products",
     component: ListProducts,
     layout: AdminLayout,
   },
