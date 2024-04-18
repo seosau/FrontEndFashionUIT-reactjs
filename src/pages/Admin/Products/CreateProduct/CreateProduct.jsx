@@ -1,13 +1,15 @@
 // use hooks
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 // use icons
 import { CiCircleRemove } from "react-icons/ci";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
 // use axios
-import axios from "axios";
 import axiosClient from "../../../../config/axios";
+
+// use validation form
+import { checkEmptyKeys, generateErrorMessage } from "../../../../utils";
 // use style
 import style from "./CreateProduct.module.scss";
 import className from "classnames/bind";
@@ -31,41 +33,63 @@ const productSample = {
 };
 
 function CreateProduct() {
+  const navigate = useNavigate();
   const [productInfo, setProductInfo] = useState(productSample);
   const [currentSize, setCurrentSize] = useState("");
   const [currentColor, setCurrentColor] = useState("");
+  const [errors, setErrors] = useState({});
   const addSize = (e) => {
     e.preventDefault();
     if (currentSize.trim() !== "") {
-      setProductInfo({
-        ...productInfo,
-        size: [...productInfo.size, currentSize.toUpperCase()],
-      });
+      const isExistedSize = productInfo.size.includes(
+        currentSize.toUpperCase()
+      );
+      if (!isExistedSize) {
+        setProductInfo({
+          ...productInfo,
+          size: [...productInfo.size, currentSize.toUpperCase()],
+        });
+      }
       setCurrentSize("");
     }
   };
   const removeSize = (index) => {
+    const sizeRemoved = productInfo.size[index];
     const newSizeArr = productInfo.size.filter((size, idx) => idx !== index);
+    const newStock = productInfo.stock.filter(
+      (item) => item.size !== sizeRemoved
+    );
     setProductInfo({
       ...productInfo,
-      size: [...newSizeArr],
+      size: newSizeArr,
+      stock: newStock,
     });
   };
   const addColor = (e) => {
     e.preventDefault();
     if (currentColor.trim() !== "") {
-      setProductInfo({
-        ...productInfo,
-        color: [...productInfo.color, currentColor.toLowerCase()],
-      });
+      const isExistedColor = productInfo.color.includes(
+        currentColor.toLowerCase()
+      );
+      if (!isExistedColor) {
+        setProductInfo({
+          ...productInfo,
+          color: [...productInfo.color, currentColor.toLowerCase()],
+        });
+      }
       setCurrentColor("");
     }
   };
   const removeColor = (index) => {
+    const colorRemoved = productInfo.color[index];
     const newColorArr = productInfo.color.filter((size, idx) => idx !== index);
+    const newStock = productInfo.stock.filter(
+      (item) => item.color !== colorRemoved
+    );
     setProductInfo({
       ...productInfo,
-      color: [...newColorArr],
+      color: newColorArr,
+      stock: newStock,
     });
   };
   useEffect(() => {
@@ -75,10 +99,19 @@ function CreateProduct() {
           productInfo.color.map((color) => ({ size, color, quantity: 0 }))
         )
         .flat();
-
+      const newProductInStockMerged = [...productInfo.stock];
+      newProductInStock.forEach((newItem) => {
+        const existingItemIndex = newProductInStockMerged.findIndex(
+          (oldItem) =>
+            oldItem.color === newItem.color && oldItem.size === newItem.size
+        );
+        if (existingItemIndex === -1) {
+          newProductInStockMerged.push(newItem);
+        }
+      });
       setProductInfo((prevProductInfo) => ({
         ...prevProductInfo,
-        stock: [...newProductInStock],
+        stock: [...newProductInStockMerged],
       }));
     } else {
       setProductInfo((prevProductInfo) => ({
@@ -117,15 +150,31 @@ function CreateProduct() {
       reader.readAsDataURL(file);
     }
   };
+  const removeImage = (index) => {
+    setProductInfo({
+      ...productInfo,
+      images: productInfo.images.filter((image, idx) => idx !== index),
+    });
+  };
 
   const addProduct = (e) => {
     e.preventDefault();
-    axiosClient
-      .post("/admin/product/store", productInfo)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => console.log(error));
+
+    const emptyKeys = checkEmptyKeys(productInfo);
+    const newErrors = {};
+    emptyKeys.forEach((key) => {
+      newErrors[key] = generateErrorMessage(key);
+    });
+    if (Object.keys(newErrors).length > 1) {
+      setErrors(newErrors);
+    } else {
+      axiosClient
+        .post("/admin/product/store", productInfo)
+        .then((res) => {
+          navigate("/admin/products");
+        })
+        .catch((error) => console.log(error));
+    }
   };
   return (
     <div className={cx("container")}>
@@ -146,6 +195,9 @@ function CreateProduct() {
               setProductInfo({ ...productInfo, name: e.target.value })
             }
           />
+          {errors?.name ? (
+            <span className={cx("error-text")}>{errors.name}</span>
+          ) : null}
         </div>
         <div className={cx("form-group")}>
           <label htmlFor="productname" className={cx("form-label")}>
@@ -168,6 +220,11 @@ function CreateProduct() {
               })
             }
           />
+          {errors["category.categoryType"] ? (
+            <span className={cx("error-text")}>
+              {errors["category.categoryType"]}
+            </span>
+          ) : null}
         </div>
         <div className={cx("form-group")}>
           <label htmlFor="productname" className={cx("form-label")}>
@@ -190,6 +247,11 @@ function CreateProduct() {
               })
             }
           />
+          {errors["category.categoryDetail"] ? (
+            <span className={cx("error-text")}>
+              {errors["category.categoryDetail"]}
+            </span>
+          ) : null}
         </div>
         <div className={cx("form-group")}>
           <label htmlFor="productname" className={cx("form-label")}>
@@ -212,6 +274,11 @@ function CreateProduct() {
               })
             }
           />
+          {errors["category.fabricType"] ? (
+            <span className={cx("error-text")}>
+              {errors["category.fabricType"]}
+            </span>
+          ) : null}
         </div>
         <div className={cx("form-group")}>
           <label htmlFor="productname" className={cx("form-label")}>
@@ -231,6 +298,9 @@ function CreateProduct() {
               })
             }
           />
+          {errors["category.sex"] ? (
+            <span className={cx("error-text")}>{errors["category.sex"]}</span>
+          ) : null}
         </div>
         <div className={cx("form-group")}>
           <label htmlFor="productname" className={cx("form-label")}>
@@ -249,6 +319,9 @@ function CreateProduct() {
             <button className={cx("form-btn-add")} onClick={addSize}>
               <IoIosAddCircleOutline className={cx("icon-add")} />
             </button>
+            {errors?.size ? (
+              <span className={cx("error-text")}>{errors.size}</span>
+            ) : null}
           </div>
           {productInfo.size.length > 0 && (
             <ul className={cx("list-size")}>
@@ -281,12 +354,15 @@ function CreateProduct() {
             <button className={cx("form-btn-add")} onClick={addColor}>
               <IoIosAddCircleOutline className={cx("icon-add")} />
             </button>
+            {errors?.color ? (
+              <span className={cx("error-text")}>{errors.color}</span>
+            ) : null}
           </div>
           {productInfo.color.length > 0 && (
             <ul className={cx("list-size")}>
               {productInfo.color.map((color, index) => (
                 <li className={cx("item-size")}>
-                  <span>Màu {color}</span>
+                  <span className={cx("img-color")}>Màu {color}</span>
                   <CiCircleRemove
                     className={cx("icon-remove")}
                     onClick={() => removeColor(index)}
@@ -311,6 +387,9 @@ function CreateProduct() {
               setProductInfo({ ...productInfo, price: Number(e.target.value) })
             }
           />
+          {errors?.price ? (
+            <span className={cx("error-text")}>{errors.price}</span>
+          ) : null}
         </div>
         {productInfo.stock.length > 0 && (
           <div className={cx("form-group")}>
@@ -335,6 +414,9 @@ function CreateProduct() {
                 </li>
               ))}
             </ul>
+            {errors?.stock ? (
+              <span className={cx("error-text")}>{errors.stock}</span>
+            ) : null}
             <br />
           </div>
         )}
@@ -355,6 +437,9 @@ Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp
               setProductInfo({ ...productInfo, description: e.target.value })
             }
           />
+          {errors?.description ? (
+            <span className={cx("error-text")}>{errors.description}</span>
+          ) : null}
         </div>
         <div className={cx("form-group")}>
           <label htmlFor="productname" className={cx("form-label")}>
@@ -364,7 +449,7 @@ Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp
           {productInfo.color.map((color) => (
             <div className={cx("form-action")}>
               <div className={cx("form-flex")}>
-                <span className={cx("")}>Màu {color}</span>
+                <span className={cx("img-color")}>Màu {color}</span>
                 <button className={cx("btn-chooseImg")}>
                   <input
                     className={cx("img-choose-input")}
@@ -377,18 +462,28 @@ Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp
                   Chọn
                 </button>
               </div>
-              <div className={cx("imgs-container")}>
-                {productInfo.images.length > 0 &&
-                  productInfo.images.map((image) => {
+              {productInfo.images.length > 0 && (
+                <div className={cx("imgs-container")}>
+                  {productInfo.images.map((image, index) => {
                     return image.color === color ? (
-                      <img
-                        src={image.imgUrl}
-                        alt={image.color}
-                        className={cx("img-choosen")}
-                      />
+                      <span className={cx("img-item")}>
+                        <CiCircleRemove
+                          className={cx("icon-remove", "icon-remove-position")}
+                          onClick={() => removeImage(index)}
+                        />
+                        <img
+                          src={image.imgUrl}
+                          alt={image.color}
+                          className={cx("img-choosen")}
+                        />
+                      </span>
                     ) : null;
                   })}
-              </div>
+                </div>
+              )}
+              {errors?.images ? (
+                <span className={cx("error-text")}>{errors.images}</span>
+              ) : null}
             </div>
           ))}
         </div>

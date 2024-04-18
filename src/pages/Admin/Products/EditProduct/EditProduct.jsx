@@ -1,12 +1,15 @@
 // use hooks
-import { useEffect, useState, useCallback } from "react";
-import { useFetcher, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 // use icons
 import { CiCircleRemove } from "react-icons/ci";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
 // use axios
 import axiosClient from "../../../../config/axios";
+
+// use validation form
+import { checkEmptyKeys, generateErrorMessage } from "../../../../utils";
 
 // use style
 import style from "./EditProduct.module.scss";
@@ -30,10 +33,11 @@ const productSample = {
 };
 function EditProduct() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [productInfo, setProductInfo] = useState(productSample);
   const [currentSize, setCurrentSize] = useState("");
-  const [isSizeRemoved, setIsSizeRemoved] = useState(false);
+  const [errors, setErrors] = useState({});
   const [currentColor, setCurrentColor] = useState("");
   useEffect(() => {
     async function fetchData() {
@@ -54,10 +58,15 @@ function EditProduct() {
   const addSize = (e) => {
     e.preventDefault();
     if (currentSize.trim() !== "") {
-      setProductInfo({
-        ...productInfo,
-        size: [...productInfo.size, currentSize.toUpperCase()],
-      });
+      const isExistedSize = productInfo.size.includes(
+        currentSize.toUpperCase()
+      );
+      if (!isExistedSize) {
+        setProductInfo({
+          ...productInfo,
+          size: [...productInfo.size, currentSize.toUpperCase()],
+        });
+      }
       setCurrentSize("");
     }
   };
@@ -76,10 +85,15 @@ function EditProduct() {
   const addColor = (e) => {
     e.preventDefault();
     if (currentColor.trim() !== "") {
-      setProductInfo({
-        ...productInfo,
-        color: [...productInfo.color, currentColor.toLowerCase()],
-      });
+      const isExistedColor = productInfo.color.includes(
+        currentColor.toLowerCase()
+      );
+      if (!isExistedColor) {
+        setProductInfo({
+          ...productInfo,
+          color: [...productInfo.color, currentColor.toLowerCase()],
+        });
+      }
       setCurrentColor("");
     }
   };
@@ -159,16 +173,26 @@ function EditProduct() {
       images: productInfo.images.filter((image, idx) => idx !== index),
     });
   };
-  const editProduct = (e) => {
+  const updateProduct = (e) => {
     e.preventDefault();
-    axiosClient
-      .put(`/admin/product/update/${slug}`, productInfo)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const emptyKeys = checkEmptyKeys(productInfo);
+    const newErrors = {};
+    emptyKeys.forEach((key) => {
+      newErrors[key] = generateErrorMessage(key);
+    });
+    if (Object.keys(newErrors).length > 1) {
+      console.log("Có lôi")
+      setErrors(newErrors);
+    } else {
+      axiosClient
+        .put(`/admin/product/update/${slug}`, productInfo)
+        .then((res) => {
+          navigate("/admin/products");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
   return (
     <>
@@ -191,6 +215,9 @@ function EditProduct() {
                   setProductInfo({ ...productInfo, name: e.target.value })
                 }
               />
+              {errors?.name ? (
+                <span className={cx("error-text")}>{errors.name}</span>
+              ) : null}
             </div>
             <div className={cx("form-group")}>
               <label htmlFor="productname" className={cx("form-label")}>
@@ -213,6 +240,11 @@ function EditProduct() {
                   })
                 }
               />
+              {errors["category.categoryType"] ? (
+                <span className={cx("error-text")}>
+                  {errors["category.categoryType"]}
+                </span>
+              ) : null}
             </div>
             <div className={cx("form-group")}>
               <label htmlFor="productname" className={cx("form-label")}>
@@ -235,6 +267,11 @@ function EditProduct() {
                   })
                 }
               />
+              {errors["category.categoryDetail"] ? (
+                <span className={cx("error-text")}>
+                  {errors["category.categoryDetail"]}
+                </span>
+              ) : null}
             </div>
             <div className={cx("form-group")}>
               <label htmlFor="productname" className={cx("form-label")}>
@@ -257,6 +294,11 @@ function EditProduct() {
                   })
                 }
               />
+              {errors["category.fabricType"] ? (
+                <span className={cx("error-text")}>
+                  {errors["category.fabricType"]}
+                </span>
+              ) : null}
             </div>
             <div className={cx("form-group")}>
               <label htmlFor="productname" className={cx("form-label")}>
@@ -276,6 +318,11 @@ function EditProduct() {
                   })
                 }
               />
+              {errors["category.sex"] ? (
+                <span className={cx("error-text")}>
+                  {errors["category.sex"]}
+                </span>
+              ) : null}
             </div>
             <div className={cx("form-group")}>
               <label htmlFor="productname" className={cx("form-label")}>
@@ -294,8 +341,11 @@ function EditProduct() {
                 <button className={cx("form-btn-add")} onClick={addSize}>
                   <IoIosAddCircleOutline className={cx("icon-add")} />
                 </button>
+                {errors?.size ? (
+                  <span className={cx("error-text")}>{errors.size}</span>
+                ) : null}
               </div>
-              {productInfo?.size.length > 0 && (
+              {productInfo.size.length > 0 && (
                 <ul className={cx("list-size")}>
                   {productInfo.size.map((size, index) => (
                     <li className={cx("item-size")}>
@@ -326,12 +376,15 @@ function EditProduct() {
                 <button className={cx("form-btn-add")} onClick={addColor}>
                   <IoIosAddCircleOutline className={cx("icon-add")} />
                 </button>
+                {errors?.color ? (
+                  <span className={cx("error-text")}>{errors.color}</span>
+                ) : null}
               </div>
-              {productInfo?.color.length > 0 && (
+              {productInfo.color.length > 0 && (
                 <ul className={cx("list-size")}>
                   {productInfo.color.map((color, index) => (
                     <li className={cx("item-size")}>
-                      <span>Màu {color}</span>
+                      <span className={cx("img-color")}>Màu {color}</span>
                       <CiCircleRemove
                         className={cx("icon-remove")}
                         onClick={() => removeColor(index)}
@@ -359,6 +412,9 @@ function EditProduct() {
                   })
                 }
               />
+              {errors?.price ? (
+                <span className={cx("error-text")}>{errors.price}</span>
+              ) : null}
             </div>
             {productInfo.stock.length > 0 && (
               <div className={cx("form-group")}>
@@ -383,6 +439,9 @@ function EditProduct() {
                     </li>
                   ))}
                 </ul>
+                {errors?.stock ? (
+                  <span className={cx("error-text")}>{errors.stock}</span>
+                ) : null}
                 <br />
               </div>
             )}
@@ -397,7 +456,7 @@ function EditProduct() {
                 name="description"
                 rows={5}
                 placeholder="Chất liệu Cotton tự nhiên mềm mại, thấm hút mồ hôi và thoáng khí mang lang lại cảm giác thoải mái, dễ chịu mỗi ngày.
-  Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp với các trang phục khác."
+Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp với các trang phục khác."
                 value={productInfo.description}
                 onChange={(e) =>
                   setProductInfo({
@@ -406,6 +465,9 @@ function EditProduct() {
                   })
                 }
               />
+              {errors?.description ? (
+                <span className={cx("error-text")}>{errors.description}</span>
+              ) : null}
             </div>
             <div className={cx("form-group")}>
               <label htmlFor="productname" className={cx("form-label")}>
@@ -450,6 +512,9 @@ function EditProduct() {
                       })}
                     </div>
                   )}
+                  {errors?.images ? (
+                    <span className={cx("error-text")}>{errors.images}</span>
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -471,7 +536,7 @@ function EditProduct() {
                 }
               />
             </div>
-            <button className={cx("form-submit")} onClick={editProduct}>
+            <button className={cx("form-submit")} onClick={updateProduct}>
               Sửa sản phẩm
             </button>
           </form>
