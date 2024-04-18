@@ -33,9 +33,9 @@ function ListProducts() {
         </thead>
         <tbody>
           {products.length > 0 &&
-            products.map((product,index) => (
+            products.map((product, index) => (
               <tr key={index}>
-                <td>{index+1}</td>
+                <td>{index + 1}</td>
                 <td>
                   <img
                     src={product.images[0].imgUrl}
@@ -50,12 +50,17 @@ function ListProducts() {
                   <ul>
                     {product.stock.map((infoStock, index) => (
                       <li key={index}>
-                        <span className={cx("product-size")}> Size {infoStock.size} - </span>
+                        <span className={cx("product-size")}>
+                          {" "}
+                          Size {infoStock.size} -{" "}
+                        </span>
                         <span className={cx("product-color")}>
-                      
                           Màu {infoStock.color} -
                         </span>
-                        <span className={cx("product-quantity")}> {infoStock.quantity} </span>
+                        <span className={cx("product-quantity")}>
+                          {" "}
+                          {infoStock.quantity}{" "}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -66,9 +71,12 @@ function ListProducts() {
                   </button>
                 </td>
                 <td>
-                  <button className={cx("btn")}>
+                  <Link
+                    className={cx("btn")}
+                    to={`/admin/product/edit/${product.slug}`}
+                  >
                     <TbEdit className={cx("icon", "icon-edit")} />
-                  </button>
+                  </Link>
                 </td>
                 <td>
                   <button className={cx("btn")}>
