@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../../../../config/axios";
 import { Link } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import { CiSquareRemove } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
+import axiosClient from "../../../../config/axios";
 import style from "./ListProducts.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(style);
@@ -16,20 +16,35 @@ function ListProducts() {
       .then((res) => setProducts(res.data))
       .catch((error) => console.log(error));
   }, []);
+  const deleteProduct = (slug) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product.slug !== slug)
+    );
+    axiosClient
+      .delete(`/admin/product/delete/${slug}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className={cx("container")}>
       <h1 className={cx("title")}>Danh sách sản phẩm</h1>
       <table className={cx("table-product")}>
         <thead>
-          <th>Id</th>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th>Stock</th>
-          <th>View</th>
-          <th>Edit</th>
-          <th>Delete</th>
+          <tr>
+            <th>Id</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>View</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
         </thead>
         <tbody>
           {products.length > 0 &&
@@ -80,7 +95,10 @@ function ListProducts() {
                 </td>
                 <td>
                   <button className={cx("btn")}>
-                    <CiSquareRemove className={cx("icon", "icon-remove")} />
+                    <CiSquareRemove
+                      className={cx("icon", "icon-remove")}
+                      onClick={() => deleteProduct(product.slug)}
+                    />
                   </button>
                 </td>
               </tr>
