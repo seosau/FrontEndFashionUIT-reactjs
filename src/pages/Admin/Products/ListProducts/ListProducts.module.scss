@@ -6,11 +6,12 @@
     border: 1px solid black;
     border-collapse: collapse;
   }
-  th{
+  th {
     line-height: 3;
   }
-  td{
+  td {
     line-height: 2;
+    font-size: 14px;
   }
   .title {
     text-align: center;
@@ -19,10 +20,12 @@
 }
 .table-product {
   width: 100%;
-
+  thead{
+    text-align: center;
+  }
   thead,
   tbody {
-    text-align: center;
+   
     color: #000;
   }
 }
@@ -38,7 +41,7 @@
   cursor: pointer;
 }
 .icon {
-  font-size: 25px;
+  font-size: 20px;
 }
 .icon-view {
   color: blue;
@@ -48,4 +51,9 @@
 }
 .icon-remove {
   color: red;
+}
+.product-name {
+  font-size: 12px;
+}
+.product-desc {
 }

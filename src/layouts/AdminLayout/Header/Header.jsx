@@ -6,7 +6,7 @@ const Header = () => {
     return (
       <div className={cx("header")}>
         <div className={cx("logo")}>
-          <img src="logo.svg" alt="" />
+          {/* <img src="logo.svg" alt="" /> */}
           <span className={cx("user-name")}>lamadmin</span>
         </div>
         <div className={cx("icons")}>
@@ -22,7 +22,7 @@ const Header = () => {
             />
             <span>Jane</span>
           </div>
-          <img src="/settings.svg" alt="" className={cx("icon")} />
+          {/* <img src="/settings.svg" alt="" className={cx("icon")} /> */}
         </div>
       </div>
     );
