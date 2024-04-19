@@ -442,7 +442,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <Backtop />
     </main>
   );
 }
