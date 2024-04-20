@@ -1,7 +1,7 @@
 
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
-import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct } from "../pages/Admin";
+import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct, EditBlog } from "../pages/Admin";
 
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
@@ -145,6 +145,11 @@ export const publicRoutes = [
   {
     path: "/admin/blog/create",
     component: CreateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/blog/edit/:slug",
+    component: EditBlog,
     layout: AdminLayout,
   },
   {

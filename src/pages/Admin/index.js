@@ -1,6 +1,16 @@
 import Dashboard from "./Dashboard/Dashboard";
+// Component product
 import CreateProduct from "./Products/CreateProduct/CreateProduct";
-import CreateBlog from "./Blogs/CreateBlog/CreateBlog";
-import ListProducts from "./Products/ListProducts/ListProducts";
 import EditProduct from "./Products/EditProduct/EditProduct";
-export { Dashboard, CreateProduct, EditProduct, CreateBlog, ListProducts };
+import ListProducts from "./Products/ListProducts/ListProducts";
+// Component blog
+import CreateBlog from "./Blogs/CreateBlog/CreateBlog";
+import EditBlog from "./Blogs/EditBlog/EditBlog";
+export {
+  Dashboard,
+  CreateProduct,
+  ListProducts,
+  EditProduct,
+  CreateBlog,
+  EditBlog,
+};
