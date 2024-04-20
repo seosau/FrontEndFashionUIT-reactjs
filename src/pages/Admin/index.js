@@ -6,6 +6,7 @@ import ListProducts from "./Products/ListProducts/ListProducts";
 // Component blog
 import CreateBlog from "./Blogs/CreateBlog/CreateBlog";
 import EditBlog from "./Blogs/EditBlog/EditBlog";
+import ListBlogs from "./Blogs/ListBlogs/ListBlogs";
 export {
   Dashboard,
   CreateProduct,
@@ -13,4 +14,5 @@ export {
   EditProduct,
   CreateBlog,
   EditBlog,
+  ListBlogs
 };

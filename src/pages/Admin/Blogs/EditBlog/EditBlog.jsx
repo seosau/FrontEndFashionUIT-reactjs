@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 
 import style from "./EditBlog.module.scss";
@@ -16,6 +16,7 @@ const sampleBlog = {
   shortdesc: "",
 };
 function EditBlog() {
+  const navigate = useNavigate();
   const { slug } = useParams();
   const [blog, setBlog] = useState(sampleBlog);
   const [loading, setLoading] = useState(false);
@@ -41,7 +42,10 @@ function EditBlog() {
     e.preventDefault();
     axiosClient
       .put(`/admin/blog/update/${slug}`, blog)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        navigate("/admin/blogs");
+      })
       .catch((error) => console.log(error));
   };
 

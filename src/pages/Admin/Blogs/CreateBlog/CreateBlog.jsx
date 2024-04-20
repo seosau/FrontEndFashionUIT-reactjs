@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 
 import style from "./CreateBlog.module.scss";
@@ -15,6 +16,7 @@ const sampleBlog = {
   shortdesc: "",
 };
 function CreateBlog() {
+  const navigate = useNavigate();
   const [blog, setBlog] = useState(sampleBlog);
 
   const handleChange = (html) => {
@@ -25,7 +27,10 @@ function CreateBlog() {
     e.preventDefault();
     axiosClient
       .post("/admin/blog/store", blog)
-      .then((res) => console.log(res))
+      .then((res) => {
+        navigate("/admin/blogs")
+        console.log(res)
+      })
       .catch((error) => console.log(error));
   };
 
