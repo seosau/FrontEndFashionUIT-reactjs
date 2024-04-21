@@ -9,15 +9,14 @@ import "react-tabs/style/react-tabs.css";
 import CountdownTimer from "../../components/CountdownTimer/CountdownTimer";
 import { Navigation } from "swiper/modules";
 import "swiper/scss/navigation";
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css'
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
 import Backtop from "../../components/Backtop/Backtop";
 const cx = className.bind(styles);
 
 export default function Home() {
-
   const [tabIndex, setTabIndex] = useState(0);
   const [tabProductIndex, setProductTabIndex] = useState(0);
   const currentTime = new Date();
@@ -42,7 +41,7 @@ export default function Home() {
     swipeToSlide: true,
     transitionDuration: 500,
     verticalSwiping: false,
-    width: '100%',
+    width: "100%",
     showDots: true,
     renderDotsOutside: "renderButtonGroupOutside",
     responsive: {
@@ -81,7 +80,6 @@ export default function Home() {
     />
   );
 
-
   useEffect(() => {
     if (currentTime.getHours() >= 0 && currentTime.getHours() < 6) {
       setTabIndex(0);
@@ -99,10 +97,7 @@ export default function Home() {
       <div className={cx("slider-container")}>
         <div className={cx("slideBox")}>
           <div className={cx("slider")}>
-            <Carousel
-              {...settings}
-              customDot={<CustomDot />}
-            >
+            <Carousel {...settings} customDot={<CustomDot />}>
               <div className={cx("imgBox")}>
                 <img src={require("../../assets/image/slider_1.webp")} alt="slider" />
               </div>
@@ -195,9 +190,9 @@ export default function Home() {
                         </div>
                         <div className={cx("text-timing")}>
                           {(index === 0 && currentTime.getHours() >= 0 && currentTime.getHours() < 6) ||
-                            (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
-                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
-                            (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
+                          (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
+                          (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
+                          (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
                             ? "Đang diễn ra"
                             : "Sắp diễn ra"}
                         </div>
@@ -443,243 +438,6 @@ export default function Home() {
         </div>
       </section>
       <Backtop />
-    </main>
-  );
-                {[0, 1, 2, 3].map((index) => (
-                  <TabPanel key={index}>
-                    <div className={cx("tab-products")}>
-                      <div className={cx("tab-content", "tab-time", tabIndex === index ? "current" : "")}>
-                        <div className={cx("box-container")}>
-                          <Swiper spaceBetween={10} slidesPerView={width > 768 ? 5 : 2} modules={[Navigation]} navigation>
-                            {[...Array(8).keys()].map((productIndex) => (
-                              <SwiperSlide key={productIndex} className={cx("product-container")}>
-                                <Product productCountSale={5} />
-                              </SwiperSlide>
-                            ))}
-                          </Swiper>
-                        </div>
-                      </div>
-                    </div>
-                  </TabPanel>
-                ))}
-              </Tabs>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className={cx("banner")}>
-        <div className={cx("container")}>
-          <div className={cx("box-container")}>
-            <div className={cx("box")}>
-              <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_1.webp")} alt="Men" />
-                <div className={cx("content-banner")}>
-                  <p>Men's</p>
-                </div>
-                <Link to="" className={cx("link")}></Link>
-              </div>
-            </div>
-            <div className={cx("box")}>
-              <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_2.webp")} alt="Women" />
-                <div className={cx("content-banner")}>
-                  <p>Women's</p>
-                </div>
-                <Link to="" className={cx("link")}></Link>
-              </div>
-            </div>
-            <div className={cx("box")}>
-              <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_3.webp")} alt="Kid" />
-                <div className={cx("content-banner")}>
-                  <p>Kid's</p>
-                </div>
-                <Link to="" className={cx("link")}></Link>
-              </div>
-            </div>
-            <div className={cx("box")}>
-              <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_4.webp")} alt="Gym" />
-                <div className={cx("content-banner")}>
-                  <p>Gym's</p>
-                </div>
-                <Link to="" className={cx("link")}></Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className={cx("trending")}>
-        <div className={cx("container")}>
-          <div className={cx("box-container")}>
-            <div className={cx("title")}>
-              <h2>
-                <Link to="#" className={cx("no-underline")}>
-                  Thời trang <span>Xu Hướng</span>
-                </Link>
-              </h2>
-            </div>
-            <div className={cx("banner-tab-container")}>
-              <div className={cx("banner-tab")}>
-                <a className={cx("linear")}>
-                  <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_tab.webp")} alt="banner tab" />
-                </a>
-              </div>
-            </div>
-            <div className={cx("tab-products-container")}>
-              <Tabs selectedIndex={tabProductIndex} onSelect={(index) => setProductTabIndex(index)}>
-                <TabPanel>
-                  <div className={cx("tab-products")}>
-                    <div className={cx("tab-content", "tab-category", tabProductIndex === 0 ? "current" : "")}>
-                      <div className={cx("box-container")}>
-                        <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      </div>
-                    </div>
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div className={cx("tab-products")}>
-                    <div className={cx("tab-content", "tab-category", tabProductIndex === 1 ? "current" : "")}>
-                      <div className={cx("box-container")}>
-                        <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      </div>
-                    </div>
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div className={cx("tab-products")}>
-                    <div className={cx("tab-content", "tab-category", tabProductIndex === 2 ? "current" : "")}>
-                      <div className={cx("box-container")}>
-                        <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      </div>
-                    </div>
-                  </div>
-                </TabPanel>
-                <TabList className={cx("categories", "clearfix")}>
-                  <Tab className={cx("tab-link", "item", tabProductIndex === 0 ? "current" : "")}>
-                    <div className={cx("img-icon")}>
-                      <img className={cx("lazyload", "loaded")} src={require("../../assets/image/tab-nam.webp")} alt="tab nam" />
-                    </div>
-                    <p>
-                      Thời trang Nam
-                      <span>24 sản phẩm</span>
-                    </p>
-                  </Tab>
-                  <Tab className={cx("tab-link", "item", tabProductIndex === 1 ? "current" : "")}>
-                    <div className={cx("img-icon")}>
-                      <img className={cx("lazyload", "loaded")} src={require("../../assets/image/tab-nu.webp")} alt="tab nu" />
-                    </div>
-                    <p>
-                      Thời trang Nữ
-                      <span>24 sản phẩm</span>
-                    </p>
-                  </Tab>
-                  <Tab className={cx("tab-link", "item", tabProductIndex === 2 ? "current" : "")}>
-                    <div className={cx("img-icon")}>
-                      <img className={cx("lazyload", "loaded")} src={require("../../assets/image/tab-gym.webp")} alt="tab gym" />
-                    </div>
-                    <p>
-                      Thời trang Gym
-                      <span>24 sản phẩm</span>
-                    </p>
-                  </Tab>
-                </TabList>
-              </Tabs>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className={cx("lazyload", "big-sale")}>
-        <div className={cx("container")}>
-          <div className={cx("box-container")}>
-            <div className={cx("box")}>
-              <Link to="">
-                <img src={require("../../assets/image/img_banner_big.webp")} alt="banner big sale" className={cx("lazyload", "loaded", "img-animation")} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className={cx("product-features", "fashion-gyms")}>
-        <div className={cx("container")}>
-          <div className={cx("box-container")}>
-            <div className={cx("title")}>
-              <h2>
-                <Link to="#" className={cx("no-underline")}>
-                  Thời trang <span>Gyms</span>
-                </Link>
-              </h2>
-            </div>
-            <Swiper modules={[Navigation]} spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation>
-              {[...Array(8).keys()].map((productIndex) => (
-                <SwiperSlide key={productIndex} className={cx("product-container")}>
-                  <Product productCount={5} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </div>
-      </section>
-      <section className={cx("three-banner")}>
-        <div className={cx("container")}>
-          <div className={cx("box-container")}>
-            <div className={cx("box")}>
-              <div className={cx("one-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_3banner_1.webp")} alt="banner 1" />
-              </div>
-            </div>
-            <div className={cx("box")}>
-              <div className={cx("one-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_3banner_2.webp")} alt="banner 2" />
-              </div>
-            </div>
-            <div className={cx("box")}>
-              <div className={cx("one-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_3banner_3.webp")} alt="banner 3" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className={cx("blog")}></section>
-      <section className={cx("brand")}>
-        <div className={cx("container")}>
-          <div className={cx("box-container")}>
-            <div className={cx("title")}>
-              <h2>
-                Bean <span>Instagram</span>
-              </h2>
-            </div>
-            <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 3} modules={[Navigation]} navigation>
-              {[...Array(6).keys()].map((productIndex) => (
-                <SwiperSlide key={productIndex}>
-                  <Link to="">
-                    <img src={require(`../../assets/image/img_brand_${productIndex + 1}.webp`)} alt={`bean instagram ${productIndex + 1}`} className={cx("lazyload", "loaded")} />
-                  </Link>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }
