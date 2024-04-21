@@ -1,83 +1,91 @@
-import { CiCircleRemove } from "react-icons/ci";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "react-quill/dist/quill.snow.css";
+
 import style from "./CreateBlog.module.scss";
-import className from "classnames/bind";
-const cx = className.bind(style);
+import classNames from "classnames/bind";
+
+import axiosClient from "../../../../config/axios";
+import Editor from "../../../../components/Editor/Editor";
+
+const cx = classNames.bind(style);
+
+const sampleBlog = {
+  title: "",
+  description: "",
+  shortdesc: "",
+};
 function CreateBlog() {
+  const navigate = useNavigate();
+  const [blog, setBlog] = useState(sampleBlog);
+
+  const handleChange = (html) => {
+    setBlog({ ...blog, description: html });
+  };
+
+  const addBlog = (e) => {
+    e.preventDefault();
+    axiosClient
+      .post("/admin/blog/store", blog)
+      .then((res) => {
+        navigate("/admin/blogs")
+        console.log(res)
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
-    <div className={cx("container")}>
-      <form className={cx("formcontainer")}>
+    <div className={cx("createblog__container")}>
+      <form action="" className={cx("formcontainer")}>
         <h2 className={cx("title")}>Biểu mẫu thêm tin tức</h2>
         <div className={cx("form-group")}>
-          <label htmlFor="title" className={cx("form-label")}>
+          <label htmlFor="productname" className={cx("form-label")}>
             Tiêu đề bài viết
           </label>
           <br />
           <input
             type="text"
             className={cx("form-control")}
-            name="title"
-            placeholder="Nhà thiết kế vĩ đại đầu tiên của năm 2022"
+            name="blog-title"
+            placeholder="4 kiểu trang phục denim đang hot nhất hack mọi độ tuổi cho các nàng"
+            value={blog.title}
+            onChange={(e) =>
+              setBlog({
+                ...blog,
+                title: e.target.value,
+              })
+            }
           />
         </div>
         <div className={cx("form-group")}>
           <label htmlFor="productname" className={cx("form-label")}>
-            Mở bài
+            Mô tả bài viết
+          </label>
+          <br />
+          <Editor handleChange={handleChange} value={blog.description} />
+        </div>
+        <div className={cx("form-group")}>
+          <label htmlFor="productname" className={cx("form-label")}>
+            Tóm tắt bài viết
           </label>
           <br />
           <textarea
             type="text"
             className={cx("form-control")}
-            name="opening"
-            placeholder="Mở bài"
-            rows={5}
+            name="blog-title"
+            placeholder="Tóm tắt khoảng 100 từ"
+            value={blog.shortdesc}
+            onChange={(e) =>
+              setBlog({
+                ...blog,
+                shortdesc: e.target.value,
+              })
+            }
           />
         </div>
-        <div className={cx("form-group")}>
-          <label htmlFor="productname" className={cx("form-label")}>
-            Hình ảnh minh hoạ
-          </label>
-          <br />
-          <input type="file" className={cx("form-control")} name="image" />
-        </div>
-        <div className={cx("form-group")}>
-          <label htmlFor="productname" className={cx("form-label")}>
-            Thân Bài
-          </label>
-          <br />
-          <textarea
-            className={cx("form-control")}
-            name="article-body"
-            rows={5}
-            placeholder="Thân bài"
-          />
-        </div>
-        <div className={cx("form-group")}>
-          <label htmlFor="productname" className={cx("form-label")}>
-            Hình ảnh minh hoạ
-          </label>
-          <br />
-          <input type="file" className={cx("form-control")} name="image" />
-        </div>
-        <div className={cx("form-group")}>
-          <label htmlFor="productname" className={cx("form-label")}>
-            Kết Bài
-          </label>
-          <br />
-          <textarea
-            className={cx("form-control")}
-            name="article-body"
-            rows={5}
-            placeholder="Kết bài"
-          />
-        </div>
-        <div className={cx("form-group")}>
-          <label htmlFor="productname" className={cx("form-label")}>
-            Hình ảnh minh hoạ
-          </label>
-          <br />
-          <input type="file" className={cx("form-control")} name="image" />
-        </div>
-        <button className={cx("form-submit")}>Thêm bài viết</button>
+        <button className={cx("form-submit")} onClick={addBlog}>
+          Thêm bài viết
+        </button>
       </form>
     </div>
   );

@@ -39,19 +39,19 @@ export const menu = [
       {
         id: 2,
         title: "Products",
-        url: "/admin/listproducts",
+        url: "/admin/products",
         icon: PiShoppingCart,
       },
       {
         id: 3,
         title: "Orders",
-        url: "/admin/listorders",
+        url: "/admin/orders",
         icon: MdOutlineEventNote,
       },
       {
         id: 4,
         title: "Blogs",
-        url: "/admin/listposts",
+        url: "/admin/blogs",
         icon: BsFileEarmarkPostFill,
       },
     ],
@@ -63,13 +63,13 @@ export const menu = [
       {
         id: 1,
         title: "Add product",
-        url: "/admin/createproduct",
+        url: "/admin/product/create",
         icon: MdFormatListBulletedAdd,
       },
       {
         id: 2,
         title: "Add blog",
-        url: "/admin/createblog",
+        url: "/admin/blog/create",
         icon: MdPostAdd,
       },
     ],
