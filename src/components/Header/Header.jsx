@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { LiaPhoneSolid } from "react-icons/lia";
 import { CiLocationOn } from "react-icons/ci";
 import { BsSearch } from "react-icons/bs";
-import { SlUser } from "react-icons/sl";
+import { SlLogin, SlUser } from "react-icons/sl";
+import { PiUserPlus } from "react-icons/pi";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FaGift } from "react-icons/fa6";
 import { IoChevronDownSharp } from "react-icons/io5";
@@ -893,11 +894,25 @@ function Header() {
           </ul>
         </div>
         <div className={cx("header__action")}>
-          <div className={cx("header__action-item")}>
+          <div className={cx("header__action-item", "header__action-item-auth")}>
             <span className={cx("box-icon")}>
               <SlUser className={cx("header__action-icon")} />
             </span>
             <div className={cx("action-title")}>Tài khoản</div>
+            <ul className={cx("list-auth-action")}>
+              <li className={cx("item-auth-action")}>
+                <Link to="/login">
+                  <SlLogin />
+                  <span>Đăng nhập</span>
+                </Link>
+              </li>
+              <li className={cx("item-auth-action")}>
+                <Link to="/register">
+                  <PiUserPlus />
+                  <span>Đăng ký</span>
+                </Link>
+              </li>
+            </ul>
           </div>
           <div className={cx("header__action-item")}>
             <span className={cx("box-icon")}>
