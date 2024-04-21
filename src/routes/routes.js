@@ -18,7 +18,7 @@ import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPoli
 
 import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart } from "../pages";
 
-export const publicRoutes = [
+const routes = [
   {
     path: "/",
     component: Home,
