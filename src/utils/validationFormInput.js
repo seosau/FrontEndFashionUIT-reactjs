@@ -46,6 +46,14 @@ export const generateErrorMessage = (field) => {
       return "Kích cỡ chưa nhập";
     case "stock":
       return "Số lượng sản phẩm trong kho chưa nhập";
+    case "fullName":
+      return "Họ và tên chưa nhập";
+    case "phoneNumber":
+      return "Số diện thoại chưa nhập";
+    case "email":
+      return "Email chưa nhập";
+    case "content":
+      return "Nội dung chưa nhập";
     default:
       return "";
   }
