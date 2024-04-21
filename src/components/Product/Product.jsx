@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Product.module.scss"
+import styles from "./Product.module.scss";
 import { Link } from "react-router-dom";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CiSettings } from "react-icons/ci";
@@ -69,4 +69,3 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
     </>
   );
 }
-
