@@ -5,8 +5,9 @@ import Category from "../../components/Category/Category";
 import Tags from "../../components/Tags/Tags";
 import HotNews from "../../components/HotNews/HotNews";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { FaChevronRight } from "react-icons/fa";
+import { MdOutlineWatchLater } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
 
 const cx = classNames.bind(style);
 
@@ -20,7 +21,7 @@ export default function NewsDetail() {
               <Link className={cx("changeurl")} to="/" title="Trang chủ">
                 <span>Trang chủ</span>
               </Link>
-              <FontAwesomeIcon icon={faChevronRight} className={cx("mr_lr")} />
+              <FaChevronRight className={cx("mr_lr")} />
             </li>
             <li>
               <Link
@@ -30,7 +31,7 @@ export default function NewsDetail() {
               >
                 <span>Tin tức</span>
               </Link>
-              <FontAwesomeIcon icon={faChevronRight} className={cx("mr_lr")} />
+              <FaChevronRight className={cx("mr_lr")} />
             </li>
             <li>
               <strong>
@@ -51,41 +52,11 @@ export default function NewsDetail() {
             </h1>
             <div className={cx("posts")}>
               <div className={cx("time-post", "f")}>
-                <svg
-                  aria-hidden="true"
-                  focusable="false"
-                  data-prefix="fal"
-                  data-icon="clock"
-                  role="img"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                  className={cx("svg-inline--fa", "fa-clock", "fa-w-16")}
-                >
-                  <path
-                    fill="currentColor"
-                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm216 248c0 118.7-96.1 216-216 216-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216zm-148.9 88.3l-81.2-59c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h14c6.6 0 12 5.4 12 12v146.3l70.5 51.3c5.4 3.9 6.5 11.4 2.6 16.8l-8.2 11.3c-3.9 5.3-11.4 6.5-16.8 2.6z"
-                    className={cx("")}
-                  />
-                </svg>
+                <MdOutlineWatchLater className={cx("time-post__icon")} />
                 Thứ Ba, 05/04/2022
               </div>
               <div className={cx("time-post")}>
-                <svg
-                  aria-hidden="true"
-                  focusable="false"
-                  data-prefix="fas"
-                  data-icon="user"
-                  role="img"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"
-                  className={cx("svg-inline--fa", "fa-user", "fa-w-14")}
-                >
-                  <path
-                    fill="currentColor"
-                    d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
-                    className={cx("")}
-                  />
-                </svg>
+                <FaUser className={cx("time-post__icon")} />
                 <span>Bean Fashion</span>
               </div>
             </div>
@@ -218,18 +189,6 @@ export default function NewsDetail() {
             id="article_comments"
             acceptCharset="UTF-8"
           >
-            <input
-              name="FormType"
-              type="hidden"
-              defaultValue="article_comments"
-            />
-            <input name="utf8" type="hidden" defaultValue="true" />
-            <input
-              type="hidden"
-              id="Token-dabf3d26f98b42669b13bad124858a7e"
-              name="Token"
-              defaultValue="03AFcWeA4dvrO-cOsslZkyE7NyEX4LH5UlvHNmrBdMM8idwsW4_Zbfkax0moDWuKCxsbhtz_TL80NxtC1uIo9r_6uV7sxj08xvN6F_IaPwb_b7WsqU5mS3E8CFWqCopmYBPrQ5naWfpLDaLcx2zap3hR1SJZILhsNKgykx6KYE3-SgnxmHMjqAHhQ0fIdMWpf6ZaKwdSR_iQ11N4Tb9fjqX6tGTKfQ7b_IeSocrwivS3J8SFNFurRr6IkXF6sLNg70NNoCH6ile2T06bXkY3tJxQ0Agov_F5xVtKR0kAynulLtyANbPY3gedQC6sTnQP-TdDoXziHotBRni9WoCoEVUsRULp4G2323LUSbFfzjQespiogS1-EQKqlHQqBTKPvtMuvX-YU7XYjUxCZ7syHmd5gspO2-fKZOpVYsa9p8O0FTdBb_GSlWIZHBFXydhjrcsF1JkA-GZ0tSeM2ttBdjaG0udpdFL74iKh98oMO8H47h3ARk_6CAAIARqpc_cHBYt9TtMezasqqG2D2obcFm299HV0BpDbhifq0cVItuPDQVs3HtqZ4uOmqhXujMlnKFSl_nyAB7EuKa0crgruAKCxn7hYQOJy_MCAG7nqX1rO354TqSO9z1-aal7Wix2ktQ1r9Cy9_vWfCehFkIbocGk7-n4OWH-v33vC9-11u_3YfUXAA9Kipj1vA"
-            />
             <div className={cx("form-coment")}>
               <div className={cx("margin-top-0", "w-100")}>
                 <h5 className={cx("title-form-coment")}>
@@ -275,7 +234,11 @@ export default function NewsDetail() {
                 >
                   <textarea
                     placeholder="Nội dung"
-                    className={cx("form-control", "form-control-lg")}
+                    className={cx(
+                      "form-control",
+                      "form-control-lg",
+                      "form-control-textarea"
+                    )}
                     id="comment"
                     name="Body"
                     rows={6}

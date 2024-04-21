@@ -1,7 +1,7 @@
 import React from "react";
 import style from "./ProductDetail.module.scss";
 import classNames from "classnames/bind";
-import ProductPopup from "../../components/ProductMainInfo/ProductMainInfo";
+import ProductMainInfo from "../../components/ProductMainInfo/ProductMainInfo";
 import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
@@ -9,12 +9,10 @@ import { Navigation } from "swiper/modules";
 import "swiper/scss/navigation";
 import Product from "../../components/Product/Product";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronRight,
-  faCaretRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { FaGift } from "react-icons/fa6";
+import { FaChevronRight } from "react-icons/fa";
 import QuickViewInfo from "../../components/QuickViewInfo/QuickViewInfo";
+import Category from "../../components/Category/Category";
 
 const cx = classNames.bind(style);
 
@@ -50,7 +48,7 @@ export default function ProductDetail() {
       <p>+ Giặt với nhiệt độ tối đa 30 độ C</p>
       <p>+ Sấy ở nhiệt độ thường</p>
       <p>+ Là ủi ở nhiệt độ thấp&nbsp;</p>
-      <p>
+      <p className={cx("description__thumb")}>
         <img
           data-thumb="original"
           original-height={480}
@@ -122,7 +120,7 @@ export default function ProductDetail() {
   };
   return (
     <>
-      <div className={cx("test-z-index")}>
+      <div className={cx("set-z-index")}>
         {isPopupOpen && <QuickViewInfo openPopup={openPopup} />}
       </div>
       <div className={cx("container")}>
@@ -134,10 +132,7 @@ export default function ProductDetail() {
                 <Link className={cx("changeurl")} to="/" title="Trang chủ">
                   <span>Trang chủ</span>
                 </Link>
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  className={cx("mr_lr")}
-                />
+                <FaChevronRight className={cx("mr_lr")} />
               </li>
               <li>
                 <Link
@@ -147,10 +142,7 @@ export default function ProductDetail() {
                 >
                   <span>Sản phẩm bán chạy</span>
                 </Link>
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  className={cx("mr_lr")}
-                />
+                <FaChevronRight className={cx("mr_lr")} />
               </li>
               <li>
                 <strong>
@@ -165,7 +157,7 @@ export default function ProductDetail() {
         <div className={cx("small-container")}>
           <div className={cx("product-detail-side")}>
             {/* Chi tiết sản phẩm chính */}
-            <ProductPopup />
+            <ProductMainInfo />
             {/* Mô tả và chính sách */}
             <div className={cx("description-policy")}>
               <div>
@@ -230,11 +222,11 @@ export default function ProductDetail() {
             {/* Các mã giảm giá */}
             <div className={cx("discount-code")}>
               <fieldset className={cx("pro-discount")}>
-                <legend>
-                  <img
-                    alt="MÃ GIẢM GIÁ"
-                    src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/code_dis.gif?1706504358658"
-                  />{" "}
+                <legend className={cx("pro-discount__legend")}>
+                  <FaGift
+                    color="red"
+                    className={cx("pro-discount__gift-icon")}
+                  />
                   MÃ GIẢM GIÁ
                 </legend>
                 <div className={cx("item_discount")}>
@@ -325,10 +317,17 @@ export default function ProductDetail() {
               </fieldset>
             </div>
 
+            {/* Tags */}
+            <Category />
+
             {/* Có thể bạn thích */}
             <div className={cx("blog_noibat")}>
               <h2 className={cx("h2_sidebar_blog")}>
-                <Link to="/blogs/all" title="Tin tức nổi bật">
+                <Link
+                  to="/blogs/all"
+                  title="Có thể bạn thích"
+                  className={cx("blog_noibat__title")}
+                >
                   Có thể bạn thích
                 </Link>
               </h2>
@@ -353,6 +352,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -390,6 +390,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -427,6 +428,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -464,6 +466,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -487,7 +490,11 @@ export default function ProductDetail() {
             {/* Sản phẩm đã xem */}
             <div className={cx("blog_noibat")}>
               <h2 className={cx("h2_sidebar_blog")}>
-                <Link to="/blogs/all" title="Tin tức nổi bật">
+                <Link
+                  to="/blogs/all"
+                  title="Sản phẩm đã xem"
+                  className={cx("blog_noibat__title")}
+                >
                   Sản phẩm đã xem
                 </Link>
               </h2>
@@ -512,6 +519,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -549,6 +557,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -586,6 +595,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -623,6 +633,7 @@ export default function ProductDetail() {
                       <Link
                         title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
                         to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
+                        className={cx("contentright__product-title")}
                       >
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
@@ -648,14 +659,7 @@ export default function ProductDetail() {
                   className={cx("view-more")}
                 >
                   Xem thêm
-                  {/* <FontAwesomeIcon
-                    icon={faChevronRight}
-                    className={cx("view-more-arrow")}
-                  /> */}
-                  <FontAwesomeIcon
-                    icon={faCaretRight}
-                    className={cx("view-more-arrow")}
-                  />
+                  <FaChevronRight className={cx("view-more-arrow")} />
                 </Link>
               </div>
             </div>

@@ -1,85 +1,36 @@
-*, ::after, ::before {
-    box-sizing: border-box;
-}
-/* .container {
-    background-color:aqua;
-}
-h3 a{
-    color: red;
-} */
+.news-card-row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  // margin-right: -15px;
+  // margin-left: -15px;
+  margin: 0.5em;
+  // width: 25%;
+  width: 18.5em;
+  height: auto;
+  text-align: center;
+  justify-content: space-around;
 
-// .row {
-//     margin-right: -10px;
-//     margin-left: -10px;
-// }
-
-.row{
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    // margin-right: -15px;
-    // margin-left: -15px;
-    margin: 0.5em;
-    // width: 25%;
-    width: 18.5em;
-    height: auto;
-    text-align: center;
-    justify-content:space-around;
-}
-
-.item-blog {
+  .item-blog {
     margin-bottom: 30px;
     width: 100%;
-}
+  }
 
-.item-blog .block-content .time-post {
+  .item-blog .block-content .time-post {
     margin-bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-}
+  }
 
-.item-blog .block-thumb {
+  .item-blog .block-thumb {
     display: flex;
-    justify-content:space-around;
-}
+    justify-content: space-around;
+  }
 
-// .item-blog .block-thumb .thumb {
-//     position: relative;
-//     overflow: hidden;
-//     width: 100%;
-//     display: flex;
-//     -o-justify-content: center;
-//     -moz-justify-content: center;
-//     -webkit-justify-content: center;
-//     -os-justify-content: center;
-//     -o-display: flex;
-//     -moz-display: flex;
-//     -webkit-display: flex;
-//     -os-display: flex;
-//     align-items: center;
-//     position: relative;
-//     height: auto !important;
-//     padding-bottom: 60%;
-// }
-
-// .item-blog .block-thumb .thumb img {
-//     // width: auto !important;
-//     width: 100%;
-//     max-height: 100%;
-//     position: absolute;
-//     top: 0;
-//     bottom: 0;
-//     left: 0;
-//     right: 0;
-//     margin: auto;
-//     transition: .3s ease-in-out all;
-//     will-change: opacify;
-// }
-
-.item-blog .block-thumb .thumb {
+  .item-blog .block-thumb .thumb {
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -88,9 +39,9 @@ h3 a{
     align-items: center;
     height: auto !important;
     padding-bottom: 60%;
-}
+  }
 
-.item-blog .block-thumb .thumb img {
+  .item-blog .block-thumb .thumb img {
     /* width: auto !important; */
     width: 100%;
     max-height: 100%;
@@ -100,11 +51,16 @@ h3 a{
     left: 0;
     right: 0;
     margin: auto;
-    transition: .3s ease-in-out all;
     will-change: opacity; /* Corrected property name */
-}
+  }
+  .item-blog .block-thumb img {
+    border: 0 none;
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+  }
 
-.item-blog .block-content {
+  .item-blog .block-content {
     -webkit-box-flex: 1;
     flex-grow: 1;
     display: flex;
@@ -120,9 +76,9 @@ h3 a{
     box-shadow: 0px 4px 8px -2px #7aa5bb;
     margin-bottom: 10px;
     border-radius: 5px;
-}
+  }
 
-.item-blog .block-content h3 {
+  .item-blog .block-content h3 {
     font-size: 16px;
     margin-top: 0;
     padding-top: 0;
@@ -131,31 +87,30 @@ h3 a{
     min-height: 48px;
     text-align: center;
     font-weight: 500;
-}
+  }
 
-.item-blog .block-content h3 a {
+  .item-blog .block-content h3 a {
     color: #000;
     font-weight: bold;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
+  }
 
-.item-blog .block-content h3 a:hover {
+  .item-blog .block-content h3 a:hover {
     color: #01567f;
-}
+  }
 
-
-.item-blog .block-content .time-post {
+  .item-blog .block-content .time-post {
     margin-bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-}
+  }
 
-.item-blog .block-content .time-post span {
+  .item-blog .block-content .time-post span {
     background: #01567f;
     padding: 0 5px;
     border: 1px solid #7aa5bb;
@@ -163,9 +118,9 @@ h3 a{
     font-size: 13px;
     z-index: 1;
     color: #fff;
-}
+  }
 
-.item-blog .block-content .time-post:after {
+  .item-blog .block-content .time-post:after {
     content: "";
     position: absolute;
     width: 100%;
@@ -175,9 +130,9 @@ h3 a{
     left: 0;
     right: 0;
     bottom: 50%;
-}
+  }
 
-.item-blog .block-content .justify {
+  .item-blog .block-content .justify {
     font-size: 14px;
     color: #333;
     font-weight: 500;
@@ -187,4 +142,5 @@ h3 a{
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
 }

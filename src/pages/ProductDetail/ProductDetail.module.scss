@@ -62,7 +62,7 @@
   color: #333;
 }
 .breadcrumb li .mr_lr {
-  padding: 0px 3px;
+  margin: 0px 3px;
   color: #333;
   width: 10px;
   height: 10px;
@@ -81,29 +81,6 @@
   color: #fcaf17;
 }
 
-// // CSS Popup ===============================================================
-// .visible-product-popup {
-//   position: fixed;
-//   background-color: rgba(0, 0, 0, 0.6);
-//   // background-color: #01567f;
-//   // width: 100%;
-//   // height: 100%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-
-//   .product-popup {
-//     position: relative;
-//     // background-color: rgba(0, 0, 0, 0.08);
-//     // background-color: #01567f;
-//     width: 60em;
-//     // height: max-content;
-//   }
-// }
 // CSS của Mô tả và chính sách =================================================
 .description-policy {
   .tabs {
@@ -137,6 +114,13 @@
     .policy {
       line-height: 1.5em;
     }
+  }
+
+  .description__thumb {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -243,25 +227,15 @@
   border: 1px dashed #01567f;
   background: rgba(1, 86, 127, 0.02);
 }
-// fieldset {
-//   // border: 1px solid #ebebeb;
-//   // padding: 15px;
-// }
-input,
-textarea,
-select,
-fieldset {
-  // border-radius: 0;
+
+.pro-discount {
   max-width: 100%;
-}
-fieldset {
   min-width: 0;
-  // padding: 0;
   margin: 0;
-  // border: 0;
+  margin-bottom: 1.3em;
 }
 
-.pro-discount legend {
+.pro-discount .pro-discount__legend {
   width: auto;
   color: #01567f;
   font-weight: 600;
@@ -270,35 +244,18 @@ fieldset {
   border: 1px solid;
   font-size: 16px;
   margin-bottom: 0px;
-  padding: 0px 10px;
-}
-
-label,
-legend {
-  display: block;
-  // font-weight: 400;
-}
-// legend {
-//   // border: 0;
-//   // padding: 0;
-// }
-legend {
-  // display: block;
-  // width: 100%;
+  padding: 5px 10px;
   max-width: 100%;
-  // padding: 0;
-  // margin-bottom: .5rem;
-  // font-size: 1.5rem;
   line-height: inherit;
-  // color: inherit;
   white-space: normal;
+  display: flex;
+  // justify-content: center;
+  align-items: end;
+  gap: 0.3em;
 }
-.pro-discount legend img {
-  max-width: 23px;
-  mix-blend-mode: multiply;
-  vertical-align: -3px;
+.pro-discount__gift-icon {
+  font-size: 20px;
 }
-
 .pro-discount .item_discount {
   position: relative;
   background: #fff;
@@ -388,11 +345,6 @@ legend {
 }
 
 // Có thể bạn thích và Sản phẩm tương tự =====================================================
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
 
 .blog_noibat {
   border-radius: 10px;
@@ -413,7 +365,7 @@ legend {
   padding: 1em 0em;
 }
 
-a {
+.blog_noibat .blog_noibat__title {
   color: #333e44;
 }
 
@@ -490,6 +442,10 @@ a {
   font-weight: 500;
 }
 
+.blog_noibat .blog_content .item .contentright .contentright__product-title {
+  color: #333e44;
+}
+
 .blog_noibat .blog_content .item .time-post {
   margin-bottom: 0px;
 }
@@ -500,7 +456,7 @@ a {
   color: #333e44;
 }
 
-.item::after {
+.blog_noibat .blog_content .item::after {
   display: block;
   clear: both;
   content: "";
@@ -511,20 +467,21 @@ a {
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #01567f;
       width: 100%;
       font-style: italic;
       .view-more-arrow {
-        padding: 0px 3px;
-        color: #333;
-        width: 15px;
-        height: 15px;
+        margin: 0px 3px;
+        color: #01567f;
+        width: 13px;
+        height: 13px;
         margin-top: 2px;
       }
     }
   }
 }
 // Có thể bạn thích và sản phẩm tương tự
-.test-z-index {
+.set-z-index {
   position: relative;
   z-index: 9999;
 }

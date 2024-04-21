@@ -1,4 +1,4 @@
-.container {
+.news-container {
   display: flex;
   flex-direction: column;
   // flex-direction: row;
@@ -13,7 +13,7 @@
   // width: 1080px;
 }
 
-.small-container {
+.news-container .small-container {
   display: flex;
   flex-direction: row;
   gap: 1.3em;
@@ -25,7 +25,7 @@
   width: 1300px;
 }
 
-.title-page {
+.news-container .small-container .title-page {
   font-size: 16px;
   text-transform: uppercase;
   font-weight: bold;
@@ -36,74 +36,76 @@
   margin-bottom: 20px;
 }
 
-.row {
+.news-container .small-container .row {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
-.nav-side {
+.news-container .small-container .nav-side {
   width: 40%;
 }
 
 // CSS của thanh điều hướng =======================================================
-.bread-crumb {
-  background: #f5f5f5;
-  margin-bottom: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.container-this {
-  // padding-left: 10px;
-  // padding-right: 10px;
-  // width: 100%;
-  // max-width: 100%;
-  // margin-right: auto;
-  // margin-left: auto;
-  padding-right: 45px;
-  padding-left: 45px;
-  max-width: 1349px;
-  width: 1349px;
-  // background-color: #014566;
-}
-.breadcrumb {
-  margin: 0;
-  font-size: 14px;
-  padding: 15px 0px;
-  border-radius: 0;
-  font-weight: 400;
-  line-height: 24px;
-  background-color: transparent;
-  width: 100%;
-  text-align: left;
-}
-.breadcrumb li {
-  display: inline;
-}
-.breadcrumb li .changeurl {
-  color: #333;
-}
-.breadcrumb li .changeurl > span {
-  color: #333;
-}
-.breadcrumb li .mr_lr {
-  padding: 0px 3px;
-  color: #333;
-  width: 10px;
-  height: 10px;
-  margin-top: -2px;
-}
-.breadcrumb li .changeurl:hover,
-.breadcrumb li.active,
-.breadcrumb li strong {
-  color: #fcaf17;
-  font-weight: 400;
-  text-decoration: none;
-}
-.breadcrumb li .changeurl:hover span,
-.breadcrumb li.active span,
-.breadcrumb li strong span {
-  color: #fcaf17;
+.news-container {
+  .bread-crumb {
+    background: #f5f5f5;
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .container-this {
+    // padding-left: 10px;
+    // padding-right: 10px;
+    // width: 100%;
+    // max-width: 100%;
+    // margin-right: auto;
+    // margin-left: auto;
+    padding-right: 45px;
+    padding-left: 45px;
+    max-width: 1349px;
+    width: 1349px;
+    // background-color: #014566;
+  }
+  .breadcrumb {
+    margin: 0;
+    font-size: 14px;
+    padding: 15px 0px;
+    border-radius: 0;
+    font-weight: 400;
+    line-height: 24px;
+    background-color: transparent;
+    width: 100%;
+    text-align: left;
+  }
+  .breadcrumb li {
+    display: inline;
+  }
+  .breadcrumb li .changeurl {
+    color: #333;
+  }
+  .breadcrumb li .changeurl > span {
+    color: #333;
+  }
+  .breadcrumb li .mr_lr {
+    margin: 0px 3px;
+    color: #333;
+    width: 10px;
+    height: 10px;
+    margin-top: -2px;
+  }
+  .breadcrumb li .changeurl:hover,
+  .breadcrumb li.active,
+  .breadcrumb li strong {
+    color: #fcaf17;
+    font-weight: 400;
+    text-decoration: none;
+  }
+  .breadcrumb li .changeurl:hover span,
+  .breadcrumb li.active span,
+  .breadcrumb li strong span {
+    color: #fcaf17;
+  }
 }

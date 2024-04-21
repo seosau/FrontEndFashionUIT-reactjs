@@ -9,7 +9,11 @@ export default function HotNews() {
   return (
     <div className={cx("blog_noibat")}>
       <h2 className={cx("h2_sidebar_blog")}>
-        <Link to="/blogs/all" title="Tin tức nổi bật">
+        <Link
+          to="/blogs/all"
+          title="Tin tức nổi bật"
+          className={cx("blog_noibat__title")}
+        >
           Tin tức nổi bật
         </Link>
       </h2>
@@ -23,8 +27,7 @@ export default function HotNews() {
             >
               <img
                 className={cx("img_blog", "lazyload", "loaded")}
-                src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
-                data-src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
+                src={require("../../assets/image/news_Img.webp")}
                 alt="4 kiểu trang phục denim đang hot nhất hack mọi độ tuổi cho các nàng"
                 data-was-processed="true"
               />
@@ -54,8 +57,7 @@ export default function HotNews() {
             >
               <img
                 className={cx("img_blog", "lazyload", "loaded")}
-                src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
-                data-src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
+                src={require("../../assets/image/news_Img.webp")}
                 alt="4 kiểu trang phục denim đang hot nhất hack mọi độ tuổi cho các nàng"
                 data-was-processed="true"
               />
@@ -85,8 +87,7 @@ export default function HotNews() {
             >
               <img
                 className={cx("img_blog", "lazyload", "loaded")}
-                src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
-                data-src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
+                src={require("../../assets/image/news_Img.webp")}
                 alt="4 kiểu trang phục denim đang hot nhất hack mọi độ tuổi cho các nàng"
                 data-was-processed="true"
               />
@@ -116,8 +117,7 @@ export default function HotNews() {
             >
               <img
                 className={cx("img_blog", "lazyload", "loaded")}
-                src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
-                data-src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
+                src={require("../../assets/image/news_Img.webp")}
                 alt="4 kiểu trang phục denim đang hot nhất hack mọi độ tuổi cho các nàng"
                 data-was-processed="true"
               />
@@ -147,8 +147,7 @@ export default function HotNews() {
             >
               <img
                 className={cx("img_blog", "lazyload", "loaded")}
-                src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
-                data-src="https://bizweb.dktcdn.net/100/451/884/articles/4-kieu-trang-phuc-demin-hot-nhat.jpg?v=1649173718847"
+                src={require("../../assets/image/news_Img.webp")}
                 alt="4 kiểu trang phục denim đang hot nhất hack mọi độ tuổi cho các nàng"
                 data-was-processed="true"
               />

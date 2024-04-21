@@ -6,8 +6,7 @@ import HotNews from "../../components/HotNews/HotNews";
 import Category from "../../components/Category/Category";
 import Tags from "../../components/Tags/Tags";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { FaChevronRight } from "react-icons/fa";
 
 const cx = classNames.bind(style);
 
@@ -64,7 +63,7 @@ const data = [
 
 export default function News() {
   return (
-    <div className={cx("container")}>
+    <div className={cx("news-container")}>
       <section className={cx("bread-crumb")}>
         <div className={cx("container-this")}>
           <ul className={cx("breadcrumb")}>
@@ -72,7 +71,7 @@ export default function News() {
               <Link className={cx("changeurl")} to="/" title="Trang chủ">
                 <span>Trang chủ</span>
               </Link>
-              <FontAwesomeIcon icon={faChevronRight} className={cx("mr_lr")} />
+              <FaChevronRight className={cx("mr_lr")} />
             </li>
             <li>
               <strong>

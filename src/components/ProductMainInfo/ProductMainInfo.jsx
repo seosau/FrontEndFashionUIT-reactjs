@@ -59,7 +59,7 @@ const tempSizes = [
   { value: "L", index: 2 },
 ];
 
-export default function ProductPopup({
+export default function ProductMainInfo({
   title,
   images,
   oldPrice,
@@ -94,21 +94,13 @@ export default function ProductPopup({
     setActiveSize(index);
   };
   return (
-    <div className={cx("container")}>
+    <div className={cx("ProductMainInfo-container")}>
       <div className={cx("small-container")}>
         <div className={cx("left-image")}>
           <div className={cx("main-image")}>
             <img src={tempImg[mainImgIndex].src} />
           </div>
           <div className={cx("small-images")}>
-            {/* {images.map(
-              (e = (
-                <div className={cx("each-small-img")}>
-                  <img src={require("")} alt={title} />
-                </div>
-              ))
-            )} */}
-
             <Swiper
               spaceBetween={10}
               slidesPerView={4}
@@ -152,7 +144,7 @@ export default function ProductPopup({
                   BeanFashion
                 </span>
               </p>
-              <p className={cx("ngan-cach")}>|</p>
+              <p className={cx("co-tra-st", "separate")}>|</p>
               <p className={cx("product-stock")}>
                 Tình trạng:
                 <span className={cx("stock", "co-tra-st")}>Còn hàng</span>

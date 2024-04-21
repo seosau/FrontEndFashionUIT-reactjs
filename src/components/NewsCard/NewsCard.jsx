@@ -58,7 +58,7 @@ const data = [
 
 export default function NewsCard({ props }) {
   return (
-    <div className={cx("row")}>
+    <div className={cx("news-card-row")}>
       <div className={cx("item-blog")}>
         <div className={cx("block-thumb")}>
           <Link className={cx("thumb ")} to={props.href} title={props.title}>
