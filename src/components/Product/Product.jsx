@@ -69,4 +69,3 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
     </>
   );
 }
-

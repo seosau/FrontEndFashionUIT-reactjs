@@ -196,7 +196,7 @@ export default function AllProducts() {
     if (selectedFilter.indexOf(item) != -1) {
       removeFilter(item);
     } else {
-      setSelectedFilter([...selectedFilter, item]);
+      setSelectedFilter([...selectedFilter, item])
     }
   };
   const removeFilter = (item) => {
