@@ -1,49 +1,58 @@
 import style from "./ChainStore.module.scss";
 import className from "classnames/bind";
 import { IoIosArrowForward } from "react-icons/io";
-import React, { useState } from "react";
+import { FaLocationDot } from "react-icons/fa6";
+import { FaPhoneVolume } from "react-icons/fa6";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import axiosClient from "../../config/axios";
 
 const cx = className.bind(style);
+const url = 'https://vapi.vnappmob.com';
 
 function ChainStore() {
-  const data = {
-    provinces: [
-      { id: 1, name: "Hồ Chí Minh" },
-      { id: 2, name: "Hà Nội" },
-      { id: 3, name: "Bình Dương" },
-      { id: 4, name: "Cần Thơ" },
-      { id: 5, name: "Đà Nẵng" },
-      // Các tỉnh khác...
-    ],
-    districts: [
-      { id: 1, provinceId: 1, name: "Quận 10" },
-      { id: 2, provinceId: 2, name: "Quận Ba Đình" },
-      { id: 3, provinceId: 2, name: "Quận Cầu Giấy" },
-      { id: 4, provinceId: 2, name: "Quận Hà Đông" },
-      { id: 5, provinceId: 3, name: "Quận Thủ Dầu Một" },
-      { id: 6, provinceId: 4, name: "Quận Ninh Kiều" },
-      { id: 7, provinceId: 5, name: "Quận Hải Châu" },
 
-      // Các quận khác...
-    ],
-    towns: [
-      { id: 1, districtId: 1, name: "Phường 15" },
-      { id: 2, districtId: 2, name: "Phường Liễu Giai" },
-      { id: 3, districtId: 3, name: "Phường Nghĩa Tân" },
-      { id: 4, districtId: 3, name: "Phường Trung Hoà" },
-      { id: 5, districtId: 4, name: "Phường Văn Quán" },
-      { id: 6, districtId: 5, name: "Phường Phú Thọ" },
-      { id: 7, districtId: 6, name: "Phường An Khánh" },
-      { id: 8, districtId: 7, name: "Phường Hoà Cường Nam" },
-      // Các xã khác...
-    ],
-  };
+  const [listProvinces, setListProvinces] = useState();
+  const [listDistricts, setListDistricts] = useState();
+  const [listTowns, setListTowns] = useState();
+
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedTown, setSelectedTown] = useState("");
 
+  const [locationStore, setLocationStore] = useState();
+
+  const [selectedLocation, setSelectedLocation] = useState(
+    {
+      province: '',
+      district: '',
+      town: '',
+    }
+  );
+
+  const getLocationStore = async () => {
+    try {
+      const response = await axiosClient.get('/location/getLocation');
+      if (response.status === 200) {
+        setLocationStore(response.data);
+      } else {
+        console.error('Error:', response.statusText);
+      }
+    } catch (error) {
+      // Xử lý lỗi nếu có bất kỳ lỗi nào xảy ra
+      console.error('Error fetching location:', error);
+    }
+  }
+
   const handleProvinceChange = (event) => {
     const provinceId = event.target.value;
+    let provinceName = listProvinces.find(province => province.province_id === provinceId)?.province_name || '';
+    setSelectedLocation(prevState => ({
+      ...prevState,
+      province: provinceName,
+      district: '',
+      town: ''
+    }));
     setSelectedProvince(provinceId);
     setSelectedDistrict("");
     setSelectedTown("");
@@ -51,14 +60,57 @@ function ChainStore() {
 
   const handleDistrictChange = (event) => {
     const districtId = event.target.value;
+    let districtName = listDistricts.find(district => district.district_id === districtId)?.district_name || '';
+    setSelectedLocation(prevState => ({
+      ...prevState,
+      district: districtName,
+      town: ''
+    }));
     setSelectedDistrict(districtId);
     setSelectedTown("");
   };
 
+
   const handleTownChange = (event) => {
     const townId = event.target.value;
+    let townName = listTowns.find(ward => ward.ward_id === townId)?.ward_name || '';
+    setSelectedLocation(prevState => ({
+      ...prevState,
+      town: townName
+    }));
     setSelectedTown(townId);
   };
+
+
+  const getListProvinces = async () => {
+    const provincesData = await axios.get(url + '/api/province');
+    setListProvinces(provincesData.data.results);
+  }
+
+  const getListDistricts = async (provinceId) => {
+    const districtsData = await axios.get(url + '/api/province/district/' + provinceId);
+    setListDistricts(districtsData.data.results);
+  }
+
+  const getListTowns = async (districtId) => {
+    const townsData = await axios.get(url + '/api/province/ward/' + districtId);
+    setListTowns(townsData.data.results);
+  }
+
+  useEffect(() => {
+    getListProvinces();
+    getLocationStore();
+  }, [])
+
+  useEffect(() => {
+    if (selectedProvince !== '')
+      getListDistricts(selectedProvince)
+  }, [selectedProvince])
+
+  useEffect(() => {
+    if (selectedDistrict !== '')
+      getListTowns(selectedDistrict)
+  }, [selectedDistrict])
 
   return (
     <>
@@ -88,11 +140,12 @@ function ChainStore() {
             <div className={cx("province-sort")}>
               <select value={selectedProvince} onChange={handleProvinceChange}>
                 <option value={""}>Chọn tỉnh thành</option>
-                {data.provinces.map((province) => (
-                  <option key={province.id} value={province.id}>
-                    {province.name}
+                {listProvinces ? listProvinces.map((province) => (
+                  <option key={province.province_id} value={province.province_id}>
+                    {province.province_name}
                   </option>
-                ))}
+                )) : <>
+                </>}
               </select>
             </div>
           </div>
@@ -100,16 +153,12 @@ function ChainStore() {
             <div className={cx("district-sort")}>
               <select value={selectedDistrict} onChange={handleDistrictChange}>
                 <option value={""}>Chọn quận/huyện</option>
-                {data.districts
-                  .filter(
-                    (district) =>
-                      district.provinceId === Number(selectedProvince)
-                  )
-                  .map((district) => (
-                    <option key={district.id} value={district.id}>
-                      {district.name}
-                    </option>
-                  ))}
+                {listDistricts ? listDistricts.map((district) => (
+                  <option key={district.district_id} value={district.district_id}>
+                    {district.district_name}
+                  </option>
+                )) : <>
+                </>}
               </select>
             </div>
           </div>
@@ -117,16 +166,47 @@ function ChainStore() {
             <div className={cx("town-sort")}>
               <select value={selectedTown} onChange={handleTownChange}>
                 <option value={""}>Chọn phường xã</option>
-                {data.towns
-                  .filter(
-                    (town) => town.districtId === Number(selectedDistrict)
-                  )
-                  .map((town) => (
-                    <option key={town.id} value={town.id}>
-                      {town.name}
-                    </option>
-                  ))}
+                {listTowns ? listTowns.map((ward) => (
+                  <option key={ward.ward_id} value={ward.ward_id}>
+                    {ward.ward_name}
+                  </option>
+                )) : <>
+                </>}
               </select>
+            </div>
+          </div>
+          <div className={cx("store-location-container")}>
+            <div className={cx("store-location-box")}>
+              {
+                locationStore ?
+                  (
+                    locationStore.length ? locationStore.filter(
+                      item => selectedLocation.province !== '' ? (
+                        selectedLocation.district !== '' ? (
+                          selectedLocation.town !== '' ? (
+                            item.city === selectedLocation.province && item.district === selectedLocation.district && item.ward === selectedLocation.town
+                          ) : item.city === selectedLocation.province && item.district === selectedLocation.district
+                        ) : item.city === selectedLocation.province
+                      ) : item
+                    ).map((location, index) => (
+                      <div key={index} className={cx("store-location-name")}>
+                        <h6>{'Bean Fashion ' + location.city}</h6>
+                        <span>
+                          <FaLocationDot className={cx("icon")} />
+                          {location.addressDetail + ', ' + location.ward + ', ' + location.district + ', ' + location.city}
+                        </span>
+                        <span>
+                          <FaPhoneVolume className={cx("icon")} />
+                          {location.phoneNumber}
+                        </span>
+                      </div>
+                    ))
+                      :
+                      <div className={cx("store-location-name")}>
+                      </div>
+                  ) :
+                  <></>
+              }
             </div>
           </div>
         </div>
@@ -140,6 +220,7 @@ function ChainStore() {
               allowfullscreen={""}
               loading={"lazy"}
               referrerpolicy={"no-referrer-when-downgrade"}
+              title="Store Location"
             ></iframe>
           </div>
         </div>

@@ -1,0 +1,59 @@
+.container {
+  background-color: #fff;
+  table,
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th {
+    line-height: 3;
+  }
+  td {
+    line-height: 2;
+    font-size: 14px;
+  }
+  .title {
+    text-align: center;
+    color: var(--main-color);
+  }
+}
+.table-product {
+  width: 100%;
+  thead{
+    text-align: center;
+  }
+  thead,
+  tbody {
+   
+    color: #000;
+  }
+}
+
+.product-image {
+  width: 60px;
+  height: 60px;
+  margin-top: 12px;
+}
+.btn {
+  padding: 10px;
+  background: none;
+  cursor: pointer;
+}
+.icon {
+  font-size: 20px;
+}
+.icon-view {
+  color: blue;
+}
+.icon-edit {
+  color: green;
+}
+.icon-remove {
+  color: red;
+}
+.product-name {
+  font-size: 12px;
+}
+.product-desc {
+}

@@ -1,11 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import style from "./Register.module.scss";
 import className from "classnames/bind";
 import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
+import axiosClient from "../../config/axios";
 
 const cx = className.bind(style);
 function Register() {
+  const navigate = useNavigate();
   const [isPrivate, setIsPrivate] = useState(true);
   const [registerInfo, setRegisterInfo] = useState({
     name: "",
@@ -23,28 +25,50 @@ function Register() {
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
     if (registerInfo.name === "" || registerInfo.phoneNumber === "" || registerInfo.email === "" || registerInfo.pass === "" || registerInfo.cpass === "") {
       setIsFullFilled(false);
+      return false;
     } else {
       if (!isFullFilled) setIsFullFilled(true);
       if (!phoneNumberRegex.test(registerInfo.phoneNumber)) {
         setIsPhoneNumberValid(false);
+        return false;
       } else {
         if (!isPhoneNumberValid) setIsPhoneNumberValid(true);
         if (!emailRegex.test(registerInfo.email)) {
           setIsEmailValid(false);
+          return false;
         } else {
           if (!isEmailValid) setIsEmailValid(true);
           if (registerInfo.pass !== registerInfo.cpass) {
             setIsPassValid(false);
+            return false;
           } else {
             if (!isPassValid) setIsPassValid(true);
           }
         }
       }
     }
+    return true;
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    validateForm();
+    if (validateForm()) {
+      var user = {
+        email: registerInfo.email,
+        name: registerInfo.name,
+        password: registerInfo.pass,
+        phoneNumber: registerInfo.phoneNumber,
+      };
+      axiosClient
+        .post(`/register`, user)
+        .then((response) => {
+          window.alert("Registration successful! Please check your email to verify your account.");
+          navigate("/login");
+        })
+        .catch((error) => {
+          window.alert(`Registration failed! ${error.response.data.message}`);
+          console.log("registration failed", error);
+        });
+    }
   };
   // useEffect(() => {
   //   console.log(registerInfo);

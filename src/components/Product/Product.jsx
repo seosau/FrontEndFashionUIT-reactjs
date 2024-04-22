@@ -1,20 +1,22 @@
 import React from "react";
-import styles from "./Product.module.scss"
+import styles from "./Product.module.scss";
 import { Link } from "react-router-dom";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CiSettings } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
 import className from "classnames/bind";
 const cx = className.bind(styles);
-export default function Product({ ranking, title, oldPrice, newPrice, productCount, productCountSale, discount, index }) {
+export default function Product({ ranking, title, oldPrice, newPrice, productCount, productCountSale, image, discount, index, openPopup }) {
   return (
     <>
       <div className={cx("product-thumbnail")}>
         <Link className={cx("product-overlay")}></Link>
         <Link className={cx("image-thumbnail", "no-underline")}>
-          <img className={cx("lazyload", "loaded")} src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")} alt="ao thun co tron" />
+          <img className={cx("lazyload", "loaded")} src={image} alt={title} />
         </Link>
-        <span className={cx("sale")}>-30%</span>
+        {
+          discount && <span className={cx("sale")}>{discount}</span>
+        }
         {ranking ? (
           <div className={cx("product-index-num")}>
             <span className={cx("cri_index")}></span>
@@ -24,23 +26,27 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
         <div className={cx("product-action")}>
           <Link className={cx("product-overlay-action")}></Link>
           <div className={cx("group-action")}>
-            <CiSettings className={cx("icon")} />
-            <IoEyeOutline className={cx("icon")} />
-            <HiOutlineShoppingBag className={cx("icon")} />
+            <CiSettings className={cx("icon")} title="" />
+            <IoEyeOutline className={cx("icon")} title="Xem trước" onClick={openPopup} />
+            <HiOutlineShoppingBag className={cx("icon")} title="Thêm vào giỏ" />
           </div>
         </div>
       </div>
       <div className={cx("product-info")}>
         <Link className={cx("no-underline")}>
-          <h3 className={cx("product-name")}>Áo cotton nữ cổ tròn dáng suông in chữ Trend</h3>
+          <h3 className={cx("product-name")}>{title}</h3>
         </Link>
         <div className={cx("price-box")}>
-          <span className={cx("price")}>195.000₫</span>
-          <span className={cx("compare-price")}>280.000₫</span>
+          {
+            newPrice ? <>
+              <span className={cx("price")}>{newPrice}₫</span>
+              <span className={cx("compare-price")}>{oldPrice}₫</span>
+            </> : <span className={cx("price")}>{oldPrice}₫</span>
+          }
           {productCount && (
             <div className={cx("productcount")}>
               <div className={cx("countitem", "visible")}>
-                <span className={cx("a-center")}>Đã bán 210</span>
+                <span className={cx("a-center")}>Đã bán {productCount}</span>
                 <div className={cx("countdown")}>
                   <span></span>
                 </div>
@@ -51,7 +57,7 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
         {productCountSale && (
           <div className={cx("productcount-sale")}>
             <div className={cx("countitem", "visible")}>
-              <span className={cx("a-center")}>Đã bán 210</span>
+              <span className={cx("a-center")}>Đã bán {productCountSale}</span>
               <div className={cx("countdown")}>
                 <span></span>
               </div>
@@ -63,4 +69,3 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
     </>
   );
 }
-

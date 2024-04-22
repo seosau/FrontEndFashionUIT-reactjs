@@ -9,15 +9,14 @@ import "react-tabs/style/react-tabs.css";
 import CountdownTimer from "../../components/CountdownTimer/CountdownTimer";
 import { Navigation } from "swiper/modules";
 import "swiper/scss/navigation";
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css'
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
 import Backtop from "../../components/Backtop/Backtop";
 const cx = className.bind(styles);
 
 export default function Home() {
-
   const [tabIndex, setTabIndex] = useState(0);
   const [tabProductIndex, setProductTabIndex] = useState(0);
   const currentTime = new Date();
@@ -42,7 +41,7 @@ export default function Home() {
     swipeToSlide: true,
     transitionDuration: 500,
     verticalSwiping: false,
-    width: '100%',
+    width: "100%",
     showDots: true,
     renderDotsOutside: "renderButtonGroupOutside",
     responsive: {
@@ -81,7 +80,6 @@ export default function Home() {
     />
   );
 
-
   useEffect(() => {
     if (currentTime.getHours() >= 0 && currentTime.getHours() < 6) {
       setTabIndex(0);
@@ -99,10 +97,7 @@ export default function Home() {
       <div className={cx("slider-container")}>
         <div className={cx("slideBox")}>
           <div className={cx("slider")}>
-            <Carousel
-              {...settings}
-              customDot={<CustomDot />}
-            >
+            <Carousel {...settings} customDot={<CustomDot />}>
               <div className={cx("imgBox")}>
                 <img src={require("../../assets/image/slider_1.webp")} alt="slider" />
               </div>
@@ -195,9 +190,9 @@ export default function Home() {
                         </div>
                         <div className={cx("text-timing")}>
                           {(index === 0 && currentTime.getHours() >= 0 && currentTime.getHours() < 6) ||
-                            (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
-                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
-                            (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
+                          (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
+                          (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
+                          (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
                             ? "Đang diễn ra"
                             : "Sắp diễn ra"}
                         </div>
@@ -442,8 +437,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <Backtop />
     </main>
   );
 }
-

@@ -1,3 +1,14 @@
+import AdminLayout from "../layouts/AdminLayout/AdminLayout";
+import {
+  Dashboard,
+  CreateProduct,
+  CreateBlog,
+  ListProducts,
+  EditProduct,
+  EditBlog,
+  ListBlogs,
+} from "../pages/Admin";
+
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -13,11 +24,22 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore  } from "../pages";
+import {
+  Home,
+  AllProducts,
+  Login,
+  Register,
+  Account,
+  Orders,
+  ChangePass,
+  Address,
+  ChainStore,
+  Contact,
+  CheckOut,
+  ProductCart,
+} from "../pages";
 
-
-
-export const publicRoutes = [
+const routes = [
   {
     path: "/",
     component: Home,
@@ -28,7 +50,7 @@ export const publicRoutes = [
   },
   {
     path: "/cart",
-    component: "",
+    component: ProductCart,
   },
   {
     path: "/login",
@@ -54,7 +76,11 @@ export const publicRoutes = [
     path: "/chainstore",
     component: ChainStore,
   },
-  }
+  {
+    path: "/checkout",
+    component: CheckOut,
+  },
+  {
     path: "/contact-support",
     component: Contact,
   },
@@ -123,3 +149,41 @@ export const publicRoutes = [
     component: AllProducts,
   },
 ];
+const adminRoutes = [
+  {
+    path: "/admin/dashboard",
+    component: Dashboard,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/product/create",
+    component: CreateProduct,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/product/edit/:slug",
+    component: EditProduct,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/products",
+    component: ListProducts,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/blog/create",
+    component: CreateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/blog/edit/:slug",
+    component: EditBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/blogs",
+    component: ListBlogs,
+    layout: AdminLayout,
+  },
+];
+export { routes, adminRoutes };
