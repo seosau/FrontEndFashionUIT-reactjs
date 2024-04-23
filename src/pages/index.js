@@ -1,7 +1,7 @@
 import Home from "./Home/Home";
 import Register from "./Register/Register";
 import Login from "./Login/Login";
-
+import CheckOut from "./CheckOut/CheckOut";
 import Account from "./Account/Account";
 import ProductCart from "./ProductCart/ProductCart";
 import Orders from "./Orders/Orders";
@@ -26,4 +26,5 @@ export {
   Address,
   ChainStore,
   ProductCart,
+  CheckOut,
 };
