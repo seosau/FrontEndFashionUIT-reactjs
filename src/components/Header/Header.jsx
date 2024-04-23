@@ -1,6 +1,6 @@
 import className from "classnames/bind";
 import style from "./Header.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LiaPhoneSolid } from "react-icons/lia";
 import { CiLocationOn } from "react-icons/ci";
 import { BsSearch } from "react-icons/bs";
@@ -15,7 +15,7 @@ import Search from "../../components/Search/Search";
 import { useContext, useState } from "react";
 import { logDOM } from "@testing-library/react";
 import axiosClient from "../../config/axios";
-import { LoginContext } from "../../Context/LoginContext";
+import { AuthContext } from "../../Context/AuthContext";
 const cx = className.bind(style);
 function Header() {
   const [searchVisible, setSearchVisible] = useState(false);
@@ -30,13 +30,16 @@ function Header() {
 
     setSearchVisible(query !== "");
   };
-  const { isLogin, setIsLogin } = useContext(LoginContext);
+  const { isAuth, setIsAuth, setDecodedToken } = useContext(AuthContext);
+  const navigate = useNavigate();
   const handleLogout = () => {
     axiosClient
       .get(`/logout`)
       .then(({ data }) => {
         localStorage.removeItem("decodedToken");
-        setIsLogin(false);
+        setIsAuth(false);
+        setDecodedToken(null);
+        navigate("/login");
       })
       .catch((error) => {
         console.log("Login Error", error.response.data.message);
@@ -762,7 +765,7 @@ function Header() {
             </span>
             <div className={cx("action-title")}>Tài khoản</div>
             <ul className={cx("list-auth-action")}>
-              {isLogin == false ? (
+              {isAuth == false ? (
                 <>
                   <li className={cx("item-auth-action")}>
                     <Link to="/login">

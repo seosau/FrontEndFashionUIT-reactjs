@@ -5,7 +5,7 @@ import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
-import { LoginContext } from "../../Context/LoginContext";
+import { AuthContext } from "../../Context/AuthContext";
 const cx = className.bind(style);
 function Login() {
   const [isPrivate, setIsPrivate] = useState(true);
@@ -17,7 +17,7 @@ function Login() {
     email: "",
     pass: "",
   });
-  const { isLogin, setIsLogin } = useContext(LoginContext);
+  const { isAuth, setIsAuth, setDecodedToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const validateForm = () => {
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
@@ -37,7 +37,7 @@ function Login() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isLogin) {
+    if (!isAuth) {
       if (validateForm()) {
         const user = {
           email: loginInfo.email,
@@ -50,16 +50,8 @@ function Login() {
             const token = data.token;
             if (token) {
               const decodedToken = jwtDecode(token);
-              const userId = decodedToken.userId;
-              const userName = decodedToken.userName;
-
-              var local = localStorage.getItem("decodedToken");
-              if (local) {
-                localStorage.removeItem("decodedToken");
-              }
-              localStorage.setItem("decodedToken", JSON.stringify(decodedToken));
-              local = JSON.parse(localStorage.getItem("decodedToken"));
-              setIsLogin(true);
+              setDecodedToken(decodedToken);
+              setIsAuth(true);
               navigate("/");
             } else {
               window.alert("Please verify your email!");

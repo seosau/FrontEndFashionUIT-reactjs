@@ -1,19 +1,20 @@
 import style from "./SideBar.module.scss";
 import className from "classnames/bind";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axiosClient from "../../../config/axios";
 import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "../../../Context/AuthContext";
 const cx = className.bind(style);
 
 export default function SideBar() {
-  const decodedToken = JSON.parse(localStorage.getItem("decodedToken"));
+  const { decodedToken } = useContext(AuthContext);
   const location = useLocation();
   const currentPath = location.pathname;
   return (
     <div className={cx("sideBar")}>
       <div className={cx("greeting-user")}>
         <div className={cx("greeting")}>
-          Xin chào, <span className={cx("user-name")}>{decodedToken.userName}</span>
+          Xin chào, <span className={cx("user-name")}>{decodedToken?.userName}</span>
         </div>
       </div>
       <div className={cx("linkContainer")}>
