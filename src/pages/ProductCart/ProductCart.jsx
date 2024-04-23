@@ -9,7 +9,7 @@ const cx = className.bind(style);
 
 export default function ProductCart() {
     const [cartItems, setCartItems] = useState([]);
-
+    
     const addToCart = (Product) => {
         setCartItems([...cartItems, Product]);
     };
@@ -18,6 +18,7 @@ export default function ProductCart() {
         newCartItems.splice(index, 1);
         setCartItems(newCartItems);
     };
+
     return <div className={cx("body-wrap")} >
         <div className={cx("bread_crumb")}> 
             <div className={cx("container")}>
@@ -38,19 +39,10 @@ export default function ProductCart() {
             <div className={cx("header-cart")}>
                 <h1 className={cx("title-cart")}>GIỎ HÀNG CỦA BẠN</h1> 
             </div>
-            <div className={cx("box-free-ship")}>
-               <div className={cx("progress-free-shipping")} data-value={150000}>
-               <div className={cx("progress-bar")} role={"progress-bar"} aria-valuemin={0} aria-valuemax={100}>
-                    <div className={cx("content-free-shipping")}>
-                        Mua tối thiểu 906.000đ để được
-                        <b> MIỄN PHÍ VẬN CHUYỂN</b>
-                    </div>
-                </div>
-               </div>
-            </div>
+           
             <div className={cx("body-cart")}>
                 <div className={cx("cart-moblie-page")}>
-                    {cartItems.length === 0 ? (
+                    {cartItems.length !== 0 ? (
                        <div className={cx("cart-empty")}>
                        <div className={cx("cart-empty-icon")}><HiOutlineShoppingCart/>
                         </div>
@@ -58,6 +50,16 @@ export default function ProductCart() {
                     </div> 
                     ): (
                         <div className={cx("cartMobilePage")}>
+                            <div className={cx("box-free-ship")}>
+                        <div className={cx("progress-free-shipping")} data-value={150000}>
+                        <div className={cx("progress-bar")} role={"progress-bar"} aria-valuemin={0} aria-valuemax={100}>
+                             <div className={cx("content-free-shipping")}>
+                                 Mua tối thiểu 906.000đ để được
+                                 <b> MIỄN PHÍ VẬN CHUYỂN</b>
+                             </div>
+                         </div>
+                        </div>
+                     </div>
                         <form action = "/cart" method="post" noValidate className={cx("cart-mobile-body")}>
                             <div className={cx("cart-header-info")}>
                                 <div className={cx("cart-header-info-ttsp")}>THÔNG TIN SẢN PHẨM</div>
@@ -68,17 +70,16 @@ export default function ProductCart() {
                             <div className={cx("cart-inner-body")}>
                             <div className={cx("cart-row")}>
                                 <div className={cx("cart-row-product-cart")} data-line = "1">
-                                    <a href="/" className={cx("cart-product-image")} title="">
+                                    <Link to="/" className={cx("cart-product-image")} title=""/>
                                         <img src="" alt=""></img>
-                                    </a>
                                     <div className={cx("grid-item-info-detail")}>
                                         <div className={cx("item-info-name")}>
-                                            <a href="" className={cx("item-info-name-link")} title="">
+                                            <Link to="" className={cx("item-info-name-link")} >
                                                 Tên sản phẩm
-                                            </a>
+                                            </Link>
                                             <span className={cx("item-info-size")}>M</span>
-                                            <a title="Xóa" className={cx("btn-remove-item-cart")}
-                                                href="" data-line="1">Xóa</a>
+                                            <Link className={cx("btn-remove-item-cart")}
+                                                to="" data-line="1">Xóa</Link>
                                         </div>     
                                         <div className={cx("grid-price")}>
                                             <div className={cx("grid-item-cart-price")}>
@@ -88,13 +89,12 @@ export default function ProductCart() {
                                         <div className={cx("grid-qty")}>
                                             <div className={cx("grid-cart-select-item")}>
                                                 <div className={cx("grid-cart-select-group-btn")}>
-                                                    <button type="button" className={cx("btn-adjust-qty-minus")}
-                                                    data-id data-qty={"0"} data-line="1" aria-label="-"> - </button>
-                                                    <input type="text" name="update[]" className={cx("number-sidebar")}
-                                                    maxLength={"3"} value={"1"} min={"0"} aria-label={"quantity"}
-                                                    pattern={"[0-9]*"}></input>
-                                                    <button type="button" className={cx("btn-adjust-qty-plus")}
-                                                    data-id data-line={"1"} data-qty={"2"} aria-label={"+"}> + </button>
+                                                    <button className={cx("btn-adjust-qty-minus")}
+                                                    > - </button>
+                                                    <input type="text" className={cx("number-sidebar")}
+                                                    maxLength={3} value={1} 
+                                                    ></input>
+                                                    <button className={cx("btn-adjust-qty-plus")}> + </button>
                                                 </div>
                                             </div>   
                                         </div>
@@ -115,7 +115,7 @@ export default function ProductCart() {
                                     </div>
                                 </div>
                                 <div className={cx("cart-btn-continue")}>
-                                    <a className={cx("btn-checkout")} title="Tiếp tục mua hàng" href="/products">TIẾP TỤC MUA HÀNG</a>
+                                    <Link className={cx("btn-checkout")} to="/products">TIẾP TỤC MUA HÀNG</Link>
                                 </div>
                                 <div className={cx("cart-btn-checkout")}>
                                     <button onClick="location.href='/checkout'" type = "button"
