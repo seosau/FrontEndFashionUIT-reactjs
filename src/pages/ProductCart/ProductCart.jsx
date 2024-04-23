@@ -42,7 +42,7 @@ export default function ProductCart() {
            
             <div className={cx("body-cart")}>
                 <div className={cx("cart-moblie-page")}>
-                    {cartItems.length !== 0 ? (
+                    {cartItems.length === 0 ? (
                        <div className={cx("cart-empty")}>
                        <div className={cx("cart-empty-icon")}><HiOutlineShoppingCart/>
                         </div>
