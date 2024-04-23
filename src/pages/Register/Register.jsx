@@ -66,7 +66,6 @@ function Register() {
         })
         .catch((error) => {
           window.alert(`Registration failed! ${error.response.data.message}`);
-          console.log("registration failed", error);
         });
     }
   };
@@ -81,11 +80,6 @@ function Register() {
           <div className={cx("backLine")}>
             <div className={cx("frontLine")}></div>
           </div>
-          {/* {!isFullFilled ? <div className={cx("isFullFilled")}>Vui lòng nhập đầy đủ thông tin!</div> : null}
-          {!isPhoneNumberValid ? <div className={cx("isFullFilled")}>Số điện thoại không hợp lệ!</div> : null}
-          {!isEmailValid ? <div className={cx("isFullFilled")}>Email không hợp lệ!</div> : null}
-          {!isPassValid ? <div className={cx("isFullFilled")}>Nhập lại mật khẩu không khớp!</div> : null} */}
-
           {!isFullFilled ? (
             <div className={cx("warningTxt")}>Vui lòng nhập đầy đủ thông tin!</div>
           ) : !isPhoneNumberValid ? (

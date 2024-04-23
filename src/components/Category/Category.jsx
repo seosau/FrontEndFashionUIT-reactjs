@@ -4,7 +4,6 @@ import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-
 const cx = classNames.bind(style);
 
 const data = [
@@ -698,19 +697,9 @@ export default function Category() {
       <nav className={cx("nav-category")}>
         <ul className={cx("nav", "navbar-pills")}>
           {data.map((e) => (
-            <li
-              className={cx(
-                "nav-item",
-                "relative",
-                isVisible === e.index ? "showing-detail" : "not-show-detail"
-              )}
-            >
+            <li className={cx("nav-item", "relative", isVisible === e.index ? "showing-detail" : "not-show-detail")}>
               <div className={cx("category-title")}>
-                <Link
-                  title={e.name}
-                  to={e.link}
-                  className={cx("nav-link", "pr-5")}
-                >
+                <Link title={e.name} to={e.link} className={cx("nav-link", "pr-5")}>
                   {e.name}
                 </Link>
                 {isVisible === e.index ? (
@@ -733,69 +722,28 @@ export default function Category() {
                   />
                 )}
               </div>
-              <ul
-                className={cx(
-                  "menu_down",
-                  `${isVisible === e.index ? `visible` : `hidden`}`
-                )}
-              >
+              <ul className={cx("menu_down", `${isVisible === e.index ? `visible` : `hidden`}`)}>
                 {e.subcategories.length > 0 &&
                   e.subcategories.map((e1) => (
-                    <li
-                      className={cx(
-                        "dropdown-submenu",
-                        "nav-item",
-                        "relative",
-                        isVisible === e.index && isVisible2 === e1.index
-                          ? "showing-detail"
-                          : "not-show-detail"
-                      )}
-                    >
+                    <li className={cx("dropdown-submenu", "nav-item", "relative", isVisible === e.index && isVisible2 === e1.index ? "showing-detail" : "not-show-detail")}>
                       <div className={cx("category-title")}>
-                        <Link
-                          title={e1.name}
-                          className={cx("nav-link", "pr-5")}
-                          to={e1.link}
-                        >
+                        <Link title={e1.name} className={cx("nav-link", "pr-5")} to={e1.link}>
                           {e1.name}
                         </Link>
 
-                        {isVisible === e.index &&
-                        isVisible2 === e1.index &&
-                        e1.subcategories.length > 0 ? (
-                          <FontAwesomeIcon
-                            icon={faMinus}
-                            onClick={() => toggleMenu2(0)}
-                            className={cx("fa-icon", "fa-minus")}
-                          />
+                        {isVisible === e.index && isVisible2 === e1.index && e1.subcategories.length > 0 ? (
+                          <FontAwesomeIcon icon={faMinus} onClick={() => toggleMenu2(0)} className={cx("fa-icon", "fa-minus")} />
                         ) : e1.subcategories.length > 0 ? (
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            onClick={() => toggleMenu2(e1.index)}
-                            className={cx("fa-icon", "fa-plus")}
-                          />
+                          <FontAwesomeIcon icon={faPlus} onClick={() => toggleMenu2(e1.index)} className={cx("fa-icon", "fa-plus")} />
                         ) : (
                           <></>
                         )}
                       </div>
-                      <ul
-                        className={cx(
-                          "menu_down",
-                          `${
-                            isVisible === e.index && isVisible2 === e1.index
-                              ? `visible`
-                              : `hidden`
-                          }`
-                        )}
-                      >
+                      <ul className={cx("menu_down", `${isVisible === e.index && isVisible2 === e1.index ? `visible` : `hidden`}`)}>
                         {e1.subcategories.length > 0 &&
                           e1.subcategories.map((e2) => (
                             <li className={cx("nav-item")}>
-                              <Link
-                                title={e2.name}
-                                className={cx("nav-link", "pl-4")}
-                                to={e2.link}
-                              >
+                              <Link title={e2.name} className={cx("nav-link", "pl-4")} to={e2.link}>
                                 {e2.name}
                               </Link>
                             </li>

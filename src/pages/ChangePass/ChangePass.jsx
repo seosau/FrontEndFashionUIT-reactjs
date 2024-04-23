@@ -2,103 +2,90 @@ import style from "./ChangePass.module.scss";
 import className from "classnames/bind";
 import { IoIosArrowForward } from "react-icons/io";
 import React, { useState, useEffect } from "react";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import SideBar from "../../components/Account/SideBar/SideBar";
+import axiosClient from "../../config/axios";
 const cx = className.bind(style);
 
 function ChangePass() {
-  const [path, setPath] = useState("");
-
-  useEffect(() => {
-    if (path !== "") {
-      // Chuyển trang đến đường dẫn mới
-      window.location.href = path;
+  const [isPrivate, setIsPrivate] = useState(true);
+  const [changePassInfo, setChangePassInfo] = useState({
+    oldPass: "",
+    pass: "",
+    cpass: "",
+  });
+  const [isFullFilled, setIsFullFilled] = useState(true);
+  const [isPassValid, setIsPassValid] = useState(true);
+  const validateForm = () => {
+    if (changePassInfo.oldPass === "" || changePassInfo.pass === "" || changePassInfo.cpass === "") {
+      setIsFullFilled(false);
+      return false;
+    } else {
+      if (changePassInfo.pass !== changePassInfo.cpass) {
+        if (!isFullFilled) setIsFullFilled(true);
+        setIsPassValid(false);
+        return false;
+      } else {
+        if (!isPassValid) setIsPassValid(true);
+      }
     }
-  }, [path]);
-
-  const account = () => {
-    // Cập nhật giá trị của path
-    setPath("/account");
+    return true;
   };
-  const orders = () => {
-    // Cập nhật giá trị của path
-    setPath("/account/orders");
-  };
-  const address = () => {
-    // Cập nhật giá trị của path
-    setPath("/account/address");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      axiosClient
+        .post(`/change-password`, { oldPassword: changePassInfo.oldPass, newPassword: changePassInfo.pass })
+        .then((response) => {
+          window.alert("Password changed successfully!");
+        })
+        .catch((error) => {
+          window.alert(`Password changed failed! ${error.response.data.message}`);
+        });
+    }
   };
   return (
-    <>
+    <div className={cx("content")}>
       <div className={cx("wrapper")}>
-        <div className={cx("container")}>
-          <ul className={cx("breadcrumb")}>
-            <li className={cx("Home")}>
-              <div className={cx("text1")}>
-                <a className={cx("text3")} href="/" title="Trang chủ">
-                  <span>Trang chủ</span>
-                </a>
-                <div className={cx("arrow")}>
-                  <IoIosArrowForward />
-                </div>
-              </div>
-            </li>
-            <li className={cx("text2")}>
-              <div>Thay đổi mật khẩu</div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className={cx("main")}>
-        <div className={cx("side-bar")}>
-          <div className={cx("title1")}>TRANG TÀI KHOẢN</div>
-          <div className={cx("greeting-user")}>
-            <div className={cx("greeting")}>Xin chào,</div>
-            <div className={cx("user-name")}>User Name</div>
-          </div>
-          <div className={cx("user-info")}>
-            <button onClick={account}>Thông tin tài khoản</button>
-          </div>
-          <div className={cx("your-order")}>
-            <button onClick={orders}>Đơn hàng của bạn</button>
-          </div>
-          <div className={cx("change-pass")}>Đổi mật khẩu</div>
-          <div className={cx("address")}>
-            <button onClick={address}>Sổ địa chỉ</button>
-          </div>
-        </div>
-        <div className={cx("content")}>
-          <div className={cx("title2")}>ĐỔI MẬT KHẨU</div>
-          <div className={cx("warning")}>
-            Để đảm bảo tính bảo mật bạn vui lòng đặt lại mật khẩu với ít nhất 8
-            kí tự
-          </div>
-
+        <SideBar />
+        <div className={cx("main")}>
+          <div className={cx("title")}>ĐỔI MẬT KHẨU</div>
+          <div className={cx("warning")}>Để đảm bảo tính bảo mật bạn vui lòng đặt lại mật khẩu với ít nhất 8 kí tự</div>
+          {!isFullFilled ? <div className={cx("warningTxt")}>Vui lòng nhập đầy đủ thông tin!</div> : !isPassValid ? <div className={cx("warningTxt")}>Nhập lại mật khẩu không khớp!</div> : null}
           <div className={cx("old-pass")}>
-            <div className={cx("content-text")}>Mật khẩu cũ *</div>
+            <div className={cx("content-text")}>
+              Mật khẩu cũ <span className={cx("require")}>*</span>
+            </div>
             <div className={cx("content-input")}>
-              <input type="password"></input>
+              <input onChange={(e) => setChangePassInfo({ ...changePassInfo, oldPass: e.target.value })} type={isPrivate ? "password" : "text"}></input>
+              <span onClick={() => setIsPrivate(!isPrivate)} className={cx("eye")}>
+                {isPrivate ? <FaEyeSlash color="#01567f" /> : <FaEye color="#01567f" />}
+              </span>
             </div>
           </div>
           <div className={cx("new-pass")}>
-            <div className={cx("content-text")}>Mật khẩu mới *</div>
+            <div className={cx("content-text")}>
+              Mật khẩu mới <span className={cx("require")}>*</span>
+            </div>
             <div className={cx("content-input")}>
-              <input type="password"></input>
+              <input onChange={(e) => setChangePassInfo({ ...changePassInfo, pass: e.target.value })} type={isPrivate ? "password" : "text"}></input>
             </div>
           </div>
           <div className={cx("confirm-pass")}>
-            <div className={cx("content-text")}>Xác nhận lại mật khẩu *</div>
+            <div className={cx("content-text")}>
+              Xác nhận lại mật khẩu <span className={cx("require")}>*</span>
+            </div>
             <div className={cx("content-input")}>
-              <input type="password"></input>
+              <input onChange={(e) => setChangePassInfo({ ...changePassInfo, cpass: e.target.value })} type={isPrivate ? "password" : "text"}></input>
             </div>
           </div>
 
-          <div className={cx("change-pass-button")}>
+          <div onClick={(e) => handleSubmit(e)} className={cx("change-pass-button")}>
             <button className={cx("btn-change-pass")}>Đặt lại mật khẩu</button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
