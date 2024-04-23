@@ -2,9 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import style from "./Login.module.scss";
 import className from "classnames/bind";
 import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
+import { LoginContext } from "../../Context/LoginContext";
 const cx = className.bind(style);
 function Login() {
   const [isPrivate, setIsPrivate] = useState(true);
@@ -16,7 +17,7 @@ function Login() {
     email: "",
     pass: "",
   });
-
+  const { isLogin, setIsLogin } = useContext(LoginContext);
   const navigate = useNavigate();
   const validateForm = () => {
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
@@ -36,38 +37,50 @@ function Login() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      const user = {
-        email: loginInfo.email,
-        password: loginInfo.pass,
-        isRemember,
-      };
-      axiosClient
-        .post(`/login`, user)
-        .then(({ data }) => {
-          const token = data.token;
-          console.log(token);
-          if (token) {
-            const decodedToken = jwtDecode(token);
-            const userId = decodedToken.userId;
-            const userName = decodedToken.userName;
+    if (!isLogin) {
+      if (validateForm()) {
+        const user = {
+          email: loginInfo.email,
+          password: loginInfo.pass,
+          isRemember,
+        };
+        axiosClient
+          .post(`/login`, user)
+          .then(({ data }) => {
+            const token = data.token;
+            if (token) {
+              const decodedToken = jwtDecode(token);
+              const userId = decodedToken.userId;
+              const userName = decodedToken.userName;
 
-            var local = localStorage.getItem("decodedToken");
-            if (local) {
-              localStorage.removeItem("decodedToken");
+              var local = localStorage.getItem("decodedToken");
+              if (local) {
+                localStorage.removeItem("decodedToken");
+              }
+              localStorage.setItem("decodedToken", JSON.stringify(decodedToken));
+              local = JSON.parse(localStorage.getItem("decodedToken"));
+              setIsLogin(true);
+              navigate("/");
+            } else {
+              window.alert("Please verify your email!");
+              console.log("Please verify your email!");
             }
-            localStorage.setItem("decodedToken", JSON.stringify(decodedToken));
-            local = JSON.parse(localStorage.getItem("decodedToken"));
-            console.log(local);
-            // navigate("/");
-          } else {
-            window.alert("Please verify your email!");
-            console.log("Please verify your email!");
-          }
-        })
-        .catch((error) => {
-          console.log("Login Error", error.response.data.message);
-        });
+          })
+          .catch((error) => {
+            switch (error.response.status) {
+              case 401: {
+                window.alert("Email hoặc mật khẩu không đúng!");
+                break;
+              }
+              case 500: {
+                window.alert("Đã có lỗi xãy ra, vui lòng thử lại!");
+                break;
+              }
+            }
+          });
+      }
+    } else {
+      window.alert("Bạn đã đăng nhập. Vui lòng đăng xuất trước khi đăng nhập tài khoản khác!");
     }
   };
   return (
@@ -92,7 +105,7 @@ function Login() {
           </div>
           <div className={cx("rememberContainer")}>
             <div onClick={(e) => setIsRemember(!isRemember)} className={cx("remember")}>
-              <input checked={isRemember} type="checkbox" className={cx("rememberCheckBox")}></input>
+              <input checked={isRemember} onChange={() => {}} type="checkbox" className={cx("rememberCheckBox")}></input>
               <div className={cx("rememberTxt")}>Ghi nhớ</div>
             </div>
           </div>
