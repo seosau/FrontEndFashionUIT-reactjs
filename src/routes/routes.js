@@ -1,6 +1,13 @@
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
-import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct, EditBlog, ListBlogs } from "../pages/Admin";
-
+import {
+  Dashboard,
+  CreateProduct,
+  CreateBlog,
+  ListProducts,
+  EditProduct,
+  EditBlog,
+  ListBlogs,
+} from "../pages/Admin";
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -16,7 +23,7 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart } from "../pages";
+import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart, CheckOut, News, NewsDetail } from "../pages";
 
 const routes = [
   {
@@ -56,8 +63,20 @@ const routes = [
     component: ChainStore,
   },
   {
+    path: "/checkout",
+    component: CheckOut,
+  },
+  {
     path: "/contact-support",
     component: Contact,
+  },
+  {
+    path: "/blogs",
+    component: News,
+  },
+  {
+    path: "/blog/:slug",
+    component: NewsDetail,
   },
   {
     path: "/inquiries-support",
