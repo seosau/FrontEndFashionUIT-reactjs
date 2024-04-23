@@ -31,13 +31,17 @@
   padding-bottom: 20px;
   font-weight: 500;
   background: none;
+  color: black;
   &:hover {
     color: var(--hight-light-color);
     cursor: pointer;
   }
+  &:visited {
+    color: black;
+  }
 }
 .current {
-  color: var(--hight-light-color);
+  color: var(--hight-light-color) !important;
   font-weight: 700;
   font-size: 18px;
 }
