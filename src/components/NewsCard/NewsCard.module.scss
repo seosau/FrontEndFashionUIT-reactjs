@@ -25,11 +25,6 @@
     position: relative;
   }
 
-  .item-blog .block-thumb {
-    display: flex;
-    justify-content: space-around;
-  }
-
   .item-blog .block-thumb .thumb {
     position: relative;
     overflow: hidden;
@@ -68,7 +63,7 @@
     -webkit-box-direction: normal;
     flex-direction: column;
     background: #fff;
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
     margin-top: -30px;
     position: relative;

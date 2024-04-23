@@ -1,12 +1,13 @@
-import React from "react";
-import NewsCard from "../../components/NewsCard/NewsCard";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { FaChevronRight } from "react-icons/fa";
 import style from "./News.module.scss";
 import classNames from "classnames/bind";
+import NewsCard from "../../components/NewsCard/NewsCard";
 import HotNews from "../../components/HotNews/HotNews";
 import Category from "../../components/Category/Category";
 import Tags from "../../components/Tags/Tags";
-import { Link } from "react-router-dom";
-import { FaChevronRight } from "react-icons/fa";
+import axiosClient from "../../config/axios";
 
 const cx = classNames.bind(style);
 
@@ -62,6 +63,20 @@ const data = [
 ];
 
 export default function News() {
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      axiosClient
+        .get("/blogs")
+        .then(({ data }) => {
+          setBlogs(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetchData();
+  }, []);
   return (
     <div className={cx("news-container")}>
       <section className={cx("bread-crumb")}>
@@ -86,13 +101,12 @@ export default function News() {
         <div className={cx("news-side")}>
           <h1 className={cx("title-page")}>Tin tức</h1>
           <div className={cx("row")}>
-            {data.map((news) => (
-              <NewsCard props={news} />
+            {blogs.map((blog) => (
+              <NewsCard blog={blog} />
             ))}
           </div>
         </div>
         <div className={cx("nav-side")}>
-          <Category />
           <Tags />
           <HotNews />
         </div>

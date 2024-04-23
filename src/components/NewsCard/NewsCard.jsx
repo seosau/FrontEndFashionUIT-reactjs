@@ -56,35 +56,53 @@ const data = [
   },
 ];
 
-export default function NewsCard({ props }) {
+export default function NewsCard({ blog }) {
+  const convertStringDate = (stringTime) => {
+    const date = new Date(stringTime);
+    const ngay = date.getDate();
+    const thang = date.getMonth() + 1;
+    const nam = date.getFullYear();
+    const chuoiNgayThangNam =
+      (ngay < 10 ? "0" : "") +
+      ngay +
+      "/" +
+      (thang < 10 ? "0" : "") +
+      thang +
+      "/" +
+      nam;
+    return chuoiNgayThangNam;
+  };
+  const convertImageUrl = (stringHtml) => {
+    const regex = /<img src=\"([^\"]+)\"/g;
+    var match;
+    while ((match = regex.exec(stringHtml)) !== null) {
+      return match[1];
+    }
+  };
   return (
     <div className={cx("news-card-row")}>
       <div className={cx("item-blog")}>
         <div className={cx("block-thumb")}>
-          <Link className={cx("thumb ")} to={props.href} title={props.title}>
+          <Link className={cx("thumb ")} to={`/blog/${blog.slug}`} title={blog.title}>
             <img
-              // width={320}
               width={320}
               height={240}
-              // className={cx("lazyload loaded")}
               className={cx("lazyload")}
-              src={props.imgSrc}
-              data-src={props.imgSrc}
-              alt={props.title}
-              data-was-processed="true"
+              src={convertImageUrl(blog.description)}
+              alt={blog.title}
             />
           </Link>
         </div>
         <div className={cx("block-content")}>
           <h3>
-            <Link to={props.href} title={props.title}>
-              {props.title}
+            <Link to={`/blog/${blog.slug}`} title={blog.title}>
+              {blog.title}
             </Link>
           </h3>
           <p className={cx("time-post")}>
-            <span>{props.postTime}</span>
+            <span>{convertStringDate(blog.createdAt)}</span>
           </p>
-          <p className={cx("justify")}>{props.description}</p>
+          <p className={cx("justify")}>{blog.shortdesc}</p>
         </div>
       </div>
     </div>

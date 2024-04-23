@@ -56,12 +56,12 @@ function Header() {
           </div>
           <ul className={cx("header__bot")}>
             <li className={cx("header__bot-item")}>
-              <Link href="#" className={cx("nav-link")}>
+              <Link to="/" className={cx("nav-link")}>
                 Trang chủ
               </Link>
             </li>
             <li className={cx("header__bot-item", "has-mega")}>
-              <Link href="#" className={cx("nav-link")}>
+              <Link to="/nu" className={cx("nav-link")}>
                 Nữ
                 <IoChevronDownSharp className={cx("icon-down")} />
               </Link>
@@ -724,7 +724,7 @@ function Header() {
               </div>
             </li>
             <li className={cx("header__bot-item", "has-mega")}>
-              <Link href="#" className={cx("nav-link")}>
+              <Link to="/products" className={cx("nav-link")}>
                 Sản phẩm
                 <IoChevronDownSharp className={cx("icon-down")} />
               </Link>
@@ -876,12 +876,12 @@ function Header() {
               </div>
             </li>
             <li className={cx("header__bot-item")}>
-              <Link href="#" className={cx("nav-link")}>
+              <Link to="/blogs" className={cx("nav-link")}>
                 Tin tức
               </Link>
             </li>
             <li className={cx("header__bot-item")}>
-              <Link href="" className={cx("nav-link")}>
+              <Link to="/contact-support" className={cx("nav-link")}>
                 Liên hệ
               </Link>
             </li>
@@ -894,7 +894,9 @@ function Header() {
           </ul>
         </div>
         <div className={cx("header__action")}>
-          <div className={cx("header__action-item", "header__action-item-auth")}>
+          <div
+            className={cx("header__action-item", "header__action-item-auth")}
+          >
             <span className={cx("box-icon")}>
               <SlUser className={cx("header__action-icon")} />
             </span>

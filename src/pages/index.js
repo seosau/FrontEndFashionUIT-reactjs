@@ -10,8 +10,20 @@ import Address from "./Address/Address";
 import ChainStore from "./ChainStore/ChainStore";
 import Contact from "./Contact/Contact";
 import AllProducts from "./AllProducts/AllProducts";
-
-
-export { Home, AllProducts, Login, Register, Contact, Account, Orders, ChangePass, Address, ChainStore, ProductCart };
-
-
+import News from "./News/News";
+import NewsDetail from "./NewsDetail/NewsDetail";
+export {
+  Home,
+  AllProducts,
+  Login,
+  Register,
+  Contact,
+  News,
+  NewsDetail,
+  Account,
+  Orders,
+  ChangePass,
+  Address,
+  ChainStore,
+  ProductCart,
+};
