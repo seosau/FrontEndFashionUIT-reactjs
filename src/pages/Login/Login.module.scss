@@ -167,5 +167,22 @@
 .facebookBtn,
 .googleBtn:hover {
   cursor: pointer;
-
+}
+.rememberContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.rememberCheckBox:active {
+}
+.rememberTxt {
+  margin-left: 16px;
+  user-select: none;
+}
+.remember:hover {
+  cursor: pointer;
+}
+.remember {
+  display: flex;
+  justify-content: flex-start;
 }

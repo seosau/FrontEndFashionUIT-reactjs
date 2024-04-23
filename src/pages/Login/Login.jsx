@@ -5,7 +5,6 @@ import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
-import { useCookies } from "react-cookie";
 const cx = className.bind(style);
 function Login() {
   const [isPrivate, setIsPrivate] = useState(true);
@@ -17,7 +16,6 @@ function Login() {
     email: "",
     pass: "",
   });
-  const [cookies, setCookie, removeCookie] = useCookies(["cookie-name"]);
 
   const navigate = useNavigate();
   const validateForm = () => {
@@ -42,6 +40,7 @@ function Login() {
       const user = {
         email: loginInfo.email,
         password: loginInfo.pass,
+        isRemember,
       };
       axiosClient
         .post(`/login`, user)
@@ -52,18 +51,7 @@ function Login() {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.userId;
             const userName = decodedToken.userName;
-            var cookieOptions;
-            if (isRemember && token) {
-              cookieOptions = {
-                httpOnly: true,
-                expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-              };
-            } else if (token && !isRemember) {
-              cookieOptions = {
-                httpOnly: true,
-              };
-            }
-            setCookie("token", token, cookieOptions);
+
             var local = localStorage.getItem("decodedToken");
             if (local) {
               localStorage.removeItem("decodedToken");
@@ -73,6 +61,7 @@ function Login() {
             console.log(local);
             // navigate("/");
           } else {
+            window.alert("Please verify your email!");
             console.log("Please verify your email!");
           }
         })
@@ -100,6 +89,12 @@ function Login() {
             <span onClick={() => setIsPrivate(!isPrivate)} className={cx("eye")}>
               {isPrivate ? <FaEyeSlash color="#01567f" /> : <FaEye color="#01567f" />}
             </span>
+          </div>
+          <div className={cx("rememberContainer")}>
+            <div onClick={(e) => setIsRemember(!isRemember)} className={cx("remember")}>
+              <input checked={isRemember} type="checkbox" className={cx("rememberCheckBox")}></input>
+              <div className={cx("rememberTxt")}>Ghi nhớ</div>
+            </div>
           </div>
           <button onClick={(e) => handleSubmit(e)} type="submit" className={cx("btnContainer")}>
             <div className={cx("btnTxt")}>ĐĂNG NHẬP</div>
