@@ -79,6 +79,8 @@ export default function NewsDetail() {
               dangerouslySetInnerHTML={{ __html: blog.description }}
             />
           </div>
+          <img src="https://bizweb.dktcdn.net/100/423/358/files/4-kieu-trang-phuc-demin-hot-nhat-1.jpg?v=1646494601635" alt="" width="81"
+          />
           <form
             method="post"
             action="/posts/nha-thiet-ke-vi-dai-dau-tien-cua-nam-2022/comments"

@@ -46,10 +46,12 @@ function ListBlogs() {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td className={cx("product-name")}>{blog.title}</td>
-                <td className={cx("product-desc")}>{blog.description}</td>
-                <td className={cx("product-price")}>
-                  {blog.shortdesc} .000vnd
+                <td className={cx("product-desc")}>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: blog.description }}
+                  ></div>
                 </td>
+                <td className={cx("product-price")}>{blog.shortdesc}</td>
                 <td>
                   <Link
                     className={cx("btn")}

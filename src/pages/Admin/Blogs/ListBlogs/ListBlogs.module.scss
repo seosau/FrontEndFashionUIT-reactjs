@@ -53,6 +53,8 @@
   .product-name {
     font-size: 12px;
   }
-  .product-desc {
+  .product-desc div{
+    overflow-y: scroll;
+    height: 300px;
   }
 }
