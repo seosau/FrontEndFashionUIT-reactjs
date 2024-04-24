@@ -1,36 +1,79 @@
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import style from "./Login.module.scss";
 import className from "classnames/bind";
 import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import axiosClient from "../../config/axios";
+import { AuthContext } from "../../Context/AuthContext";
 const cx = className.bind(style);
 function Login() {
   const [isPrivate, setIsPrivate] = useState(true);
   const [isFullFilled, setIsFullFilled] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isRemember, setIsRemember] = useState(false);
 
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     pass: "",
   });
+  const { isAuth, setIsAuth, setDecodedToken } = useContext(AuthContext);
+  const navigate = useNavigate();
   const validateForm = () => {
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
     if (loginInfo.email === "" || loginInfo.pass === "") {
       setIsFullFilled(false);
+      return false;
     } else {
       if (!isFullFilled) setIsFullFilled(true);
       if (!emailRegex.test(loginInfo.email)) {
         setIsEmailValid(false);
+        return false;
       } else {
         if (!isEmailValid) setIsEmailValid(true);
       }
     }
+    return true;
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    validateForm();
+    if (!isAuth) {
+      if (validateForm()) {
+        const user = {
+          email: loginInfo.email,
+          password: loginInfo.pass,
+          isRemember,
+        };
+        axiosClient
+          .post(`/login`, user)
+          .then(({ data }) => {
+            const token = data.token;
+            if (token) {
+              const decodedToken = jwtDecode(token);
+              setDecodedToken(decodedToken);
+              setIsAuth(true);
+              navigate("/");
+            } else {
+              window.alert("Please verify your email!");
+              console.log("Please verify your email!");
+            }
+          })
+          .catch((error) => {
+            switch (error.response.status) {
+              case 401: {
+                window.alert("Email hoặc mật khẩu không đúng!");
+                break;
+              }
+              case 500: {
+                window.alert("Đã có lỗi xãy ra, vui lòng thử lại!");
+                break;
+              }
+            }
+          });
+      }
+    } else {
+      window.alert("Bạn đã đăng nhập. Vui lòng đăng xuất trước khi đăng nhập tài khoản khác!");
+    }
   };
   return (
     <div>
@@ -51,6 +94,12 @@ function Login() {
             <span onClick={() => setIsPrivate(!isPrivate)} className={cx("eye")}>
               {isPrivate ? <FaEyeSlash color="#01567f" /> : <FaEye color="#01567f" />}
             </span>
+          </div>
+          <div className={cx("rememberContainer")}>
+            <div onClick={(e) => setIsRemember(!isRemember)} className={cx("remember")}>
+              <input checked={isRemember} onChange={() => {}} type="checkbox" className={cx("rememberCheckBox")}></input>
+              <div className={cx("rememberTxt")}>Ghi nhớ</div>
+            </div>
           </div>
           <button onClick={(e) => handleSubmit(e)} type="submit" className={cx("btnContainer")}>
             <div className={cx("btnTxt")}>ĐĂNG NHẬP</div>
@@ -77,7 +126,6 @@ function Login() {
         </form>
       </div>
     </div>
-
   );
 }
 

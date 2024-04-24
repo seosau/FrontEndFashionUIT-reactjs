@@ -1,12 +1,12 @@
 import React from "react";
-import styles from "./Product.module.scss"
+import styles from "./Product.module.scss";
 import { Link } from "react-router-dom";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CiSettings } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
 import className from "classnames/bind";
 const cx = className.bind(styles);
-export default function Product({ ranking, title, oldPrice, newPrice, productCount, productCountSale, image, discount, index }) {
+export default function Product({ ranking, title, oldPrice, newPrice, productCount, productCountSale, image, discount, index, openPopup }) {
   return (
     <>
       <div className={cx("product-thumbnail")}>
@@ -27,7 +27,7 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
           <Link className={cx("product-overlay-action")}></Link>
           <div className={cx("group-action")}>
             <CiSettings className={cx("icon")} title="" />
-            <IoEyeOutline className={cx("icon")} title="Xem trước" />
+            <IoEyeOutline className={cx("icon")} title="Xem trước" onClick={openPopup} />
             <HiOutlineShoppingBag className={cx("icon")} title="Thêm vào giỏ" />
           </div>
         </div>
@@ -69,4 +69,3 @@ export default function Product({ ranking, title, oldPrice, newPrice, productCou
     </>
   );
 }
-
