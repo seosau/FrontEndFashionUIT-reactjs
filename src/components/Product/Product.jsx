@@ -8,12 +8,13 @@ import { IoClose } from "react-icons/io5";
 import { useStateContext } from "../../context/CartContextProvider";
 import className from "classnames/bind";
 import axiosClient from "../../config/axios";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 const cx = className.bind(styles);
 
 export default function Product({ product, ranking, newPrice, productCount, productCountSale, discount, openPopup }) {
   const { cartItems, setQuantityInCart, setCartItems } = useStateContext();
+  const {isAuth} = useContext(AuthContext)
   const [hidePopup, setHidePopup] = useState(true);
   const [selectedColor, setSelectedColor] = useState();
   const [selectedSize, setSelectedSize] = useState();
@@ -24,9 +25,7 @@ export default function Product({ product, ranking, newPrice, productCount, prod
   }
 
   const handleAddToCart = async () => {
-    const decodedToken = localStorage.getItem('decodedToken');
-
-    if (decodedToken) {
+    if (isAuth) {
       if (product.stock === 0) {
         return alert("Hết sản phẩm")
       }
