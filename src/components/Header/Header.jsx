@@ -12,10 +12,11 @@ import { FaGift } from "react-icons/fa6";
 import { IoChevronDownSharp } from "react-icons/io5";
 
 import Search from "../../components/Search/Search";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { logDOM } from "@testing-library/react";
 import axiosClient from "../../config/axios";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
+import { useStateContext } from "../../context/CartContextProvider";
 const cx = className.bind(style);
 function Header() {
   const [searchVisible, setSearchVisible] = useState(false);
@@ -27,10 +28,31 @@ function Header() {
   const handleInputChange = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
-
+    
     setSearchVisible(query !== "");
   };
   const { isAuth, setIsAuth, setDecodedToken } = useContext(AuthContext);
+  const {
+    setCartItems,
+    quantityInCart,
+    setQuantityInCart
+  } = useStateContext();
+  const getQuantityInCart = async () => {
+    try {
+      const response = await axiosClient.get('/cart/get');
+      setQuantityInCart(response.data.quantity)
+      setCartItems(response.data.products)
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    if (isAuth)
+      getQuantityInCart()
+  }, [isAuth])
+
   const navigate = useNavigate();
   const handleLogout = () => {
     axiosClient
@@ -798,13 +820,13 @@ function Header() {
               )}
             </ul>
           </div>
-          <div className={cx("header__action-item")}>
+          <Link to='/cart' className={cx("header__action-item")}>
             <span className={cx("box-icon")}>
               <HiOutlineShoppingBag className={cx("header__action-icon")} />
             </span>
             <div className={cx("action-title")}>Giỏ hàng</div>
-            <span className={cx("cart-count")}>0</span>
-          </div>
+            <span className={cx("cart-count")}>{quantityInCart}</span>
+          </Link>
         </div>
       </header>
     </div>

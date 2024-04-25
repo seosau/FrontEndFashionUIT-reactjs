@@ -3,7 +3,7 @@ import className from "classnames/bind";
 import React, { useState, useEffect, useContext } from "react";
 import axiosClient from "../../../config/axios";
 import { Link, useLocation } from "react-router-dom";
-import { AuthContext } from "../../../Context/AuthContext";
+import { AuthContext } from "../../../context/AuthContext";
 const cx = className.bind(style);
 
 export default function SideBar() {

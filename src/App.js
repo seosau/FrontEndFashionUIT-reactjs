@@ -1,4 +1,4 @@
-import { AuthProvider } from "./Context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import RouterCpn from "./Router";
 function App() {
   return (
