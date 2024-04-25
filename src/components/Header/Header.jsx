@@ -60,6 +60,8 @@ function Header() {
       .then(({ data }) => {
         localStorage.removeItem("decodedToken");
         setIsAuth(false);
+        setCartItems([]);
+        setQuantityInCart(0)
         setDecodedToken(null);
         navigate("/login");
       })
