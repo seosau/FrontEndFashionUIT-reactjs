@@ -7,6 +7,8 @@ import ListProducts from "./Products/ListProducts/ListProducts";
 import CreateBlog from "./Blogs/CreateBlog/CreateBlog";
 import EditBlog from "./Blogs/EditBlog/EditBlog";
 import ListBlogs from "./Blogs/ListBlogs/ListBlogs";
+// Component user
+import ListUsers from "./ListUsers/ListUsers";
 export {
   Dashboard,
   CreateProduct,
@@ -14,5 +16,6 @@ export {
   EditProduct,
   CreateBlog,
   EditBlog,
-  ListBlogs
+  ListBlogs,
+  ListUsers
 };

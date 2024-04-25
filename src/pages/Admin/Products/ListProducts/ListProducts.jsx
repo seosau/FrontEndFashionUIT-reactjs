@@ -1,24 +1,65 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import { CiSquareRemove } from "react-icons/ci";
 import { FaTrashAlt } from "react-icons/fa";
 import { GoSearch } from "react-icons/go";
 import { IoMdAdd } from "react-icons/io";
 import axiosClient from "../../../../config/axios";
+import { useDebounce } from "../../../../hooks";
+
 import style from "./ListProducts.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(style);
 
 function ListProducts() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const [searchValue, setSearchValue] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
+  const debounced = useDebounce(searchValue, 500);
+  const inputRef = useRef();
+  const handleClear = () => {
+    setSearchValue("");
+    setSearchResult([]);
+
+    inputRef.current.focus();
+  };
+  const handleChange = (e) => {
+    const searchValue = e.target.value;
+    if (!searchValue.startsWith(" ")) {
+      setSearchValue(searchValue);
+    }
+  };
   useEffect(() => {
-    axiosClient
-      .get("/admin/products")
-      .then((res) => setProducts(res.data))
-      .catch((error) => console.log(error));
-  }, []);
+    if (!debounced.trim()) {
+      // setSearchResult([]);
+      // return;
+      axiosClient
+        .get("/admin/products")
+        .then((res) => setProducts(res.data))
+        .catch((error) => console.log(error));
+    }
+    const fetchApi = async () => {
+      setLoading(true);
+
+      await axiosClient
+        .get(`/product/search/${debounced}`)
+        .then(({ data }) => {
+          setProducts(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchApi();
+  }, [debounced]);
   const convertStringDate = (stringTime) => {
     var date = new Date(stringTime);
     var nam = date.getFullYear();
@@ -76,7 +117,12 @@ function ListProducts() {
     axiosClient
       .delete("/admin/product/delete/all", { data: selectedProducts })
       .then((res) => {
-        console.log(res);
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) =>
+            !selectedProducts.includes(product.slug)
+          )
+        );
+        setSelectedProducts([]);
       })
       .catch((error) => {
         console.log(error);
@@ -97,7 +143,7 @@ function ListProducts() {
       </div>
       <div className={cx("addproduct__body")}>
         <div className={cx("addproduct__action")}>
-          <select name="stock" id="" className={cx("action-stock")}>
+          {/* <select name="stock" id="" className={cx("action-stock")}>
             <option value="">In stock</option>
             <option value="">Low stock</option>
             <option value="">Out of stock</option>
@@ -105,13 +151,14 @@ function ListProducts() {
           <select name="stock" id="" className={cx("action-active")}>
             <option value="">Published</option>
             <option value="">Draft</option>
-          </select>
+          </select> */}
           <div className={cx("action-search")}>
             <GoSearch className={cx("action-search-icon")} />
             <input
               type="text"
               className={cx("action-search-input")}
               placeholder="Tìm kiếm sản phẩm..."
+              onChange={handleChange}
             />
           </div>
           <div className={cx("action-delete")}>

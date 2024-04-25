@@ -18,12 +18,12 @@ export const menu = [
         url: "/admin/dashboard",
         icon: SlHome,
       },
-      {
-        id: 2,
-        title: "Profile",
-        url: "/admin/profile",
-        icon: LuUser2,
-      },
+      // {
+      //   id: 2,
+      //   title: "Profile",
+      //   url: "/admin/profile",
+      //   icon: LuUser2,
+      // },
     ],
   },
   {
@@ -33,7 +33,7 @@ export const menu = [
       {
         id: 1,
         title: "Users",
-        url: "admin/listusers",
+        url: "/admin/accounts",
         icon: LuUsers2,
       },
       {
@@ -74,24 +74,24 @@ export const menu = [
       },
     ],
   },
-  {
-    id: 4,
-    title: "Maintenance",
-    listItems: [
-      {
-        id: 1,
-        title: "Settings",
-        url: "/",
-        icon: IoSettingsOutline,
-      },
-      {
-        id: 2,
-        title: "Backups",
-        url: "/",
-        icon: MdOutlineBackup,
-      },
-    ],
-  },
+  // {
+  //   id: 4,
+  //   title: "Maintenance",
+  //   listItems: [
+  //     {
+  //       id: 1,
+  //       title: "Settings",
+  //       url: "/",
+  //       icon: IoSettingsOutline,
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "Backups",
+  //       url: "/",
+  //       icon: MdOutlineBackup,
+  //     },
+  //   ],
+  // },
  
 ];
 
