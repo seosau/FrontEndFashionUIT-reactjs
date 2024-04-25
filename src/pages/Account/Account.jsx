@@ -1,9 +1,8 @@
 import style from "./Account.module.scss";
 import className from "classnames/bind";
-import { IoIosArrowForward } from "react-icons/io";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import SideBar from "../../components/Account/SideBar/SideBar";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 const cx = className.bind(style);
 
 function Account() {

@@ -99,13 +99,13 @@ export default function Home() {
           <div className={cx("slider")}>
             <Carousel {...settings} customDot={<CustomDot />}>
               <div className={cx("imgBox")}>
-                <img src={require("../../assets/image/slider_1.webp")} alt="slider" />
+                <img src={require("../../assets/image/slider_1.webp")} draggable={false} alt="slider" />
               </div>
               <div className={cx("imgBox")}>
-                <img src={require("../../assets/image/banner2.jpg")} alt="slider" />
+                <img src={require("../../assets/image/banner2.jpg")} draggable={false} alt="slider" />
               </div>
               <div className={cx("imgBox")}>
-                <img src={require("../../assets/image/banner3.webp")} alt="slider" />
+                <img src={require("../../assets/image/banner3.webp")} draggable={false} alt="slider" />
               </div>
             </Carousel>
           </div>

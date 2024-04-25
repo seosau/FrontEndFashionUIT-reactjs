@@ -512,9 +512,7 @@ export default function AllProducts() {
                 filteredProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
                     <Product
-                      title={product.name}
-                      oldPrice={product.price}
-                      image={product.images[0].imgUrl}
+                      product={product}
                     />
                   </div>
                 ))
@@ -522,9 +520,7 @@ export default function AllProducts() {
                 products.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
                     <Product
-                      title={product.name}
-                      oldPrice={product.price}
-                      image={product.images[0].imgUrl}
+                      product={product}
                     />
                   </div>
                 ))
