@@ -15,7 +15,7 @@ import Search from "../../components/Search/Search";
 import { useContext, useState } from "react";
 import { logDOM } from "@testing-library/react";
 import axiosClient from "../../config/axios";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 const cx = className.bind(style);
 function Header() {
   const [searchVisible, setSearchVisible] = useState(false);

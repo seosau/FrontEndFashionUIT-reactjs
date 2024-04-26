@@ -5,7 +5,7 @@ import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 const cx = className.bind(style);
 function Login() {
   const [isPrivate, setIsPrivate] = useState(true);
