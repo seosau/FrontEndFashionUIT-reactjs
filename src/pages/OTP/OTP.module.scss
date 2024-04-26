@@ -62,15 +62,9 @@
   font-size: 14px;
   color: #000;
   width: 90%;
+  text-align: center;
 }
 
-.eye {
-  padding: 6px;
-}
-.eye:hover {
-  opacity: 0.5;
-  cursor: pointer;
-}
 .btnContainer {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -103,86 +97,4 @@
 }
 .btnTxt:hover {
   color: #01567f;
-}
-.linkContainer {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-.forgotLink {
-}
-.forgotLink:hover {
-  color: rgb(255, 140, 58);
-  cursor: pointer;
-}
-.registerLink {
-}
-.registerLink:hover {
-  color: #01567f;
-  cursor: pointer;
-}
-.optionTitle {
-  margin-top: 14px;
-  margin-bottom: 10px;
-}
-.optionContainer {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  gap: 10px;
-  margin-top: 14px;
-  margin-bottom: 10px;
-}
-.facebookBtn {
-  background-color: #3b5998;
-  width: 120px;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 2px;
-}
-.googleBtn {
-  background-color: #e14b33;
-  width: 120px;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 2px;
-}
-.optionTxt {
-  color: white;
-  font-size: 12px;
-  width: 100%;
-  text-align: center;
-  user-select: none;
-}
-.separate {
-  margin-left: 6px;
-  margin-right: 6px;
-  border-left: rgba(0, 0, 0, 0.2) solid 1px;
-  height: 100%;
-}
-.facebookBtn,
-.googleBtn:hover {
-  cursor: pointer;
-}
-.rememberContainer {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-}
-.rememberCheckBox:active {
-}
-.rememberTxt {
-  margin-left: 16px;
-  user-select: none;
-}
-.remember:hover {
-  cursor: pointer;
-}
-.remember {
-  display: flex;
-  justify-content: flex-start;
 }

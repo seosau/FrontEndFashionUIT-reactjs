@@ -1,17 +1,33 @@
-import React from "react";
-import style from "./NewsDetail.module.scss";
-import classNames from "classnames/bind";
-import Category from "../../components/Category/Category";
-import Tags from "../../components/Tags/Tags";
-import HotNews from "../../components/HotNews/HotNews";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+
 import { FaChevronRight } from "react-icons/fa";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 
+import style from "./NewsDetail.module.scss";
+import classNames from "classnames/bind";
+
+import Category from "../../components/Category/Category";
+import Tags from "../../components/Tags/Tags";
+import HotNews from "../../components/HotNews/HotNews";
+import axiosClient from "../../config/axios";
+
 const cx = classNames.bind(style);
 
 export default function NewsDetail() {
+  const { slug } = useParams();
+  const [blog, setBlog] = useState({});
+  useEffect(() => {
+    axiosClient
+      .get(`/blog/${slug}`)
+      .then(({ data }) => {
+        setBlog(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [slug]);
   return (
     <article className={cx("article-main")}>
       <section className={cx("bread-crumb")}>
@@ -35,7 +51,7 @@ export default function NewsDetail() {
             </li>
             <li>
               <strong>
-                <span>Nhà thiết kế vĩ đại đầu tiên của năm 2022</span>
+                <span>{blog.title}</span>
               </strong>
             </li>
             <li></li>
@@ -47,9 +63,7 @@ export default function NewsDetail() {
           className={cx("right-content", "col-lg-9", "col-12", "order-lg-2")}
         >
           <div className={cx("article-details", "clearfix")}>
-            <h1 className={cx("article-title")}>
-              Nhà thiết kế vĩ đại đầu tiên của năm 2022
-            </h1>
+            <h1 className={cx("article-title")}>{blog.title}</h1>
             <div className={cx("posts")}>
               <div className={cx("time-post", "f")}>
                 <MdOutlineWatchLater className={cx("time-post__icon")} />
@@ -60,129 +74,13 @@ export default function NewsDetail() {
                 <span>Bean Fashion</span>
               </div>
             </div>
-            <div className={cx("rte")}>
-              <p>
-                Đó là buổi trình diễn lớn đầu tiên của Tuần lễ thời trang Milan:
-                1 giờ chiều ngày 1.
-              </p>
-              <p>
-                Mọi chiếc ghế trong không gian nhà kho hang động, nơi
-                được&nbsp;trang trí bằng những chiếc vỏ bom bằng vải denim bơm
-                hơi khổng lồ và những con khỉ mỡ&nbsp;, đều đã đầy ắp.&nbsp;Một
-                số người tham dự dường như đã đến thẳng từ sân bay.&nbsp;Tim
-                Blanks, nhà phê bình của Business of Fashion, đã có mặt tại buổi
-                trình diễn “lần đầu tiên sau nhiều năm”.&nbsp;Ditto biên tập
-                viên kiêm giám tuyển Stefano Tonchi.&nbsp;Julia Fox, nam châm
-                nổi tiếng của thời điểm này, ở hàng ghế đầu.&nbsp;Renzo Rosso,
-                ông trùm, chủ sở hữu của Only the Brave, một trong số ít tập
-                đoàn của Ý, đang chủ trì, một nụ cười trên môi.
-              </p>
-              <p>Tất cả ở đó để xem bộ sưu tập Diesel mới.</p>
-              <p>Chờ đã… Diesel?&nbsp;Thương hiệu quần jean rock 'n' roll?</p>
-              <p>
-                Diesel, thương hiệu quần jean rock 'n' roll một thời do Glenn
-                Martens thiết kế.
-              </p>
-              <p>
-                <img
-                  data-thumb="original"
-                  original-height={2048}
-                  original-width={1366}
-                  src="https://bizweb.dktcdn.net/100/423/358/files/nha-thiet-ke-vi-dai-nam-2022-1.jpg?v=1646493284789"
-                />
-              </p>
-              <p>
-                Đó là chặng thứ ba trong bộ ba buổi trình diễn của ông Martens
-                kể từ đầu năm, đã cùng nhau đưa ông từ nhà khái niệm thích hợp,
-                được yêu mến bởi những người trong ngành có đầu óc cao, những
-                người yêu thích thời trang và sinh viên trường nghệ thuật, lên
-                vị trí số một. nhà thiết kế của năm 2022.
-              </p>
-              <p>
-                Vào ngày 19 tháng 1, có một buổi trình diễn chung của nam và nữ
-                cho Y / Project, thương hiệu Pháp đình đám mà anh tiếp quản vào
-                năm 2013, có áo ba lỗ lưới, váy và quần lụa với phần thân và
-                háng của nam và nữ được kết hợp ngẫu nhiên. , trong một bài bình
-                luận không phải ngẫu nhiên về cuộc trò chuyện rộng hơn xung
-                quanh giới tính và bản sắc.
-              </p>
-              <p>
-                Tuần tiếp theo, bộ sưu tập thời trang cao cấp đầu tiên của anh
-                ấy với tư cách là&nbsp;nhà thiết kế khách mời cho Jean Paul
-                Gaultier&nbsp;, hoàn chỉnh với những chiếc váy dạ hội đồ sộ
-                trông giống như biển có bọt và váy nàng tiên cá được làm từ
-                những dải ruy băng lụa cắt vụn, giống như một chiếc áo nịt ngực
-                không bao giờ lỗi mốt.
-              </p>
-              <p>
-                Sau đó, ba tuần sau đó, Diesel đến với 1.000 dạng denim: chần,
-                sờn, cắt dán, mạ crôm, tái chế, tái tạo.
-              </p>
-              <p>
-                Ông Martens không phải là nhà thiết kế đầu tiên thử sức với
-                nhiều thương hiệu đồng thời (hiện tại Jonathan Anderson với JW
-                Anderson và Loewe và Raf Simons với thương hiệu của riêng mình
-                và Prada là một trong số những người thực hiện nghĩa vụ kép),
-                nhưng ông có thể là người đầu tiên nắm lấy những ngôi nhà có vẻ
-                khác biệt như vậy để được ca ngợi ngang nhau.
-              </p>
-              <p>
-                <img
-                  data-thumb="original"
-                  original-height={2048}
-                  original-width={1366}
-                  src="https://bizweb.dktcdn.net/100/423/358/files/nha-thiet-ke-vi-dai-nam-2022-2.jpg?v=1646493382770"
-                />
-              </p>
-              <p>
-                Xem chương trình Diesel “khiến tôi rơi nước mắt,” ông Rosso nói
-                sau đó.&nbsp;"Cách xử lý denim của anh ấy là điều mà chúng tôi
-                chưa từng thấy trước đây."
-              </p>
-              <p>Ông ấy, ông Tonchi nói, "không sợ bất cứ điều gì."</p>
-              <p>
-                Khi ông Martens được bổ nhiệm làm chủ tịch hội đồng giám khảo
-                thời trang cho ấn bản lần thứ 37 của Liên hoan nhiếp ảnh và thời
-                trang quốc tế Hyères, giải thưởng thời trang của Liên hoan phim
-                Cannes, sự biến đổi của ông từ thiên tài lập dị thành vận động
-                viên đỉnh cao trong ngành dường như đã hoàn tất.&nbsp;Nhưng bây
-                giờ mọi người rốt cuộc đang xem, hắn sẽ làm gì tiếp theo?
-              </p>
-              <p id="link-346345d4">Quá lạ, quá nhiều</p>
-              <p>
-                “Chúng tôi chưa bao giờ rao giảng rằng chúng tôi sẽ tạo ra những
-                hình bóng đẹp,” ông Martens, 38 tuổi, nói vài tuần trước buổi
-                trình diễn Diesel.&nbsp;“Rất nhiều việc chúng tôi làm là vì lợi
-                ích của việc đẩy giới hạn và rất nhiều người trước đây đã nói:“
-                Tại sao? ”” Anh ấy đang nói về Y / Project và Phóng to qua video
-                từ văn phòng Y / Project của anh ấy trong Paris.
-              </p>
-              <p>
-                Anh ta đang mặc bộ đồng phục quen thuộc của mình: một chiếc áo
-                len đen cũ mua từ một cửa hàng ở London, quần jean denim đen và
-                một chiếc mũ bóng chày bạc màu.&nbsp;Anh ta có hai sợi dây xích
-                quanh cổ, một chiếc khuyên tai ở tai và hai chiếc nhẫn trên ngón
-                tay, và anh ta đã cạo trọc một nửa.
-              </p>
-              <p>
-                Y / Project, anh ấy nói, “đã tồn tại trong rất nhiều năm để thực
-                hiện thiết kế thử nghiệm này và những thứ kỳ quặc và không ai
-                quan tâm.&nbsp;Nó quá kỳ lạ, tất cả là quá nhiều.&nbsp;Họ đã bị
-                đột quỵ sau cái nhìn thứ ba. "&nbsp;Ngay cả nhân viên, anh ấy
-                nói, thường có "một khoảnh khắc phù hợp khi chúng tôi xem xét
-                thiết kế của mình và suy nghĩ, 'Chúng tôi có nghiêm túc làm điều
-                này không?'"
-              </p>
-              <p>
-                <img
-                  data-thumb="original"
-                  original-height={2048}
-                  original-width={1366}
-                  src="https://bizweb.dktcdn.net/100/423/358/files/nha-thiet-ke-vi-dai-nam-2022-3.jpg?v=1646493449646"
-                />
-              </p>
-            </div>
+            <div
+              className={cx("blog__description")}
+              dangerouslySetInnerHTML={{ __html: blog.description }}
+            />
           </div>
+          <img src="https://bizweb.dktcdn.net/100/423/358/files/4-kieu-trang-phuc-demin-hot-nhat-1.jpg?v=1646494601635" alt="" width="81"
+          />
           <form
             method="post"
             action="/posts/nha-thiet-ke-vi-dai-dau-tien-cua-nam-2022/comments"

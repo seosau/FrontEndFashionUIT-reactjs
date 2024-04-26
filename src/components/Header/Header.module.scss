@@ -7,6 +7,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  max-width: 1200px;
 }
 
 .header__logo {
@@ -152,7 +153,7 @@
   padding: 5px 5px;
   transition: background 0.5s;
   border-radius: 5px;
-
+  gap: 2;
   &:hover {
     background-color: var(--main-color);
     a {
@@ -191,6 +192,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+}
+
+.header__action-item:hover {
+  color: var(--hover-color);
+  .box-icon {
+    border-color: var(--hover-color) !important;
+  }
 }
 .header__action-item-auth {
   &:hover {
@@ -418,16 +427,8 @@
   content: "";
   width: 50%;
   height: 100%;
-  background: -webkit-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 100%
-  );
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 100%
-  );
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 100%);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 100%);
   -webkit-transform: skewX(-25deg);
   transform: skewX(-25deg);
 }
@@ -552,4 +553,10 @@
   .icon-down {
     display: none;
   }
+}
+.logout {
+  background-color: red;
+}
+.logoutTxt {
+  color: white;
 }

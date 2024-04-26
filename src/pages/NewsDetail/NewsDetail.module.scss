@@ -170,23 +170,26 @@
   margin-bottom: 10px;
 }
 
-.article-main .rte {
+.article-main .blog__description {
   font-size: 14px;
 }
 
 @media (max-width: 767px) {
-  .article-main .rte iframe {
+  .article-main .blog__description iframe {
     width: 100%;
   }
 }
 
-.article-main .rte ul {
+.article-main .blog__description ul {
   list-style: initial;
   padding-left: 25px;
 }
 
-.article-main .row .article-details .rte p img {
+.article-main .row .article-details .blog__description p img {
   margin: 1.7em 0;
+  object-fit: contain;
+  width: 400px;
+  height: auto;
 }
 
 .article-main form {

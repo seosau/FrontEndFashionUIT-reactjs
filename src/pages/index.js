@@ -10,18 +10,9 @@ import Address from "./Address/Address";
 import ChainStore from "./ChainStore/ChainStore";
 import Contact from "./Contact/Contact";
 import AllProducts from "./AllProducts/AllProducts";
-
-export {
-  Home,
-  AllProducts,
-  Login,
-  Register,
-  Contact,
-  Account,
-  Orders,
-  ChangePass,
-  Address,
-  ChainStore,
-  ProductCart,
-  CheckOut,
-};
+import News from "./News/News";
+import NewsDetail from "./NewsDetail/NewsDetail";
+import Forgot from "./Forgot/Forgot";
+import ResetPass from "./ResetPass/ResetPass";
+import OTP from "./OTP/OTP";
+export { Home, AllProducts, Login, Register, Contact, News, NewsDetail, Account, Orders, ChangePass, Address, ChainStore, ProductCart, CheckOut, Forgot, ResetPass, OTP };
