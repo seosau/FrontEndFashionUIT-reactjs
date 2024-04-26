@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { routes, adminRoutes } from "./routes/routes";
 import { DefaultLayout } from "./layouts";
 import { Fragment } from "react";
-import Contact from "./pages/Contact/Contact";
 
 function App() {
   const decodedToken = JSON.parse(localStorage.getItem("decodedToken"));

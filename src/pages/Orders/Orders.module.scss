@@ -3,36 +3,6 @@
   height: 54px;
   background-color: whitesmoke;
   padding-left: 165px;
-  table {
-    width: 839px;
-    border-collapse: collapse;
-  }
-  
-  table,
-  th,
-  td {
-    border: 0.4px solid gray;
-  }
-  
-  tr {
-    text-align: center;
-  }
-  
-  th,
-  td {
-    padding: 8px;
-    text-align: center;
-  }
-  
-  .orders-thead {
-    background-color: var(--hight-light-color);
-    color: #fff;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #dddddd;
-  }
-  
 }
 
 .breadcrumb {
@@ -139,9 +109,220 @@
   padding-left: 150px;
 }
 
+.content-title {
+  display: flex;
+}
+
+.order-date {
+  font-size: 14px;
+}
+
 .title2 {
   font-size: 20px;
   font-weight: 400;
   padding-bottom: 30px;
+  padding-right: 500px;
 }
 
+.order-status {
+  display: flex;
+  padding-bottom: 40px;
+}
+
+.checkout-status {
+  display: flex;
+  padding-right: 40px;
+}
+
+.status1 {
+  padding-left: 5px;
+  font-style: italic;
+  font-weight: 900;
+  color: red;
+}
+
+.transfer-status {
+  display: flex;
+}
+
+.status2 {
+  padding-left: 5px;
+  font-weight: 900;
+}
+
+.order-info,
+.order-title {
+  display: flex;
+}
+
+.address-title {
+  font-size: 18px;
+  padding-right: 235px;
+  padding-bottom: 5px;
+}
+
+.order-address {
+  border: 1px solid rgb(149, 148, 148);
+  border-radius: 7px;
+  padding: 7px 35px 30px 15px;
+}
+
+.user-name {
+  font-size: 17px;
+  color: black;
+  margin-bottom: 8px;
+}
+
+.user-address {
+  margin-bottom: 8px;
+}
+
+.checkout-title {
+  font-size: 18px;
+  padding-right: 155px;
+  padding-bottom: 5px;
+}
+
+.order-checkout {
+  border: 1px solid rgb(149, 148, 148);
+  border-radius: 7px;
+  padding: 7px 40px 30px 15px;
+  margin-left: 20px;
+}
+
+.order-title {
+  font-size: 18px;
+  padding-bottom: 5px;
+}
+
+.order-note {
+  border: 1px solid rgb(149, 148, 148);
+  border-radius: 7px;
+  padding: 7px 45px 30px 15px;
+  margin-left: 20px;
+}
+
+.order-total {
+  border: 1px solid rgb(149, 148, 148);
+  border-radius: 7px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.total-head {
+  position: relative;
+  display: flex;
+  padding: 20px 10px 20px 10px;
+  ::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 1px;
+    background-color: rgb(149, 148, 148);
+  }
+}
+
+.title-product {
+  padding-right: 380px;
+}
+
+.title-price {
+  padding-right: 90px;
+}
+
+.title-quantity {
+  padding-right: 90px;
+}
+
+.title-total {
+  padding-right: 43px;
+}
+
+.order-content {
+  padding-top: 15px;
+  padding-bottom: 20px;
+  margin-bottom: 50px;
+  display: flex;
+  position: relative;
+  ::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 1px;
+    background-color: rgb(149, 148, 148);
+  }
+}
+
+.product-img {
+  height: 150px;
+  width: 120px;
+  margin-left: 15px;
+}
+
+.about-product {
+  padding-top: 50px;
+  padding-left: 8px;
+}
+
+.product-name {
+  font-size: 13px;
+}
+
+.product-size {
+  font-size: 12px;
+  opacity: 80%;
+}
+
+.product-price {
+  font-size: 14px;
+  padding-left: 45px;
+  padding-top: 48px;
+}
+
+.product-quantity {
+  padding-left: 117px;
+  padding-top: 47px;
+}
+
+.product-total {
+  font-size: 14px;
+  padding-left: 115px;
+  padding-top: 48px;
+}
+
+.others-fee {
+  padding-left: 50%;
+}
+
+.transfer-fee,
+.cost,
+.coupon {
+  display: flex;
+}
+
+.others-fee-title1 {
+  padding-right: 300px;
+  padding-bottom: 30px;
+}
+
+.others-fee-title2 {
+  padding-right: 125px;
+  padding-bottom: 30px;
+}
+
+.others-fee-title3 {
+  padding-right: 253px;
+  padding-bottom: 30px;
+}
+
+.last-cost {
+  font-size: 20px;
+  color: red;
+  font-weight: 700;
+}
