@@ -45,14 +45,14 @@ function Orders() {
             <div className={cx("user-name")}>User Name</div>
           </div>
           <div className={cx("user-info")}>
-            <button onClick={account}>Thông tin tài khoản</button>
+            <Link to={"/account"}>Thông tin tài khoản</Link>
           </div>
           <div className={cx("your-order")}>Đơn hàng của bạn</div>
           <div className={cx("change-pass")}>
-            <button onClick={changepass}>Đổi mật khẩu</button>
+            <Link to={"/account/changepass"}>Đổi mật khẩu</Link>
           </div>
           <div className={cx("address")}>
-            <button onClick={address}>Sổ địa chỉ</button>
+            <button onClick={"/account/address"}>Sổ địa chỉ</button>
           </div>
         </div>
         <div className={cx("content")}>
