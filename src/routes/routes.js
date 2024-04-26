@@ -1,5 +1,5 @@
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
-import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct, EditBlog, ListBlogs } from "../pages/Admin";
+import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct, EditBlog, ListBlogs, ListUsers } from "../pages/Admin";
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -181,6 +181,11 @@ const adminRoutes = [
   {
     path: "/admin/blogs",
     component: ListBlogs,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/accounts",
+    component: ListUsers,
     layout: AdminLayout,
   },
 ];

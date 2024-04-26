@@ -192,6 +192,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+}
+
+.header__action-item:hover {
+  color: var(--hover-color);
+  .box-icon {
+    border-color: var(--hover-color) !important;
+  }
 }
 .header__action-item-auth {
   &:hover {
