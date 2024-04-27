@@ -170,3 +170,38 @@
   font-size: 18px;
   font-weight: 100;
 }
+// REsponsive
+@media screen and (max-width: 1200px) {
+  .header__logo {
+    margin-left: 10px;
+  }
+  .search__input {
+    min-width: 100px;
+  }
+  .search-result {
+    position: absolute;
+    right: -138px;
+    width: 245px;
+    top: -6px;
+  }
+}
+@media screen and (max-width: 992px) {
+  .search__input-container {
+    width: 100%;
+    .search__input {
+      width: 100%;
+    }
+  }
+  .search-result {
+    right: -392px;
+    width: 750px;
+    top: 48px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .search-result {
+    right: -202px;
+    width: 369px;
+    top: 48px;
+  }
+}

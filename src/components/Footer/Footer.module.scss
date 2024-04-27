@@ -4,13 +4,12 @@
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
-
 }
 
 .footer {
   margin: auto;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   padding-bottom: 30px;
   border-bottom: 1px solid var(--border-color);
 }
@@ -30,8 +29,7 @@
 }
 
 .mt-horizontal {
-  margin-right: 20px;
-  margin-left: 20px;
+  margin: 0 20px;
 }
 
 .footer_list_social_network {
@@ -75,9 +73,8 @@
 
 .list-news {
   margin-left: 10px;
-  width: 320px;
+  max-width: 320px;
 }
-
 
 .footer__section .list-news div a,
 .footer__section .list-news div p,
@@ -135,4 +132,39 @@
 
 .link:hover {
   color: var(--hight-light-color);
+}
+@media screen and (max-width: 1200px) {
+  .list-news {
+    margin-left: 10px;
+    max-width: 200px;
+  }
+  .footer__section {
+    max-width: 300px;
+  }
+  .footer__section .list-news div p {
+    padding-bottom: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+      color: var(--hight-light-color);
+    }
+  }
+  .mt-horizontal {
+    margin: 0;
+  }
+  .footer__section ul {
+    margin-left: 2px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .footer {
+    flex-wrap: wrap;
+  }
+  .footer__section {
+    width: 50%;
+  }
 }
