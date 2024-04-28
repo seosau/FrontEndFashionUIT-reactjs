@@ -15,7 +15,26 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart, CheckOut, News, NewsDetail, Forgot, ResetPass, OTP } from "../pages";
+import {
+  Home,
+  AllProducts,
+  Login,
+  Register,
+  Account,
+  Orders,
+  ChangePass,
+  Address,
+  ChainStore,
+  Contact,
+  ProductCart,
+  CheckOut,
+  News,
+  NewsDetail,
+  Forgot,
+  ResetPass,
+  OTP,
+  ProductDetail,
+} from "../pages";
 import OrderStatus from "../pages/OrderStatus/OrderStatus";
 import OrderDetail from "../pages/OrderDetail/OrderDetail";
 
@@ -147,6 +166,10 @@ const routes = [
   {
     path: "/products",
     component: AllProducts,
+  },
+  {
+    path: "/product/detail/:slug",
+    component: ProductDetail,
   },
   {
     path: "/products",

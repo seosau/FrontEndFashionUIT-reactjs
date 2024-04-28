@@ -1,22 +1,27 @@
-import React from "react";
-import style from "./ProductDetail.module.scss";
-import classNames from "classnames/bind";
-import ProductMainInfo from "../../components/ProductMainInfo/ProductMainInfo";
 import { useState, useEffect, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/scss";
 import { Navigation } from "swiper/modules";
-import "swiper/scss/navigation";
-import Product from "../../components/Product/Product";
-import { Link } from "react-router-dom";
+
 import { FaGift } from "react-icons/fa6";
 import { FaChevronRight } from "react-icons/fa";
+
+import "swiper/scss";
+import "swiper/scss/navigation";
+import classNames from "classnames/bind";
+import style from "./ProductDetail.module.scss";
+
+import Product from "../../components/Product/Product";
+import ProductMainInfo from "../../components/ProductMainInfo/ProductMainInfo";
 import QuickViewInfo from "../../components/QuickViewInfo/QuickViewInfo";
 import Category from "../../components/Category/Category";
+import axiosClient from "../../config/axios";
 
 const cx = classNames.bind(style);
 
 export default function ProductDetail() {
+  const { slug } = useParams();
+  const [product, setProduct] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const openPopup = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -27,58 +32,22 @@ export default function ProductDetail() {
   const handleTabClick = (index) => {
     setActiveTab(index);
   };
-
   const tabs = ["Mô tả sản phẩm", "Chính sách đổi trả"]; // Danh sách các tab
-
+  useEffect(() => {
+    async function fetchData() {
+      await axiosClient
+        .get(`/product/detail/${slug}`)
+        .then(({ data }) => {
+          setProduct(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetchData();
+  }, [slug]);
   const tabContents = [
-    <div className={cx("description")}>
-      <p>
-        Chất liệu Cotton tự nhiên mềm mại, thấm hút mồ hôi và thoáng khí mang
-        lang lại cảm giác thoải mái, dễ chịu mỗi ngày.
-      </p>
-      <p>
-        Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp với các
-        trang phục khác.
-      </p>
-      <p>
-        <strong>Hướng dẫn bảo quản:</strong>
-      </p>
-      <p>+ Không giật tag (mác) - cắt bằng kéo</p>
-      <p>+ Giặt máy với chu kỳ trung bình và vòng quay ngắn</p>
-      <p>+ Giặt với nhiệt độ tối đa 30 độ C</p>
-      <p>+ Sấy ở nhiệt độ thường</p>
-      <p>+ Là ủi ở nhiệt độ thấp&nbsp;</p>
-      <p className={cx("description__thumb")}>
-        <img
-          data-thumb="original"
-          original-height={480}
-          original-width={370}
-          src="//bizweb.dktcdn.net/100/451/884/products/4apcb001cam01-409k-1.jpg?v=1649862131563"
-        />
-        <img
-          data-thumb="original"
-          original-height={480}
-          original-width={370}
-          src="//bizweb.dktcdn.net/100/451/884/products/4apcb001cam01-409k-1a.jpg?v=1649862132127"
-        />
-        <img
-          data-thumb="original"
-          original-height={480}
-          original-width={370}
-          src="//bizweb.dktcdn.net/100/451/884/products/4apcb001cam01-409k-1b.jpg?v=1649862132990"
-        />
-        <img
-          data-thumb="original"
-          original-height={480}
-          original-width={370}
-          src="//bizweb.dktcdn.net/100/451/884/products/4apcb001cam01-409k-1e.jpg?v=1649862170077"
-        />
-      </p>
-      <ul>
-        <li>Vải đảm bảo chất lượng</li>
-        <li>Không để tiếp xúc ở nhiệt độ cao</li>
-      </ul>
-    </div>,
+    <div className={cx("description")}>{product.description}</div>,
 
     <div className={cx("policy")}>
       + Sản phẩm lỗi, hỏng do quá trình sản xuất hoặc vận chuyện
@@ -157,7 +126,9 @@ export default function ProductDetail() {
         <div className={cx("small-container")}>
           <div className={cx("product-detail-side")}>
             {/* Chi tiết sản phẩm chính */}
-            <ProductMainInfo />
+            {Object.keys(product).length > 0 && (
+              <ProductMainInfo product={product} />
+            )}
             {/* Mô tả và chính sách */}
             <div className={cx("description-policy")}>
               <div>

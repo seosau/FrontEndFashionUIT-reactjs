@@ -381,6 +381,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -402,6 +403,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -423,6 +425,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -444,6 +447,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -465,6 +469,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -482,27 +487,13 @@ export default function AllProducts() {
               </div>
               <div className={cx("sortTitle")}>Sắp xếp:</div>
               <select className={cx("sortOpt")}>
-                <option className={cx("sortOptItem")}>
-                  <div className={cx("sortOptItemTxt")}>Mặc định</div>
-                </option>
-                <option className={cx("sortOptItem")}>
-                  <div className={cx("sortOptItemTxt")}>A &#8594; Z</div>
-                </option>
-                <option className={cx("sortOptItem")}>
-                  <div className={cx("sortOptItemTxt")}>Z &#8594; A</div>
-                </option>
-                <option className={cx("sortOptItem")}>
-                  <div className={cx("sortOptItemTxt")}>Giá tăng dần</div>
-                </option>
-                <option className={cx("sortOptItem")}>
-                  <div className={cx("sortOptItemTxt")}>Giá giảm dần</div>
-                </option>
-                <option className={cx("sortOptItem")}>
-                  <div className={cx("sortOptItemTxt")}>Cũ nhất</div>
-                </option>
-                <option className={cx("sortOptItem")}>
-                  <div className={cx("sortOptItemTxt")}>Mới nhất</div>
-                </option>
+                <option className={cx("sortOptItem")}>Mặc định</option>
+                <option className={cx("sortOptItem")}>A &#8594; Z</option>
+                <option className={cx("sortOptItem")}>Z &#8594; A</option>
+                <option className={cx("sortOptItem")}>Giá tăng dần</option>
+                <option className={cx("sortOptItem")}>Giá giảm dần</option>
+                <option className={cx("sortOptItem")}>Cũ nhất</option>
+                <option className={cx("sortOptItem")}>Mới nhất</option>
               </select>
             </div>
           </div>
@@ -511,17 +502,13 @@ export default function AllProducts() {
               selectedFilter.length > 0 ? (
                 filteredProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product
-                      product={product}
-                    />
+                    <Product product={product} />
                   </div>
                 ))
               ) : (
                 products.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product
-                      product={product}
-                    />
+                    <Product product={product} />
                   </div>
                 ))
               )

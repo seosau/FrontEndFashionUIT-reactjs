@@ -186,6 +186,7 @@ export default function Search() {
           </div>
         </div>
       )}
+      // maxWidth={"100%"}
       onClickOutside={handleHideResult}
     >
       <div className={cx("search__input-container")}>
@@ -198,7 +199,7 @@ export default function Search() {
           onChange={handleChange}
           onFocus={() => setShowResult(true)}
         />
-        {!!searchValue && !loading && (
+        {/* {!!searchValue && !loading && (
           <button
             className={cx("clear")}
             onClick={handleClear}
@@ -210,7 +211,7 @@ export default function Search() {
 
         {loading && (
           <FaSpinner className={cx("loading")} style={{ left: width * 0.66 }} />
-        )}
+        )} */}
 
         <button className={cx("search__btn")} onClick={(e) => onSearch(e)}>
           <GoSearch className={cx("icon-style")} />

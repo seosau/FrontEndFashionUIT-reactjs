@@ -1,36 +1,27 @@
+import { useContext, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import className from "classnames/bind";
 import style from "./Header.module.scss";
-import { Link, useNavigate } from "react-router-dom";
+
 import { LiaPhoneSolid } from "react-icons/lia";
 import { CiLocationOn } from "react-icons/ci";
-import { BsSearch } from "react-icons/bs";
+import { GoSearch } from "react-icons/go";
 import { SlLogin, SlLogout, SlUser } from "react-icons/sl";
 import { PiUserPlus, PiUser } from "react-icons/pi";
-import { CiUser } from "react-icons/ci";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FaGift } from "react-icons/fa6";
 import { IoChevronDownSharp } from "react-icons/io5";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 import Search from "../../components/Search/Search";
-import { useContext, useState, useEffect } from "react";
-import { logDOM } from "@testing-library/react";
 import axiosClient from "../../config/axios";
 import { AuthContext } from "../../context/AuthContext";
 import { useStateContext } from "../../context/CartContextProvider";
 const cx = className.bind(style);
-function Header() {
+function Header({ setShowModal }) {
   const [searchVisible, setSearchVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchSuggestions, setSearchsuggestions] = useState([]);
-  const toggleSearch = () => {
-    setSearchVisible(!searchVisible);
-  };
-  const handleInputChange = (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
 
-    setSearchVisible(query !== "");
-  };
   const { isAuth, setIsAuth, setDecodedToken } = useContext(AuthContext);
   const { setCartItems, quantityInCart, setQuantityInCart } = useStateContext();
   const getQuantityInCart = async () => {
@@ -66,6 +57,14 @@ function Header() {
   return (
     <div className={cx("container")}>
       <header className={cx("header")}>
+        <div className={cx("header__nav-action")}>
+          <div className={cx("header__nav-list")} onClick={() => setShowModal(true)}>
+            <RxHamburgerMenu className={cx("header__nav-icon")} />
+          </div>
+          <div className={cx("header__nav-action")}>
+            <GoSearch className={cx("header__nav-icon")} onClick={() => setSearchVisible((prevSearchVisible) => !prevSearchVisible)} />
+          </div>
+        </div>
         <div className={cx("header__logo")}>
           <img className={cx("header__img")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/logo.png?1706504358658" alt="logo" />
         </div>
@@ -825,6 +824,11 @@ function Header() {
           </Link>
         </div>
       </header>
+      {searchVisible && (
+        <div className={cx("header__search-action")}>
+          <Search />
+        </div>
+      )}
     </div>
   );
 }

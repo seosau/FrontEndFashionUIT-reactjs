@@ -196,6 +196,7 @@ function Footer() {
             </li>
           </ul>
         </div>
+        <div className={cx("footer__section-group")}></div>
       </footer>
       <p className={cx("license")}>© Bản quyền thuộc về Mr. Bean | Cung cấp bởi Sapo</p>
     </div>
