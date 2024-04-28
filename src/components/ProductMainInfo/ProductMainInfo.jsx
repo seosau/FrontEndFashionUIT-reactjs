@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import style from "./ProductMainInfo.module.scss";
 import className from "classnames/bind";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
 import { Navigation } from "swiper/modules";
 import "swiper/scss/navigation";
+import { useStateContext } from "../../context/CartContextProvider";
+import axiosClient from "../../config/axios";
+import { AuthContext } from "../../context/AuthContext";
 
 const cx = className.bind(style);
 
 export default function ProductMainInfo({ product }) {
+  const {isAuth} = useContext(AuthContext)
+  const {cartItems, setCartItems, setQuantityInCart} = useStateContext()
   const [mainImgIndex, setMainImgIndex] = useState(0);
   const switchMainImg = (index) => {
     setMainImgIndex(index);
@@ -33,6 +38,53 @@ export default function ProductMainInfo({ product }) {
   const changeActiveSize = (index) => {
     setActiveSize(index);
   };
+
+  const handleAddToCart = async () => {
+    if (isAuth) {
+      if (product.stock === 0) {
+        return alert("Hết sản phẩm");
+      }
+
+      const data = {
+        products: {
+          productId: product._id,
+          size: product.sizes[activeSize],
+          color: product.colors[activeColor].colorName,
+          quantity: parseInt(count),
+          price: product.price,
+        },
+      };
+
+      axiosClient
+        .post("/cart/add", data)
+        .then((response) => {
+          console.log(response.data.message);
+          setQuantityInCart(response.data.quantity);
+          const tmp = [...cartItems];
+
+          const existingItemIndex = cartItems.findIndex(
+            (item) =>
+              item.productId === data.products.productId &&
+              item.size === data.products.size &&
+              item.color === data.products.color
+          );
+
+          if (existingItemIndex !== -1) {
+            tmp[existingItemIndex].quantity += parseInt(data.products.quantity);
+          } else {
+            tmp.push(data.products);
+          }
+          setCartItems(tmp);
+          alert(response.data.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert("Bạn chưa đăng nhập");
+    }
+  };
+
   return (
     <>
       {product && (
@@ -111,14 +163,14 @@ export default function ProductMainInfo({ product }) {
                 <p>
                   Màu sắc:{" "}
                   <span className={cx("picked-color")}>
-                    {product.color[activeColor]}
+                    {product.colors[activeColor].colorName}
                   </span>
                 </p>
                 <div className={cx("all-color")}>
-                  {product.color.map((color,index) => (
+                  {product.colors.map((color,index) => (
                     <button
                       className={cx("each-color")}
-                      // style={{ backgroundColor: e.code }}
+                      style={{ backgroundColor: color.colorCode }}
                       onClick={() => {
                         changeActiveColor(index);
                       }}
@@ -138,11 +190,11 @@ export default function ProductMainInfo({ product }) {
                 <p>
                   Kích thước:{" "}
                   <span className={cx("picked-size")}>
-                    {product.size[activeSize]}
+                    {product.sizes[activeSize]}
                   </span>
                 </p>
                 <div className={cx("all-size")}>
-                  {product.size.map((size,index) => (
+                  {product.sizes.map((size,index) => (
                     <div
                       className={cx(
                         activeSize === index ? "active-size" : "each-size"
@@ -176,7 +228,7 @@ export default function ProductMainInfo({ product }) {
                   </button>
                 </div>
                 <div className={cx("add-to-card")}>
-                  <button onClick={""} className={cx("add-to-card-button")}>
+                  <button onClick={handleAddToCart} className={cx("add-to-card-button")}>
                     Thêm vào giỏ hàng
                   </button>
                 </div>

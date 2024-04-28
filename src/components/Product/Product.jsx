@@ -162,8 +162,8 @@ export default function Product({
                 <div className={cx("cart-size")}>
                   <span>Chọn size:</span>
                   <div className={cx("group-size")}>
-                    {product.size.map((size) => (
-                      <div
+                    {product.sizes.map((size, index) => (
+                      <div key={index}
                         className={cx(
                           "size",
                           selectedSize === size && "active-selected"
@@ -178,15 +178,15 @@ export default function Product({
                 <div className={cx("cart-color")}>
                   <span>Chọn màu:</span>
                   <div className={cx("group-color")}>
-                    {product.color.map((color) => (
-                      <div
+                    {product.colors.map((color, index) => (
+                      <div key={index}
                         className={cx(
                           "color",
-                          selectedColor === color && "active-selected"
+                          selectedColor === color.colorName && "active-selected"
                         )}
-                        onClick={() => handleSelectColor(color)}
+                        onClick={() => handleSelectColor(color.colorName)}
                       >
-                        {color}
+                        {color.colorName}
                       </div>
                     ))}
                   </div>
