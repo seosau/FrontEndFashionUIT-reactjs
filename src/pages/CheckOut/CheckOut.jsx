@@ -64,12 +64,11 @@ function CheckOut() {
     checkoutInfoTmp.totalPrice = totalPrice + 40;
     checkoutInfoTmp.products = checkoutItems;
     checkoutInfoTmp.paid = false;
-
     axiosClient
       .post(`/order/create`, { orderInfo: checkoutInfoTmp })
       .then(({ data }) => {
         window.alert("Đặt hàng thành công");
-        navigate("/cart");
+        navigate("/order/success");
       })
       .catch((error) => {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
@@ -89,8 +88,6 @@ function CheckOut() {
     var amount = (totalPrice + 40) * 1000;
     var language = "vn";
     var bankCode = "";
-
-    console.log(1);
     axiosClient
       .post(`/order/vnpay/url`, {
         amount,
@@ -99,12 +96,7 @@ function CheckOut() {
         orderInfo: checkoutInfoTmp,
       })
       .then(({ data }) => {
-        const newWindow = window.open(data.vnpUrl, "_blank");
-        if (newWindow) {
-          newWindow.focus();
-        } else {
-          console.error("Popup window blocked by browser");
-        }
+        window.location.href = data.vnpUrl;
       })
       .catch((error) => {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");

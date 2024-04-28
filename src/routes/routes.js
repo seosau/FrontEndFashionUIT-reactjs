@@ -34,9 +34,10 @@ import {
   ResetPass,
   OTP,
   ProductDetail,
+  OrderDetail,
+  PaymentStatus,
+  OrderSuccess,
 } from "../pages";
-import OrderStatus from "../pages/OrderStatus/OrderStatus";
-import OrderDetail from "../pages/OrderDetail/OrderDetail";
 
 const routes = [
   {
@@ -177,11 +178,15 @@ const routes = [
   },
   {
     path: "/order/status",
-    component: OrderStatus,
+    component: PaymentStatus,
   },
   {
     path: "/order-detail/:orderId",
     component: OrderDetail,
+  },
+  {
+    path: "/order/success",
+    component: OrderSuccess,
   },
 ];
 const adminRoutes = [

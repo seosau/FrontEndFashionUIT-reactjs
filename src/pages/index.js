@@ -15,5 +15,30 @@ import News from "./News/News";
 import NewsDetail from "./NewsDetail/NewsDetail";
 import Forgot from "./Forgot/Forgot";
 import ResetPass from "./ResetPass/ResetPass";
+import PaymentStatus from "./PaymentStatus/PaymentStatus";
+import OrderDetail from "./OrderDetail/OrderDetail";
+import OrderSuccess from "./OrderSuccess/OrderSuccess";
 import OTP from "./OTP/OTP";
-export { Home, AllProducts, Login, Register, Contact, News, NewsDetail, Account, Orders, ChangePass, Address, ChainStore, ProductCart, ProductDetail,CheckOut, Forgot, ResetPass, OTP };
+export {
+  Home,
+  AllProducts,
+  Login,
+  Register,
+  Contact,
+  News,
+  NewsDetail,
+  Account,
+  Orders,
+  ChangePass,
+  Address,
+  ChainStore,
+  ProductCart,
+  ProductDetail,
+  CheckOut,
+  Forgot,
+  ResetPass,
+  OTP,
+  PaymentStatus,
+  OrderDetail,
+  OrderSuccess,
+};

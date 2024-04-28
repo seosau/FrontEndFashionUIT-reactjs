@@ -86,7 +86,7 @@ function Login() {
           {!isFullFilled ? <div className={cx("warningTxt")}>Vui lòng nhập đầy đủ thông tin!</div> : !isEmailValid ? <div className={cx("warningTxt")}>Email không hợp lệ!</div> : null}
           <div className={cx("inputLabel")}>Email</div>
           <div className={cx("inputContainer")}>
-            <input onChange={(e) => setLoginInfo({ ...loginInfo, email: e.target.value })} className={cx("inputField")} placeholder="abc@gmail.com"></input>
+            <input type="email" onChange={(e) => setLoginInfo({ ...loginInfo, email: e.target.value })} className={cx("inputField")} placeholder="abc@gmail.com"></input>
           </div>
           <div className={cx("inputLabel")}>Mật khẩu</div>
           <div className={cx("inputContainer")}>
@@ -105,7 +105,9 @@ function Login() {
             <div className={cx("btnTxt")}>ĐĂNG NHẬP</div>
           </button>
           <div className={cx("linkContainer")}>
-            <div className={cx("forgotLink")}>Quên mật khẩu?</div>
+            <Link to={"/forgot"} className={cx("forgotLink")}>
+              Quên mật khẩu?
+            </Link>
             <Link to={"/register"} className={cx("registerLink")}>
               Đăng ký tại đây
             </Link>

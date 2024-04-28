@@ -23,6 +23,25 @@ function OrderDetail() {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
       });
   }, []);
+  const handleCheckoutBanking = () => {
+    var orderId = order?._id;
+    var language = "vn";
+    var bankCode = "";
+
+    console.log(1);
+    axiosClient
+      .post(`/order/vnpay/re-pay`, {
+        language,
+        bankCode,
+        orderId,
+      })
+      .then(({ data }) => {
+        window.location.href = data.vnpUrl;
+      })
+      .catch((error) => {
+        console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
+      });
+  };
   const date = new Date(order?.createdAt);
   return (
     <div className={cx("content")}>
@@ -63,6 +82,15 @@ function OrderDetail() {
               <div className={cx("order-info-title")}>THANH TOÁN</div>
               <div className={cx("orderInfoBorder")}>
                 <div>{order?.paymentMethod === "cod" ? "Thanh toán khi nhận hàng (COD)" : "Thanh toán trực tuyến"}</div>
+                {order?.paymentMethod === "banking" && order?.paid == false ? (
+                  <div onClick={() => handleCheckoutBanking()} className={cx("checkOutBtn")}>
+                    <div className={cx("checkOutBtnTxt")}>THANH TOÁN NGAY</div>
+                  </div>
+                ) : order?.paymentMethod === "banking" && order?.paid == true ? (
+                  <div className={cx("inActive")}>
+                    <div className={cx("checkOutBtnTxt")}>BẠN ĐÃ THANH TOÁN</div>
+                  </div>
+                ) : null}
               </div>
             </div>
             <div className={cx("order-note")}>

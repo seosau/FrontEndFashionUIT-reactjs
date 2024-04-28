@@ -326,15 +326,21 @@ export default function ProductCart() {
                         </Link>
                       </div>
                       <div className={cx("cart-btn-checkout")}>
-                        <Link
-                          to={"/checkout"}
-                          state={{ totalPrice: totalPrice ? totalPrice : 0, checkoutItems: [...checkoutItems] }}
-                          className={cx("cart-btn-proceed-checkout")}
-                          id="btn-proceed-checkout"
-                          title="Thanh toán"
-                        >
-                          THANH TOÁN
-                        </Link>
+                        {totalPrice > 0 ? (
+                          <Link
+                            to={"/checkout"}
+                            state={{ totalPrice: totalPrice ? totalPrice : 0, checkoutItems: [...checkoutItems] }}
+                            className={cx("cart-btn-proceed-checkout")}
+                            id="btn-proceed-checkout"
+                            title="Thanh toán"
+                          >
+                            THANH TOÁN
+                          </Link>
+                        ) : (
+                          <div className={cx("cart-btn-proceed-checkout-inactive")} id="btn-proceed-checkout-inactive" title="Thanh toán">
+                            THANH TOÁN
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
