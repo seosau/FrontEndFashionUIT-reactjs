@@ -30,7 +30,7 @@ function Forgot() {
     e.preventDefault();
     if (validateForm()) {
       axiosClient
-        .post(`/forgot`, { email })
+        .post(`/auth/forgot`, { email })
         .then(({ data }) => {
           navigate("/otp", { state: { email: email } });
         })

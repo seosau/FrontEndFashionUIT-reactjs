@@ -23,7 +23,7 @@ export default function SideBar() {
         </Link>
       </div>
       <div className={cx("linkContainer")}>
-        <Link className={currentPath == "/account/orders" ? cx("linkBtn", "current") : cx("linkBtn")} to={"/account/orders"}>
+        <Link className={currentPath == "/account/orders" || currentPath.slice(0, 13) == "/order-detail" ? cx("linkBtn", "current") : cx("linkBtn")} to={"/account/orders"}>
           Đơn hàng của bạn
         </Link>
       </div>
