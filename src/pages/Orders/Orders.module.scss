@@ -1,293 +1,75 @@
-.wrapper {
-  width: 100%;
-  height: 54px;
-  background-color: whitesmoke;
-  padding-left: 165px;
-}
-
-.breadcrumb {
+.content {
   display: flex;
-  // padding-top: 20px;
+  justify-content: center;
+  min-height: 52vh;
+  width: 100%;
+}
+.wrapper {
+  width: 1200px;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 40px;
+}
+.main {
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
 }
 
-.text1 {
-  padding-right: 17px;
-  font-size: 15px;
+.title {
+  font-size: 30px;
+  font-weight: 400;
+  padding-bottom: 16px;
+  font-weight: 800;
+  color: #01567f;
 }
-
-.home-page {
-  padding-top: 20px;
-
-  .content {
-    display: flex;
-    justify-content: center;
-    min-height: 52vh;
-    width: 100%;
-  }
-  .wrapper {
-    width: 1200px;
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 40px;
-  }
-  .main {
-    justify-content: center;
-    flex-direction: column;
-    width: 100%;
-  }
-  .change-pass {
-    font-size: 15px;
-    padding-bottom: 20px;
-    color: var(--hight-light-color);
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .title {
-    font-size: 30px;
-    font-weight: 400;
-    padding-bottom: 16px;
-    font-weight: 800;
-    color: #01567f;
-  }
-  .ordersTable {
-    margin: 0;
-    padding: 0;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  .ordersHeading {
-    background-color: var(--hight-light-color);
-  }
-  .headingTilte {
-    color: #fff;
-    padding: 10px;
-    border: 0.4px solid #fff;
-    text-align: center;
-    margin: 0;
-    font-weight: 600;
-  }
-
-  .content-title {
-    display: flex;
-  }
-
-  .order-date {
-    font-size: 14px;
-  }
-
-  .title2 {
-    font-size: 20px;
-    font-weight: 400;
-    padding-bottom: 30px;
-    padding-right: 500px;
-  }
-
-  .order-status {
-    display: flex;
-    padding-bottom: 40px;
-  }
-
-  .checkout-status {
-    display: flex;
-    padding-right: 40px;
-  }
-
-  .status1 {
-    padding-left: 5px;
-    font-style: italic;
-    font-weight: 900;
-    color: red;
-  }
-
-  .transfer-status {
-    display: flex;
-  }
-
-  .status2 {
-    padding-left: 5px;
-    font-weight: 900;
-  }
-
-  .order-info,
-  .order-title {
-    display: flex;
-  }
-
-  .address-title {
-    font-size: 18px;
-    padding-right: 235px;
-    padding-bottom: 5px;
-  }
-
-  .order-address {
-    border: 1px solid rgb(149, 148, 148);
-    border-radius: 7px;
-    padding: 7px 35px 30px 15px;
-  }
-
-  .user-name {
-    font-size: 17px;
-    color: black;
-    margin-bottom: 8px;
-  }
-
-  .user-address {
-    margin-bottom: 8px;
-  }
-
-  .checkout-title {
-    font-size: 18px;
-    padding-right: 155px;
-    padding-bottom: 5px;
-  }
-
-  .order-checkout {
-    border: 1px solid rgb(149, 148, 148);
-    border-radius: 7px;
-    padding: 7px 40px 30px 15px;
-    margin-left: 20px;
-  }
-
-  .order-title {
-    font-size: 18px;
-    padding-bottom: 5px;
-  }
-
-  .order-note {
-    border: 1px solid rgb(149, 148, 148);
-    border-radius: 7px;
-    padding: 7px 45px 30px 15px;
-    margin-left: 20px;
-  }
-
-  .order-total {
-    border: 1px solid rgb(149, 148, 148);
-    border-radius: 7px;
-    margin-top: 30px;
-    margin-bottom: 20px;
-  }
-
-  .total-head {
-    position: relative;
-    display: flex;
-    padding: 20px 10px 20px 10px;
-    ::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: 95%;
-      height: 1px;
-      background-color: rgb(149, 148, 148);
-    }
-  }
-
-  .title-product {
-    padding-right: 380px;
-  }
-
-  .title-price {
-    padding-right: 90px;
-  }
-
-  .title-quantity {
-    padding-right: 90px;
-  }
-
-  .title-total {
-    padding-right: 43px;
-  }
-
-  .order-content {
-    padding-top: 15px;
-    padding-bottom: 20px;
-    margin-bottom: 50px;
-    display: flex;
-    position: relative;
-    ::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: 95%;
-      height: 1px;
-      background-color: rgb(149, 148, 148);
-    }
-  }
-
-  .product-img {
-    height: 150px;
-    width: 120px;
-    margin-left: 15px;
-  }
-
-  .about-product {
-    padding-top: 50px;
-    padding-left: 8px;
-  }
-
-  .product-name {
-    font-size: 13px;
-  }
-
-  .product-size {
-    font-size: 12px;
-    opacity: 80%;
-  }
-
-  .product-price {
-    font-size: 14px;
-    padding-left: 45px;
-    padding-top: 48px;
-  }
-
-  .product-quantity {
-    padding-left: 117px;
-    padding-top: 47px;
-  }
-
-  .product-total {
-    font-size: 14px;
-    padding-left: 115px;
-    padding-top: 48px;
-  }
-
-  .others-fee {
-    padding-left: 50%;
-  }
-
-  .transfer-fee,
-  .cost,
-  .coupon {
-    display: flex;
-  }
-
-  .others-fee-title1 {
-    padding-right: 300px;
-    padding-bottom: 30px;
-  }
-
-  .others-fee-title2 {
-    padding-right: 125px;
-    padding-bottom: 30px;
-  }
-
-  .others-fee-title3 {
-    padding-right: 253px;
-    padding-bottom: 30px;
-  }
-
-  .last-cost {
-    font-size: 20px;
-    color: red;
-    font-weight: 700;
-  }
-  .ordersBody {
-    border: 0.8px solid rgba(0, 0, 0, 0.1);
-  }
+.ordersTable {
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+.ordersHeading {
+  background-color: var(--hight-light-color);
+}
+.headingTilte {
+  color: #fff;
+  padding: 10px;
+  border: 0.4px solid #fff;
+  text-align: center;
+  margin: 0;
+  font-weight: 600;
+}
+.ordersBody {
+  // border: 0.8px solid rgba(0, 0, 0, 0.1);
+}
+.tableRow {
+  text-align: center;
+}
+.tableData {
+  border: 0.8px solid rgba(0, 0, 0, 0.1);
+  padding: 6px 10px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  display: table-cell;
+  max-width: 400px;
+}
+.address {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+.link:hover {
+  text-decoration: underline;
+}
+.tableDataContainer {
+}
+.paid {
+  color: green;
+  font-weight: 500;
+}
+.noPaid {
+  color: red;
+  font-weight: 500;
 }

@@ -1,13 +1,19 @@
 import style from "./ChangePass.module.scss";
 import className from "classnames/bind";
 import { IoIosArrowForward } from "react-icons/io";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import SideBar from "../../components/Account/SideBar/SideBar";
 import axiosClient from "../../config/axios";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { useStateContext } from "../../context/CartContextProvider";
 const cx = className.bind(style);
 
 function ChangePass() {
+  const navigate = useNavigate();
+  const { isAuth, setIsAuth, setDecodedToken } = useContext(AuthContext);
+  const { setCartItems, quantityInCart, setQuantityInCart } = useStateContext();
   const [isPrivate, setIsPrivate] = useState(true);
   const [changePassInfo, setChangePassInfo] = useState({
     oldPass: "",
@@ -35,9 +41,21 @@ function ChangePass() {
     e.preventDefault();
     if (validateForm()) {
       axiosClient
-        .post(`/change-password`, { oldPassword: changePassInfo.oldPass, newPassword: changePassInfo.pass })
+        .post(`/auth/change-password`, { oldPassword: changePassInfo.oldPass, newPassword: changePassInfo.pass })
         .then((response) => {
-          window.alert("Password changed successfully!");
+          window.alert("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
+          axiosClient
+            .get(`/auth/logout`)
+            .then((response) => {
+              setIsAuth(false);
+              setCartItems([]);
+              setQuantityInCart(0);
+              setDecodedToken(null);
+              navigate("/login");
+            })
+            .catch((error) => {
+              console.log(`Logout failed! ${error.response.data.message}`);
+            });
         })
         .catch((error) => {
           window.alert(`Password changed failed! ${error.response.data.message}`);

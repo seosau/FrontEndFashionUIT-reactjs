@@ -41,7 +41,7 @@ function Header({ setShowModal }) {
   const navigate = useNavigate();
   const handleLogout = () => {
     axiosClient
-      .get(`/logout`)
+      .get(`/auth/logout`)
       .then(({ data }) => {
         localStorage.removeItem("decodedToken");
         setIsAuth(false);
@@ -58,27 +58,15 @@ function Header({ setShowModal }) {
     <div className={cx("container")}>
       <header className={cx("header")}>
         <div className={cx("header__nav-action")}>
-          <div
-            className={cx("header__nav-list")}
-            onClick={() => setShowModal(true)}
-          >
+          <div className={cx("header__nav-list")} onClick={() => setShowModal(true)}>
             <RxHamburgerMenu className={cx("header__nav-icon")} />
           </div>
           <div className={cx("header__nav-action")}>
-            <GoSearch
-              className={cx("header__nav-icon")}
-              onClick={() =>
-                setSearchVisible((prevSearchVisible) => !prevSearchVisible)
-              }
-            />
+            <GoSearch className={cx("header__nav-icon")} onClick={() => setSearchVisible((prevSearchVisible) => !prevSearchVisible)} />
           </div>
         </div>
         <div className={cx("header__logo")}>
-          <img
-            className={cx("header__img")}
-            src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/logo.png?1706504358658"
-            alt="logo"
-          />
+          <img className={cx("header__img")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/logo.png?1706504358658" alt="logo" />
         </div>
         <div className={cx("header__navbar")}>
           <div className={cx("header__top")}>
@@ -113,18 +101,12 @@ function Header({ setShowModal }) {
                 <div className={cx("row")}>
                   <div className={cx("flex-25", "mega-banner")}>
                     <Link to="" className={cx("banner-effect")} title="Nữ">
-                      <img
-                        className={cx("lazyload", "img-responsive", "loaded")}
-                        src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-1-image-1.jpg?1706504358658"
-                        alt="Nữ"
-                      />
+                      <img className={cx("lazyload", "img-responsive", "loaded")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-1-image-1.jpg?1706504358658" alt="Nữ" />
                     </Link>
                   </div>
                   <div className={cx("flex-75", "mega-menu-list")}>
                     <ul className={cx("level0", "half-banner")}>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} to="/ao" title="Áo">
                           Áo
                         </Link>
@@ -151,9 +133,7 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/quan" title="Quần">
                           Quần
                         </Link>
@@ -174,18 +154,13 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-leggings-nu"
-                              title="Quần Leggings Nữ"
-                            >
+                            <Link to="/quan-leggings-nu" title="Quần Leggings Nữ">
                               Quần Leggings Nữ
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/vay" title="Váy">
                           Váy
                         </Link>
@@ -212,14 +187,8 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          href="/do-mac-trong"
-                          title="Đồ Mặc Trong"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} href="/do-mac-trong" title="Đồ Mặc Trong">
                           Đồ Mặc Trong
                         </Link>
                         <ul className={cx("level1")}>
@@ -234,31 +203,19 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-con-size-lon"
-                              title="Quần Con Size Lớn"
-                            >
+                            <Link to="/quan-con-size-lon" title="Quần Con Size Lớn">
                               Quần Con Size Lớn
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/ao-nguc-khong-gong"
-                              title="Áo Ngực Không Gọng"
-                            >
+                            <Link to="/ao-nguc-khong-gong" title="Áo Ngực Không Gọng">
                               Áo Ngực Không Gọng
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          to="/do-mac-nha"
-                          title="Đồ Mặc Nhà"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} to="/do-mac-nha" title="Đồ Mặc Nhà">
                           Đồ Mặc Nhà
                         </Link>
                         <ul className={cx("level1")}>
@@ -278,23 +235,14 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/dep-di-trong-nha"
-                              title="Dép Đi Trong Nhà"
-                            >
+                            <Link to="/dep-di-trong-nha" title="Dép Đi Trong Nhà">
                               Dép Đi Trong Nhà
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          to="/phu-kien"
-                          title="Phụ Kiện"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} to="/phu-kien" title="Phụ Kiện">
                           Phụ Kiện
                         </Link>
                         <ul className={cx("level1")}>
@@ -320,14 +268,8 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          to="/dam-va-jumpsut"
-                          title="Đầm Và Jumpsut"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} to="/dam-va-jumpsut" title="Đầm Và Jumpsut">
                           Đầm Và Jumpsut
                         </Link>
                         <ul className={cx("level1")}>
@@ -348,14 +290,8 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          to="/do-bo-nu"
-                          title="Đồ Bộ Nữ"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} to="/do-bo-nu" title="Đồ Bộ Nữ">
                           Đồ Bộ Nữ
                         </Link>
                         <ul className={cx("level1")}>
@@ -385,18 +321,12 @@ function Header({ setShowModal }) {
                 <div className={cx("row")}>
                   <div className={cx("flex-25", "mega-banner")}>
                     <Link to="" className={cx("banner-effect")} title="Nam">
-                      <img
-                        className={cx("lazyload", "img-responsive", "loaded")}
-                        src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-2-image-1.jpg?1706504358658"
-                        alt="Nam"
-                      />
+                      <img className={cx("lazyload", "img-responsive", "loaded")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-2-image-1.jpg?1706504358658" alt="Nam" />
                     </Link>
                   </div>
                   <div className={cx("flex-50", "mega-menu-list")}>
                     <ul className={cx("level0")}>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} to="/ao" title="Áo">
                           Áo
                         </Link>
@@ -423,9 +353,7 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/quan" title="Quần">
                           Quần
                         </Link>
@@ -446,18 +374,13 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-leggings-nu"
-                              title="Quần Leggings Nữ"
-                            >
+                            <Link to="/quan-leggings-nu" title="Quần Leggings Nữ">
                               Quần Leggings Nữ
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/vay" title="Váy">
                           Váy
                         </Link>
@@ -484,14 +407,8 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          href="/do-mac-trong"
-                          title="Đồ Mặc Trong"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} href="/do-mac-trong" title="Đồ Mặc Trong">
                           Đồ Mặc Trong
                         </Link>
                         <ul className={cx("level1")}>
@@ -506,31 +423,19 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-con-size-lon"
-                              title="Quần Con Size Lớn"
-                            >
+                            <Link to="/quan-con-size-lon" title="Quần Con Size Lớn">
                               Quần Con Size Lớn
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/ao-nguc-khong-gong"
-                              title="Áo Ngực Không Gọng"
-                            >
+                            <Link to="/ao-nguc-khong-gong" title="Áo Ngực Không Gọng">
                               Áo Ngực Không Gọng
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          to="/do-mac-nha"
-                          title="Đồ Mặc Nhà"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} to="/do-mac-nha" title="Đồ Mặc Nhà">
                           Đồ Mặc Nhà
                         </Link>
                         <ul className={cx("level1")}>
@@ -550,23 +455,14 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/dep-di-trong-nha"
-                              title="Dép Đi Trong Nhà"
-                            >
+                            <Link to="/dep-di-trong-nha" title="Dép Đi Trong Nhà">
                               Dép Đi Trong Nhà
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          to="/phu-kien"
-                          title="Phụ Kiện"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} to="/phu-kien" title="Phụ Kiện">
                           Phụ Kiện
                         </Link>
                         <ul className={cx("level1")}>
@@ -596,11 +492,7 @@ function Header({ setShowModal }) {
                   </div>
                   <div className={cx("flex-25", "mega-banner")}>
                     <Link to="" className={cx("banner-effect")} title="Nam">
-                      <img
-                        className={cx("lazyload", "img-responsive", "loaded")}
-                        src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-2-image-1.jpg?1706504358658"
-                        alt="Nam"
-                      />
+                      <img className={cx("lazyload", "img-responsive", "loaded")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-2-image-1.jpg?1706504358658" alt="Nam" />
                     </Link>
                   </div>
                 </div>
@@ -615,18 +507,12 @@ function Header({ setShowModal }) {
                 <div className={cx("row")}>
                   <div className={cx("flex-25", "mega-banner")}>
                     <Link to="" className={cx("banner-effect")} title="Trẻ em">
-                      <img
-                        className={cx("lazyload", "img-responsive", "loaded")}
-                        src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-3-image-2.jpg?1706504358658"
-                        alt="Trẻ em"
-                      />
+                      <img className={cx("lazyload", "img-responsive", "loaded")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-3-image-2.jpg?1706504358658" alt="Trẻ em" />
                     </Link>
                   </div>
                   <div className={cx("flex-50", "mega-menu-list")}>
                     <ul className={cx("level0", "half-banner")}>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} to="/ao" title="Áo">
                           Áo
                         </Link>
@@ -653,9 +539,7 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/quan" title="Quần">
                           Quần
                         </Link>
@@ -676,18 +560,13 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-leggings-nu"
-                              title="Quần Leggings Nữ"
-                            >
+                            <Link to="/quan-leggings-nu" title="Quần Leggings Nữ">
                               Quần Leggings Nữ
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/vay" title="Váy">
                           Váy
                         </Link>
@@ -714,14 +593,8 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          href="/do-mac-trong"
-                          title="Đồ Mặc Trong"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} href="/do-mac-trong" title="Đồ Mặc Trong">
                           Đồ Mặc Trong
                         </Link>
                         <ul className={cx("level1")}>
@@ -736,18 +609,12 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-con-size-lon"
-                              title="Quần Con Size Lớn"
-                            >
+                            <Link to="/quan-con-size-lon" title="Quần Con Size Lớn">
                               Quần Con Size Lớn
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/ao-nguc-khong-gong"
-                              title="Áo Ngực Không Gọng"
-                            >
+                            <Link to="/ao-nguc-khong-gong" title="Áo Ngực Không Gọng">
                               Áo Ngực Không Gọng
                             </Link>
                           </li>
@@ -757,11 +624,7 @@ function Header({ setShowModal }) {
                   </div>
                   <div className={cx("flex-25", "mega-banner")}>
                     <Link to="" className={cx("banner-effect")} title="Trẻ em">
-                      <img
-                        className={cx("lazyload", "img-responsive", "loaded")}
-                        src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-3-image-2.jpg?1706504358658"
-                        alt="Trẻ em"
-                      />
+                      <img className={cx("lazyload", "img-responsive", "loaded")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-3-image-2.jpg?1706504358658" alt="Trẻ em" />
                     </Link>
                   </div>
                 </div>
@@ -776,18 +639,12 @@ function Header({ setShowModal }) {
                 <div className={cx("row")}>
                   <div className={cx("flex-25", "mega-banner")}>
                     <Link to="" className={cx("banner-effect")} title="Nữ">
-                      <img
-                        className={cx("lazyload", "img-responsive", "loaded")}
-                        src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-4-image-1.jpg?1706504358658"
-                        alt="Nữ"
-                      />
+                      <img className={cx("lazyload", "img-responsive", "loaded")} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/mega-4-image-1.jpg?1706504358658" alt="Nữ" />
                     </Link>
                   </div>
                   <div className={cx("flex-75", "mega-menu-list")}>
                     <ul className={cx("level0", "half-banner")}>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} to="/ao" title="Áo">
                           Áo
                         </Link>
@@ -814,9 +671,7 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/quan" title="Quần">
                           Quần
                         </Link>
@@ -837,18 +692,13 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-leggings-nu"
-                              title="Quần Leggings Nữ"
-                            >
+                            <Link to="/quan-leggings-nu" title="Quần Leggings Nữ">
                               Quần Leggings Nữ
                             </Link>
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
                         <Link className={cx("hmega")} href="/vay" title="Váy">
                           Váy
                         </Link>
@@ -875,14 +725,8 @@ function Header({ setShowModal }) {
                           </li>
                         </ul>
                       </li>
-                      <li
-                        className={cx("level1", "parent", "item", "fix-navs")}
-                      >
-                        <Link
-                          className={cx("hmega")}
-                          href="/do-mac-trong"
-                          title="Đồ Mặc Trong"
-                        >
+                      <li className={cx("level1", "parent", "item", "fix-navs")}>
+                        <Link className={cx("hmega")} href="/do-mac-trong" title="Đồ Mặc Trong">
                           Đồ Mặc Trong
                         </Link>
                         <ul className={cx("level1")}>
@@ -897,18 +741,12 @@ function Header({ setShowModal }) {
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/quan-con-size-lon"
-                              title="Quần Con Size Lớn"
-                            >
+                            <Link to="/quan-con-size-lon" title="Quần Con Size Lớn">
                               Quần Con Size Lớn
                             </Link>
                           </li>
                           <li className={cx("level2")}>
-                            <Link
-                              to="/ao-nguc-khong-gong"
-                              title="Áo Ngực Không Gọng"
-                            >
+                            <Link to="/ao-nguc-khong-gong" title="Áo Ngực Không Gọng">
                               Áo Ngực Không Gọng
                             </Link>
                           </li>
@@ -938,9 +776,7 @@ function Header({ setShowModal }) {
           </ul>
         </div>
         <div className={cx("header__action")}>
-          <div
-            className={cx("header__action-item", "header__action-item-auth")}
-          >
+          <div className={cx("header__action-item", "header__action-item-auth")}>
             <span className={cx("box-icon")}>
               <SlUser className={cx("header__action-icon")} />
             </span>
@@ -969,10 +805,7 @@ function Header({ setShowModal }) {
                       <span>Tài khoản</span>
                     </Link>
                   </li>
-                  <li
-                    onClick={() => handleLogout()}
-                    className={cx("item-auth-action", "logout")}
-                  >
+                  <li onClick={() => handleLogout()} className={cx("item-auth-action", "logout")}>
                     <Link to="/login">
                       <SlLogout color="#fff" />
                       <span className={cx("logoutTxt")}>Đăng xuất</span>
