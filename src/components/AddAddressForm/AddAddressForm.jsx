@@ -8,7 +8,7 @@ import axiosClient from "../../config/axios";
 
 const cx = className.bind(style);
 
-export default function AddAddressForm({ hiddenForm, setHiddenForm }) {
+export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -97,7 +97,7 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm }) {
       addingObj.ward = ward;
       console.log(addingObj);
       axiosClient
-        .post(`/address/add`, { address: addingObj })
+        .post(`/user/address/add`, { address: addingObj })
         .then(({ data }) => {
           window.alert("Thêm địa chỉ thành công!");
           setHiddenForm(true);

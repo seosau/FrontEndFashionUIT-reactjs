@@ -11,7 +11,7 @@ function Account() {
   const [addresses, setAddresses] = useState([]);
   useEffect(() => {
     axiosClient
-      .get(`/address`)
+      .get(`/user/address`)
       .then(({ data }) => {
         setAddresses(data.addresses);
       })

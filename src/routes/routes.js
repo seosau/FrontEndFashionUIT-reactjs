@@ -16,6 +16,8 @@ import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/Sec
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
 import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart, CheckOut, News, NewsDetail, Forgot, ResetPass, OTP } from "../pages";
+import OrderStatus from "../pages/OrderStatus/OrderStatus";
+import OrderDetail from "../pages/OrderDetail/OrderDetail";
 
 const routes = [
   {
@@ -145,6 +147,18 @@ const routes = [
   {
     path: "/products",
     component: AllProducts,
+  },
+  {
+    path: "/products",
+    component: AllProducts,
+  },
+  {
+    path: "/order/status",
+    component: OrderStatus,
+  },
+  {
+    path: "/order-detail/:orderId",
+    component: OrderDetail,
   },
 ];
 const adminRoutes = [

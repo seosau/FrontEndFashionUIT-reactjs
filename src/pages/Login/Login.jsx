@@ -45,7 +45,7 @@ function Login() {
           isRemember,
         };
         axiosClient
-          .post(`/login`, user)
+          .post(`/auth/login`, user)
           .then(({ data }) => {
             const token = data.token;
             if (token) {

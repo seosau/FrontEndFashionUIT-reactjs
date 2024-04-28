@@ -8,7 +8,7 @@ const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     axiosClient
-      .get("/check-auth")
+      .get("/auth/check-auth")
       .then((data) => {
         setIsAuth(data.data.isAuth);
         if (data.data.isAuth) {

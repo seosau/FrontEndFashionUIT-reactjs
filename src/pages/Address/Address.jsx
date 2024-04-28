@@ -13,7 +13,7 @@ function Address() {
   const [addresses, setAddresses] = useState([]);
   const fetchAddresses = () => {
     axiosClient
-      .get(`/address`)
+      .get(`/user/address`)
       .then(({ data }) => {
         setAddresses(data.addresses);
       })
@@ -27,7 +27,7 @@ function Address() {
   const handleDelete = (index) => {
     if (window.confirm("Bạn có muốn xóa địa chỉ này?")) {
       axiosClient
-        .post(`/address/delete`, { index })
+        .post(`/user/address/delete`, { index })
         .then(({ data }) => {
           window.alert("Xóa địa chỉ thành công!");
           fetchAddresses();

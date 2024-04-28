@@ -50,7 +50,7 @@ function Header() {
   const navigate = useNavigate();
   const handleLogout = () => {
     axiosClient
-      .get(`/logout`)
+      .get(`/auth/logout`)
       .then(({ data }) => {
         localStorage.removeItem("decodedToken");
         setIsAuth(false);

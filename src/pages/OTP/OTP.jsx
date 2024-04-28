@@ -26,7 +26,7 @@ function OTP() {
     e.preventDefault();
     if (validateForm()) {
       axiosClient
-        .post(`/otp`, { otp, email })
+        .post(`/auth/otp`, { otp, email })
         .then(({ data }) => {
           navigate("/reset", { state: { token: data.token, email } });
         })
