@@ -168,7 +168,7 @@ function OrderDetail() {
                   <div className={cx("finalPriceTitle")}>Tổng tiền</div>
                 </div>
                 <div className={cx("finalValueCol")}>
-                  <div className={cx("shippingValue")}>0đ</div>
+                  <div className={cx("shippingValue")}>40.000đ</div>
                   <div className={cx("finalPriceValue")}>{order.totalPrice > 1000 ? Math.floor(order.totalPrice / 1000) + "." + (order.totalPrice % 1000) : order.totalPrice}.000đ</div>
                 </div>
               </div>
