@@ -56,7 +56,7 @@ export default function Product({
           productId: product._id,
           size: selectedSize,
           color: selectedColor,
-          quantity: quantity,
+          quantity: parseInt(quantity),
           price: product.price,
         },
       };
@@ -233,11 +233,11 @@ export default function Product({
             <div className={cx("price-box")}>
               {newPrice ? (
                 <>
-                  <span className={cx("price")}>{newPrice}₫</span>
-                  <span className={cx("compare-price")}>{product.price}₫</span>
+                  <span className={cx("price")}>{newPrice.toLocaleString('de-DE')}.000₫</span>
+                  <span className={cx("compare-price")}>{product.price.toLocaleString('de-DE')}.000₫</span>
                 </>
               ) : (
-                <span className={cx("price")}>{product.price}₫</span>
+                <span className={cx("price")}>{product.price.toLocaleString('de-DE')}.000₫</span>
               )}
               {productCount && (
                 <div className={cx("productcount")}>
