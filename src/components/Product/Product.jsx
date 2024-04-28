@@ -56,7 +56,7 @@ export default function Product({
           productId: product._id,
           size: selectedSize,
           color: selectedColor,
-          quantity: quantity,
+          quantity: parseInt(quantity),
           price: product.price,
         },
       };
@@ -162,8 +162,8 @@ export default function Product({
                 <div className={cx("cart-size")}>
                   <span>Chọn size:</span>
                   <div className={cx("group-size")}>
-                    {product.size.map((size) => (
-                      <div
+                    {product.sizes.map((size, index) => (
+                      <div key={index}
                         className={cx(
                           "size",
                           selectedSize === size && "active-selected"
@@ -178,15 +178,15 @@ export default function Product({
                 <div className={cx("cart-color")}>
                   <span>Chọn màu:</span>
                   <div className={cx("group-color")}>
-                    {product.color.map((color) => (
-                      <div
+                    {product.colors.map((color, index) => (
+                      <div key={index}
                         className={cx(
                           "color",
-                          selectedColor === color && "active-selected"
+                          selectedColor === color.colorName && "active-selected"
                         )}
-                        onClick={() => handleSelectColor(color)}
+                        onClick={() => handleSelectColor(color.colorName)}
                       >
-                        {color}
+                        {color.colorName}
                       </div>
                     ))}
                   </div>
@@ -233,11 +233,11 @@ export default function Product({
             <div className={cx("price-box")}>
               {newPrice ? (
                 <>
-                  <span className={cx("price")}>{newPrice}₫</span>
-                  <span className={cx("compare-price")}>{product.price}₫</span>
+                  <span className={cx("price")}>{newPrice.toLocaleString('de-DE')}.000₫</span>
+                  <span className={cx("compare-price")}>{product.price.toLocaleString('de-DE')}.000₫</span>
                 </>
               ) : (
-                <span className={cx("price")}>{product.price}₫</span>
+                <span className={cx("price")}>{product.price.toLocaleString('de-DE')}.000₫</span>
               )}
               {productCount && (
                 <div className={cx("productcount")}>
