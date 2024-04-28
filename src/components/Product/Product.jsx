@@ -223,7 +223,7 @@ export default function Product({
                 className={cx("close-popup")}
                 onClick={() => setShowPopupQuickView((prevState) => !prevState)}
               />
-              <QuickViewInfo />
+              <QuickViewInfo product={product}/>
             </div>
           )}
           <div className={cx("product-info")}>
