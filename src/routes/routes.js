@@ -1,5 +1,14 @@
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
-import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct, EditBlog, ListBlogs, ListUsers } from "../pages/Admin";
+import {
+  Dashboard,
+  CreateProduct,
+  CreateBlog,
+  ListProducts,
+  EditProduct,
+  EditBlog,
+  ListBlogs,
+  ListUsers,
+} from "../pages/Admin";
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -15,7 +24,26 @@ import PurcharePolicies from "../components/Footer/Policies/PurchasePolicies/Pur
 import SecurityPolicies from "../components/Footer/Policies/SecurityPolicies/SecurityPolicies";
 import StockPolicies from "../components/Footer/Policies/StockPolicies/StockPolicies";
 
-import { Home, AllProducts, Login, Register, Account, Orders, ChangePass, Address, ChainStore, Contact, ProductCart, CheckOut, News, NewsDetail, Forgot, ResetPass, OTP } from "../pages";
+import {
+  Home,
+  AllProducts,
+  Login,
+  Register,
+  Account,
+  Orders,
+  ChangePass,
+  Address,
+  ChainStore,
+  Contact,
+  ProductCart,
+  CheckOut,
+  News,
+  NewsDetail,
+  Forgot,
+  ResetPass,
+  OTP,
+  ProductDetail,
+} from "../pages";
 
 const routes = [
   {
@@ -145,6 +173,10 @@ const routes = [
   {
     path: "/products",
     component: AllProducts,
+  },
+  {
+    path: "/product/detail/:slug",
+    component: ProductDetail,
   },
 ];
 const adminRoutes = [

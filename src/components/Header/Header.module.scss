@@ -221,6 +221,7 @@
 }
 .action-title {
   text-align: center;
+  color: #000;
 }
 
 .box-icon {
@@ -354,7 +355,7 @@
   margin: 0;
   padding: 10px 15px 10px 10px;
   position: absolute;
-  top: 9.5%;
+  top: 100%;
   left: 15%;
   z-index: 999;
   width: 68%;
@@ -527,7 +528,9 @@
   line-height: normal;
   margin-bottom: 5px;
 }
-
+.level1.item ul.level1 li.level2:hover a{
+  color: var(--main-color);
+} 
 .level1.item ul.level1 li.level2 a {
   font-weight: normal !important;
   text-transform: none !important;

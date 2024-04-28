@@ -407,7 +407,7 @@
 
 .cart-color span,
 .cart-size span,
-.cart-quantity span{
+.cart-quantity span {
   width: 25%;
 }
 
@@ -496,4 +496,16 @@
     -webkit-transform: scale(1.2);
     opacity: 0;
   }
+}
+.opup-quickview-container {
+  position: relative;
+}
+.close-popup {
+  position: absolute;
+  font-size: 25px;
+  color: #000;
+  z-index: 101;
+  top: 65px;
+  right: 470px;
+  cursor: pointer;
 }

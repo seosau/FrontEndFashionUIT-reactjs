@@ -5,7 +5,7 @@ import ProductPopup from "../ProductMainInfo/ProductMainInfo";
 
 const cx = classNames.bind(style);
 
-export default function QuickViewInfo({ openPopup }) {
+export default function QuickViewInfo({ openPopup = () => {} }) {
   const handleClick = (e) => {
     // Kiểm tra xem phần tử đang được click có phải là phần tử cha lớn nhất không
     if (e.target.classList.contains(cx("visible-product-popup"))) {
