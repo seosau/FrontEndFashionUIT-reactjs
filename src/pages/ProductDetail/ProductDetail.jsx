@@ -47,7 +47,7 @@ export default function ProductDetail() {
     fetchData();
   }, [slug]);
   const tabContents = [
-    <div className={cx("description")}>{product.description}</div>,
+    <div className={cx("description")}  dangerouslySetInnerHTML={{__html:product.description}}></div>,
 
     <div className={cx("policy")}>
       + Sản phẩm lỗi, hỏng do quá trình sản xuất hoặc vận chuyện
@@ -115,7 +115,7 @@ export default function ProductDetail() {
               </li>
               <li>
                 <strong>
-                  <span>Áo cotton nữ cổ tròn dáng suông in chữ Trend</span>
+                  <span>{product.name}</span>
                 </strong>
               </li>
               <li></li>
@@ -288,8 +288,8 @@ export default function ProductDetail() {
               </fieldset>
             </div>
 
-            {/* Tags */}
-            <Category />
+            {/* Tags
+            <Category /> */}
 
             {/* Có thể bạn thích */}
             <div className={cx("blog_noibat")}>

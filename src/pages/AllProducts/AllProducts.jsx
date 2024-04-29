@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 import { FaPlus, FaFilter } from "react-icons/fa6";
 import { BsSortDown } from "react-icons/bs";
@@ -50,16 +50,28 @@ export default function AllProducts() {
   const [sideBarVisible, setSideBarVisible] = useState(
     window.innerWidth > 980 ? true : false
   );
+  // Lấy keyword
 
+  // products
   const [products, setProducts] = useState();
+  const [keyword, setKeyWord] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(products);
-  const [sortProducts, setSortProducts] = useState('default')
+  const [sortProducts, setSortProducts] = useState("default");
+  // lấy url
+  const location = useLocation();
+  // lấy products
   const getProducts = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const keywordQuery =
+      urlParams.get("searchValue") || urlParams.get("keyword");
+    setKeyWord(keywordQuery);
     await axiosClient
-      .get(`/products?page=${currentPage}&limit=${currentLimit}`)
+      .get(
+        `/products?page=${currentPage}&limit=${currentLimit}&keyword=${keywordQuery}`
+      )
       .then(({ data }) => {
         setProducts(data.data);
-        setTotalPages(data.pagination.totalPages)
+        setTotalPages(data.pagination.totalPages);
       })
       .catch((error) => {
         console.log(error);
@@ -74,7 +86,7 @@ export default function AllProducts() {
   };
   const findCommonProducts = (productList) => {
     const countMap = new Map();
-    productList.forEach(item => {
+    productList.forEach((item) => {
       if (countMap.has(item)) {
         countMap.set(item, countMap.get(item) + 1);
       } else {
@@ -83,7 +95,7 @@ export default function AllProducts() {
     });
 
     let maxCount = 0;
-    countMap.forEach(count => {
+    countMap.forEach((count) => {
       if (count > maxCount) {
         maxCount = count;
       }
@@ -97,52 +109,52 @@ export default function AllProducts() {
     });
 
     return mostFrequentElements;
-  }
+  };
 
   const handleSortChange = (event) => {
     const sortOption = event.target.value;
-    setSortProducts(sortOption)
-    if (sortOption === 'default')
-      return;
-    if (sortOption === 'A-Z') {
-      products.sort((a, b) => a.name.localeCompare(b.name))
+    setSortProducts(sortOption);
+    if (sortOption === "default") return;
+    if (sortOption === "A-Z") {
+      products.sort((a, b) => a.name.localeCompare(b.name));
       if (filteredProducts)
-        filteredProducts.sort((a, b) => a.name.localeCompare(b.name))
+        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
       return;
     }
-    if (sortOption === 'Z-A') {
-      products.sort((a, b) => b.name.localeCompare(a.name))
+    if (sortOption === "Z-A") {
+      products.sort((a, b) => b.name.localeCompare(a.name));
       if (filteredProducts)
-        filteredProducts.sort((a, b) => b.name.localeCompare(a.name))
+        filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
 
       return;
     }
-    if (sortOption === 'priceIncrease') {
-      products.sort((a, b) => a.price - b.price)
-      if (filteredProducts)
-        filteredProducts.sort((a, b) => a.price - b.price)
+    if (sortOption === "priceIncrease") {
+      products.sort((a, b) => a.price - b.price);
+      if (filteredProducts) filteredProducts.sort((a, b) => a.price - b.price);
       return;
     }
-    if (sortOption === 'priceDecrease') {
-      products.sort((a, b) => b.price - a.price)
-      if (filteredProducts)
-        filteredProducts.sort((a, b) => b.price - a.price)
+    if (sortOption === "priceDecrease") {
+      products.sort((a, b) => b.price - a.price);
+      if (filteredProducts) filteredProducts.sort((a, b) => b.price - a.price);
       return;
     }
-    if (sortOption === 'oldest') {
-      products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    if (sortOption === "oldest") {
+      products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
       if (filteredProducts)
-        filteredProducts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+        filteredProducts.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
       return;
     }
-    if (sortOption === 'newest') {
-      products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    if (sortOption === "newest") {
+      products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       if (filteredProducts)
-        filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        filteredProducts.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
       return;
     }
-  }
-  console.log(products)
+  };
 
   const filterProducts = () => {
     let amountPrice = 0;
@@ -231,15 +243,13 @@ export default function AllProducts() {
         if (amountFabric === 0) {
           filteredProductsByFabric.push(...tempProduct);
         } else {
-          filteredProductsByFabric = filteredProductsByFabric.filter((product) =>
-            tempProduct.includes(product)
+          filteredProductsByFabric = filteredProductsByFabric.filter(
+            (product) => tempProduct.includes(product)
           );
         }
         amountFabric++;
       }
     }
-
-    console.log(amountType)
 
     let filterResult = [];
     if (
@@ -256,10 +266,10 @@ export default function AllProducts() {
       ...filteredProductsByPrice,
       ...filteredProductsByType,
       ...filteredProductsByColor,
-      ...filteredProductsByFabric
+      ...filteredProductsByFabric,
     ];
 
-    filterResult = findCommonProducts(filterTemp)
+    filterResult = findCommonProducts(filterTemp);
     setFilteredProducts(filterResult);
   };
 
@@ -294,7 +304,7 @@ export default function AllProducts() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [location.search]);
   useEffect(() => {
     filterProducts();
   }, [selectedFilter]);
@@ -373,7 +383,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => { }}
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -395,7 +405,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => { }}
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -417,7 +427,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => { }}
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -439,7 +449,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => { }}
+                      onChange={() => {}}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -450,20 +460,40 @@ export default function AllProducts() {
         </div>
         <div className={cx("products")}>
           <div className={cx("productsHeading")}>
-            <div className={cx("productsHeadingTitle")}>TẤT CẢ SẢN PHẨM</div>
+            <div className={cx("productsHeadingTitle")}>
+              {keyword ? `Kết quả tìm kiếm cho ${keyword}` : "TẤT CẢ SẢN PHẨM"}
+            </div>
             <div className={cx("sortContainer")}>
               <div className={cx("sortIcon")}>
                 <BsSortDown />
               </div>
               <div className={cx("sortTitle")}>Sắp xếp:</div>
-              <select className={cx("sortOpt")} value={sortProducts} onChange={handleSortChange}>
-                <option className={cx("sortOptItem")} value='default'>Mặc định</option>
-                <option className={cx("sortOptItem")} value='A-Z'>A &#8594; Z</option>
-                <option className={cx("sortOptItem")} value='Z-A'>Z &#8594; A</option>
-                <option className={cx("sortOptItem")} value='priceIncrease'>Giá tăng dần</option>
-                <option className={cx("sortOptItem")} value='priceDecrease'>Giá giảm dần</option>
-                <option className={cx("sortOptItem")} value='oldest'>Cũ nhất</option>
-                <option className={cx("sortOptItem")} value='newest'>Mới nhất</option>
+              <select
+                className={cx("sortOpt")}
+                value={sortProducts}
+                onChange={handleSortChange}
+              >
+                <option className={cx("sortOptItem")} value="default">
+                  Mặc định
+                </option>
+                <option className={cx("sortOptItem")} value="A-Z">
+                  A &#8594; Z
+                </option>
+                <option className={cx("sortOptItem")} value="Z-A">
+                  Z &#8594; A
+                </option>
+                <option className={cx("sortOptItem")} value="priceIncrease">
+                  Giá tăng dần
+                </option>
+                <option className={cx("sortOptItem")} value="priceDecrease">
+                  Giá giảm dần
+                </option>
+                <option className={cx("sortOptItem")} value="oldest">
+                  Cũ nhất
+                </option>
+                <option className={cx("sortOptItem")} value="newest">
+                  Mới nhất
+                </option>
               </select>
             </div>
           </div>

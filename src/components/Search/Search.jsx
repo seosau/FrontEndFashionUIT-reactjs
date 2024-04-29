@@ -70,10 +70,10 @@ export default function Search() {
     };
     fetchApi();
   }, [debounced]);
-  const handleViewProductDetail = (data) => {
+  const viewProductDetail = (slug) => {
     handleHideResult();
     handleClear();
-    return navigate(`/shop/view1product/${data.id}`, { data });
+    return navigate(`/product/detail/${slug}`);
   };
   return (
     <HeadlessTippy
@@ -112,7 +112,11 @@ export default function Search() {
                 >
                   Quần tây
                 </Link>
-                <Link href="" className={cx("search-item")} title="Tìm kiếm váy">
+                <Link
+                  href=""
+                  className={cx("search-item")}
+                  title="Tìm kiếm váy"
+                >
                   Váy
                 </Link>
                 <Link
@@ -145,38 +149,45 @@ export default function Search() {
                 </Link>
               </div>
             </div>
-            {searchResult.length > 0 && searchResult.slice(0, 4).map((product, index) => (
-              <div className={cx("product-smart")}>
-                <Link
-                  className={cx("product-smart__image")}
-                  href="/"
-                  title={product.name}
-                >
-                  <img
-                    className={cx("image-thumb")}
-                    src={product.images[0].imgUrl}
-                    alt={product.slug}
-                  />
-                </Link>
-                <div className={cx("product-smart__info")}>
-                  <div className={cx("product-smart__info_name")}>
-                    <Link to={`/product/${product.slug}`}>{product.name}</Link>
-                  </div>
-                  <div className={cx("product-smart__info_price")}>
-                    <span className={cx("price-box")}>
-                      {product.price}.000đ
-                    </span>
-                    <span className={cx("compare-price")}>
-                      {product.price - product.discount * product.price}
-                      .000đ
-                    </span>
+            {searchResult.length > 0 &&
+              searchResult.slice(0, 4).map((product, index) => (
+                <div className={cx("product-smart")}>
+                  <Link
+                    className={cx("product-smart__image")}
+                    to={`/product/detail/${product.slug}`}
+                    title={product.name}
+                    onClick={handleClear}
+                  >
+                    <img
+                      className={cx("image-thumb")}
+                      src={product.images[0].imgUrl}
+                      alt={product.slug}
+                    />
+                  </Link>
+                  <div className={cx("product-smart__info")}>
+                    <div className={cx("product-smart__info_name")}>
+                      <Link
+                        to={`/product/detail/${product.slug}`}
+                        onClick={handleClear}
+                      >
+                        {product.name}
+                      </Link>
+                    </div>
+                    <div className={cx("product-smart__info_price")}>
+                      <span className={cx("price-box")}>
+                        {product.price}.000đ
+                      </span>
+                      <span className={cx("compare-price")}>
+                        {product.price - product.discount * product.price}
+                        .000đ
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
             <div className={cx("product-search-see-all")}>
               <Link
-                href="/"
+                to={`/products?searchValue=${searchValue}`}
                 className={cx("see-all-search")}
                 title="Xem tất cả"
               >
