@@ -101,12 +101,12 @@
   background: #fff;
   left: 0;
 }
-.filterOpt.filterOpt::-webkit-scrollbar-track {
+.filterOpt::-webkit-scrollbar-track {
   border-radius: 6px;
   background: #f1f1f1;
   border: #dcdcdc 1px solid;
 }
-.filterOpt.filterOpt::-webkit-scrollbar-thumb {
+.filterOpt::-webkit-scrollbar-thumb {
   border-radius: 6px;
   background: #01567f;
 }
@@ -214,7 +214,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 2%;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 .productCard {
   width: 23.5%;

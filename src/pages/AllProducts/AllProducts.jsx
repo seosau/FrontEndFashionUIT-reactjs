@@ -35,9 +35,8 @@ export default function AllProducts() {
     "Chân váy",
     "Đồ tập Gym",
   ];
-  const brandFilter = ["Been Fashion", "Corduroy"];
   const colorFilter = [
-    "Xanh lá cây",
+    "Xanh lá",
     "Đen",
     "Trắng",
     "Hồng",
@@ -53,7 +52,8 @@ export default function AllProducts() {
   );
 
   const [products, setProducts] = useState();
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [sortProducts, setSortProducts] = useState('default')
   const getProducts = async () => {
     await axiosClient
       .get(`/products?page=${currentPage}&limit=${currentLimit}`)
@@ -72,6 +72,78 @@ export default function AllProducts() {
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
   };
+  const findCommonProducts = (productList) => {
+    const countMap = new Map();
+    productList.forEach(item => {
+      if (countMap.has(item)) {
+        countMap.set(item, countMap.get(item) + 1);
+      } else {
+        countMap.set(item, 1);
+      }
+    });
+
+    let maxCount = 0;
+    countMap.forEach(count => {
+      if (count > maxCount) {
+        maxCount = count;
+      }
+    });
+
+    const mostFrequentElements = [];
+    countMap.forEach((count, element) => {
+      if (count === maxCount) {
+        mostFrequentElements.push(element);
+      }
+    });
+
+    return mostFrequentElements;
+  }
+
+  const handleSortChange = (event) => {
+    const sortOption = event.target.value;
+    setSortProducts(sortOption)
+    if (sortOption === 'default')
+      return;
+    if (sortOption === 'A-Z') {
+      products.sort((a, b) => a.name.localeCompare(b.name))
+      if (filteredProducts)
+        filteredProducts.sort((a, b) => a.name.localeCompare(b.name))
+      return;
+    }
+    if (sortOption === 'Z-A') {
+      products.sort((a, b) => b.name.localeCompare(a.name))
+      if (filteredProducts)
+        filteredProducts.sort((a, b) => b.name.localeCompare(a.name))
+
+      return;
+    }
+    if (sortOption === 'priceIncrease') {
+      products.sort((a, b) => a.price - b.price)
+      if (filteredProducts)
+        filteredProducts.sort((a, b) => a.price - b.price)
+      return;
+    }
+    if (sortOption === 'priceDecrease') {
+      products.sort((a, b) => b.price - a.price)
+      if (filteredProducts)
+        filteredProducts.sort((a, b) => b.price - a.price)
+      return;
+    }
+    if (sortOption === 'oldest') {
+      products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      if (filteredProducts)
+        filteredProducts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      return;
+    }
+    if (sortOption === 'newest') {
+      products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      if (filteredProducts)
+        filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      return;
+    }
+  }
+  console.log(products)
+
   const filterProducts = () => {
     let amountPrice = 0;
     let amountType = 0;
@@ -85,202 +157,110 @@ export default function AllProducts() {
 
     // priceFilter
     if (selectedFilter.includes(priceFilter[0])) {
-      let tempProduct = products.filter((product) => product.price < 2000000);
+      let tempProduct = products.filter((product) => product.price < 2000);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[1])) {
       let tempProduct = products.filter(
-        (product) => product.price >= 2000000 && product.price <= 4000000
+        (product) => product.price >= 2000 && product.price <= 4000
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[2])) {
       let tempProduct = products.filter(
-        (product) => product.price >= 4000000 && product.price <= 7000000
+        (product) => product.price >= 4000 && product.price <= 7000
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[3])) {
       let tempProduct = products.filter(
-        (product) => product.price >= 7000000 && product.price <= 13000000
+        (product) => product.price >= 7000 && product.price <= 13000
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[4])) {
-      let tempProduct = products.filter((product) => product.price > 13000000);
+      let tempProduct = products.filter((product) => product.price > 13000);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
 
     // typeFilter
-    if (selectedFilter.includes(typeFilter[0])) {
-      let tempProduct = products.filter((product) =>
-        product.category.categoryDetail.includes(typeFilter[0])
-      );
-      filteredProductsByType = [...filteredProductsByType, ...tempProduct];
-      amountType++;
-    }
-    if (selectedFilter.includes(typeFilter[1])) {
-      let tempProduct = products.filter((product) =>
-        product.category.categoryDetail.includes(typeFilter[1])
-      );
-      filteredProductsByType = [...filteredProductsByType, ...tempProduct];
-      amountType++;
-    }
-    if (selectedFilter.includes(typeFilter[2])) {
-      let tempProduct = products.filter((product) =>
-        product.category.categoryDetail.includes(typeFilter[2])
-      );
-      filteredProductsByType = [...filteredProductsByType, ...tempProduct];
-      amountType++;
-    }
-    if (selectedFilter.includes(typeFilter[3])) {
-      let tempProduct = products.filter((product) =>
-        product.category.categoryDetail.includes(typeFilter[3])
-      );
-      filteredProductsByType = [...filteredProductsByType, ...tempProduct];
-      amountType++;
-    }
-    if (selectedFilter.includes(typeFilter[4])) {
-      let tempProduct = products.filter((product) =>
-        product.category.categoryDetail.includes(typeFilter[4])
-      );
-      filteredProductsByType = [...filteredProductsByType, ...tempProduct];
-      amountType++;
-    }
-    if (selectedFilter.includes(typeFilter[5])) {
-      let tempProduct = products.filter((product) =>
-        product.category.categoryDetail.includes(typeFilter[5])
-      );
-      filteredProductsByType = [...filteredProductsByType, ...tempProduct];
-      amountType++;
+    for (let i = 0; i < typeFilter.length; i++) {
+      if (selectedFilter.includes(typeFilter[i])) {
+        let tempProduct = products.filter((product) =>
+          product.category.categoryDetail.includes(typeFilter[i])
+        );
+        if (amountType === 0) {
+          filteredProductsByType.push(...tempProduct);
+        } else {
+          filteredProductsByType = filteredProductsByType.filter((product) =>
+            tempProduct.includes(product)
+          );
+        }
+        amountType++;
+      }
     }
 
     // colorFilter
-    if (selectedFilter.includes(colorFilter[0])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[0].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
-    }
-    if (selectedFilter.includes(colorFilter[1])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[1].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
-    }
-    if (selectedFilter.includes(colorFilter[2])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[2].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
-    }
-    if (selectedFilter.includes(colorFilter[3])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[3].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
-    }
-    if (selectedFilter.includes(colorFilter[4])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[4].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
-    }
-    if (selectedFilter.includes(colorFilter[5])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[5].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
-    }
-    if (selectedFilter.includes(colorFilter[6])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[6].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
-    }
-    if (selectedFilter.includes(colorFilter[7])) {
-      let tempProduct = products.filter((product) =>
-        product.color.includes(colorFilter[7].toLowerCase())
-      );
-      filteredProductsByColor = [...filteredProductsByColor, ...tempProduct];
-      amountColor++;
+    for (let i = 0; i < colorFilter.length; i++) {
+      if (selectedFilter.includes(colorFilter[i])) {
+        let tempProduct = products.filter((product) =>
+          product.color.includes(colorFilter[i].toLowerCase())
+        );
+        if (amountColor === 0) {
+          filteredProductsByColor.push(...tempProduct);
+        } else {
+          filteredProductsByColor = filteredProductsByColor.filter((product) =>
+            tempProduct.includes(product)
+          );
+        }
+        amountColor++;
+      }
     }
 
     // fabricFilter
-    if (selectedFilter.includes(fabricTypeFilter[0])) {
-      let tempProduct = products.filter((product) =>
-        product.category.fabricType.includes(fabricTypeFilter[0])
-      );
-      filteredProductsByFabric = [...filteredProductsByFabric, ...tempProduct];
-      amountFabric++;
-    }
-    if (selectedFilter.includes(fabricTypeFilter[1])) {
-      let tempProduct = products.filter((product) =>
-        product.category.fabricType.includes(fabricTypeFilter[1])
-      );
-      filteredProductsByFabric = [...filteredProductsByFabric, ...tempProduct];
-      amountFabric++;
-    }
-    if (selectedFilter.includes(fabricTypeFilter[2])) {
-      let tempProduct = products.filter((product) =>
-        product.category.fabricType.includes(fabricTypeFilter[2])
-      );
-      filteredProductsByFabric = [...filteredProductsByFabric, ...tempProduct];
-      amountFabric++;
-    }
-    if (selectedFilter.includes(fabricTypeFilter[3])) {
-      let tempProduct = products.filter((product) =>
-        product.category.fabricType.includes(fabricTypeFilter[3])
-      );
-      filteredProductsByFabric = [...filteredProductsByFabric, ...tempProduct];
-      amountFabric++;
-    }
-    if (selectedFilter.includes(fabricTypeFilter[4])) {
-      let tempProduct = products.filter((product) =>
-        product.category.fabricType.includes(fabricTypeFilter[4])
-      );
-      filteredProductsByFabric = [...filteredProductsByFabric, ...tempProduct];
-      amountFabric++;
+    for (let i = 0; i < fabricTypeFilter.length; i++) {
+      if (selectedFilter.includes(fabricTypeFilter[i])) {
+        let tempProduct = products.filter((product) =>
+          product.category.fabricType.includes(fabricTypeFilter[i])
+        );
+        if (amountFabric === 0) {
+          filteredProductsByFabric.push(...tempProduct);
+        } else {
+          filteredProductsByFabric = filteredProductsByFabric.filter((product) =>
+            tempProduct.includes(product)
+          );
+        }
+        amountFabric++;
+      }
     }
 
-    let filterTemp = [
-      ...filteredProductsByPrice,
-      ...filteredProductsByType,
-      ...filteredProductsByColor,
-      ...filteredProductsByFabric,
-    ];
-    let filterResult = [...filterTemp];
+    console.log(amountType)
 
+    let filterResult = [];
     if (
       (amountFabric !== 0 && filteredProductsByFabric.length === 0) ||
       (amountPrice !== 0 && filteredProductsByPrice.length === 0) ||
       (amountColor !== 0 && filteredProductsByColor.length === 0) ||
       (amountType !== 0 && filteredProductsByType.length === 0)
-    )
+    ) {
       filterResult = [];
-    for (let i = 0; i < filterTemp.length - 1; i++) {
-      for (let j = i + 1; j < filterTemp.length; j++) {
-        if (filterTemp[i]._id === filterTemp[j]._id) {
-          if (filterResult.length === filterTemp.length) filterResult = [];
-          filterResult.push(filterTemp[i]);
-          break;
-        }
-      }
+      setFilteredProducts([]);
+      return;
     }
+    let filterTemp = [
+      ...filteredProductsByPrice,
+      ...filteredProductsByType,
+      ...filteredProductsByColor,
+      ...filteredProductsByFabric
+    ];
 
-    setFilteredProducts([...new Set(filterResult)]);
+    filterResult = findCommonProducts(filterTemp)
+    setFilteredProducts(filterResult);
   };
 
   const handleFilterSelect = (item) => {
@@ -393,7 +373,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -415,29 +395,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
-                    ></input>
-                    <p className={cx("filterOptItemTxt")}>{item}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={cx("filterItem")}>
-              <div className={cx("filterItemTitle")}>THƯƠNG HIỆU</div>
-              <ul className={cx("filterOpt")}>
-                {brandFilter.map((item, index) => (
-                  <li
-                    onClick={(e) => handleFilterSelect(item)}
-                    className={cx("filterOptItem")}
-                    key={index}
-                  >
-                    <input
-                      checked={
-                        selectedFilter.indexOf(item) !== -1 ? true : false
-                      }
-                      className={cx("filterCheckBox")}
-                      type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -459,7 +417,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -481,7 +439,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -498,14 +456,14 @@ export default function AllProducts() {
                 <BsSortDown />
               </div>
               <div className={cx("sortTitle")}>Sắp xếp:</div>
-              <select className={cx("sortOpt")}>
-                <option className={cx("sortOptItem")}>Mặc định</option>
-                <option className={cx("sortOptItem")}>A &#8594; Z</option>
-                <option className={cx("sortOptItem")}>Z &#8594; A</option>
-                <option className={cx("sortOptItem")}>Giá tăng dần</option>
-                <option className={cx("sortOptItem")}>Giá giảm dần</option>
-                <option className={cx("sortOptItem")}>Cũ nhất</option>
-                <option className={cx("sortOptItem")}>Mới nhất</option>
+              <select className={cx("sortOpt")} value={sortProducts} onChange={handleSortChange}>
+                <option className={cx("sortOptItem")} value='default'>Mặc định</option>
+                <option className={cx("sortOptItem")} value='A-Z'>A &#8594; Z</option>
+                <option className={cx("sortOptItem")} value='Z-A'>Z &#8594; A</option>
+                <option className={cx("sortOptItem")} value='priceIncrease'>Giá tăng dần</option>
+                <option className={cx("sortOptItem")} value='priceDecrease'>Giá giảm dần</option>
+                <option className={cx("sortOptItem")} value='oldest'>Cũ nhất</option>
+                <option className={cx("sortOptItem")} value='newest'>Mới nhất</option>
               </select>
             </div>
           </div>

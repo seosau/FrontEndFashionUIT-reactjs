@@ -23,14 +23,52 @@
   font-weight: 800;
   color: #01567f;
 }
-.add-address button {
+.add-address {
   background-color: var(--hight-light-color);
-  padding: 17px 30px;
+  padding: 14px 24px;
   color: white;
   border-radius: 7px;
   font-weight: 700;
-
-  &:hover {
-    opacity: 0.6;
-  }
+  text-align: center;
+  max-width: fit-content;
+}
+.add-address:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+.isOverlay {
+  background-color: #000;
+  opacity: 0.3;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0;
+}
+.account-info {
+  margin-bottom: 17px;
+}
+.addressContainer {
+  margin-bottom: 16px;
+  padding-top: 16px;
+  border-bottom: solid 1px green;
+  display: flex;
+  justify-content: space-between;
+}
+.deleteBtn {
+  line-height: 24px;
+  height: 24px;
+  font-size: 18px;
+  padding: 0px 8px;
+  color: red;
+}
+.btnField {
+  height: 24px;
+}
+.btnField:hover {
+  cursor: pointer;
+}
+.deleteBtn {
+  user-select: none;
 }

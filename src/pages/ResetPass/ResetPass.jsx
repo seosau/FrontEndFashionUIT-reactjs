@@ -36,7 +36,7 @@ function ResetPass() {
     e.preventDefault();
     if (validateForm()) {
       axiosClient
-        .post(`/reset`, { newPassword: pass, token, email })
+        .post(`/auth/reset`, { newPassword: pass, token, email })
         .then(({ data }) => {
           window.alert("Đổi mật khẩu thành công. Vui lòng đăng nhập lại!");
           navigate("/login");

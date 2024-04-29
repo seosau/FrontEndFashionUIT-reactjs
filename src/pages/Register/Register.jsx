@@ -59,7 +59,7 @@ function Register() {
         phoneNumber: registerInfo.phoneNumber,
       };
       axiosClient
-        .post(`/register`, user)
+        .post(`/auth/register`, user)
         .then((response) => {
           window.alert("Registration successful! Please check your email to verify your account.");
           navigate("/login");
