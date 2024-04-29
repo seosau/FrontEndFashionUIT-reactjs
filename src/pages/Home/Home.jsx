@@ -13,15 +13,58 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
-import Backtop from "../../components/Backtop/Backtop";
+import axiosClient from "../../config/axios";
 const cx = className.bind(styles);
 
 export default function Home() {
   const [tabIndex, setTabIndex] = useState(0);
   const [tabProductIndex, setProductTabIndex] = useState(0);
+  const [products, setProducts] = useState();
+  const [bestSellerProducts, setBestSellerProducts] = useState();
+  const [maleProducts, setMaleProducts] = useState();
+  const [femaleProducts, setFemaleProducts] = useState();
+  const [gymProducts, setGymProducts] = useState();
   const currentTime = new Date();
 
   const [width, setWidth] = useState(window.innerWidth);
+
+  const getProducts = async () => {
+    await axiosClient
+      .get(`/products?page=${currentPage}&limit=${currentLimit}`)
+      .then(({ data }) => {
+        setProducts(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(Number.MAX_SAFE_INTEGER);
+
+  const getBestSellerProduct = () => {
+    const productsCopy = [...products];
+    const sortedProducts = productsCopy.sort((a, b) => b.sold - a.sold);
+    setBestSellerProducts(sortedProducts.slice(0, 6));
+  }
+
+  const getMaleProducts = () => {
+    const productsCopy = [...products];
+    const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nam')
+    setMaleProducts(tmpProducts);
+  }
+
+  const getFemaleProducts = () => {
+    const productsCopy = [...products];
+    const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nữ')
+    setFemaleProducts(tmpProducts);
+  }
+
+  const getGymProducts = () => {
+    const productsCopy = [...products];
+    const tmpProducts = productsCopy.filter(product => product.category.categoryDetail.toLowerCase() === 'gym')
+    setGymProducts(tmpProducts);
+  }
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -79,6 +122,19 @@ export default function Home() {
       onClick={() => onClick()}
     />
   );
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  useEffect(() => {
+    if (products) {
+      getBestSellerProduct()
+      getMaleProducts()
+      getFemaleProducts()
+      getGymProducts()
+    }
+  }, [products])
 
   useEffect(() => {
     if (currentTime.getHours() >= 0 && currentTime.getHours() < 6) {
@@ -164,11 +220,11 @@ export default function Home() {
               </h2>
             </div>
             <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
-              {[...Array(8).keys()].map((productIndex) => (
-                <SwiperSlide key={productIndex} className={cx("product-container")}>
-                  <Product ranking={1} productCount={5} />
+              {products ? bestSellerProducts?.map((product, index) => (
+                <SwiperSlide key={index} className={cx("product-container")}>
+                  <Product product={product} ranking={index + 1} productCount={true} />
                 </SwiperSlide>
-              ))}
+              )) : <></>}
             </Swiper>
           </div>
         </div>
@@ -190,9 +246,9 @@ export default function Home() {
                         </div>
                         <div className={cx("text-timing")}>
                           {(index === 0 && currentTime.getHours() >= 0 && currentTime.getHours() < 6) ||
-                          (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
-                          (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
-                          (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
+                            (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
+                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
+                            (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
                             ? "Đang diễn ra"
                             : "Sắp diễn ra"}
                         </div>
@@ -290,11 +346,11 @@ export default function Home() {
                     <div className={cx("tab-content", "tab-category", tabProductIndex === 0 ? "current" : "")}>
                       <div className={cx("box-container")}>
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
+                          {products ? maleProducts?.map((product, index) => (
+                            <SwiperSlide key={index} className={cx("product-container")}>
+                              <Product product={product} />
                             </SwiperSlide>
-                          ))}
+                          )) : <></>}
                         </Swiper>
                       </div>
                     </div>
@@ -305,11 +361,11 @@ export default function Home() {
                     <div className={cx("tab-content", "tab-category", tabProductIndex === 1 ? "current" : "")}>
                       <div className={cx("box-container")}>
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
+                          {products ? femaleProducts?.map((product, index) => (
+                            <SwiperSlide key={index} className={cx("product-container")}>
+                              <Product product={product} />
                             </SwiperSlide>
-                          ))}
+                          )) : <></>}
                         </Swiper>
                       </div>
                     </div>
@@ -320,11 +376,11 @@ export default function Home() {
                     <div className={cx("tab-content", "tab-category", tabProductIndex === 2 ? "current" : "")}>
                       <div className={cx("box-container")}>
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
+                          {products ? gymProducts?.map((product, index) => (
+                            <SwiperSlide key={index} className={cx("product-container")}>
+                              <Product product={product} />
                             </SwiperSlide>
-                          ))}
+                          )) : <></>}
                         </Swiper>
                       </div>
                     </div>
@@ -337,7 +393,7 @@ export default function Home() {
                     </div>
                     <p>
                       Thời trang Nam
-                      <span>24 sản phẩm</span>
+                      <span>{products ? maleProducts?.length : 0} sản phẩm</span>
                     </p>
                   </Tab>
                   <Tab className={cx("tab-link", "item", tabProductIndex === 1 ? "current" : "")}>
@@ -346,7 +402,7 @@ export default function Home() {
                     </div>
                     <p>
                       Thời trang Nữ
-                      <span>24 sản phẩm</span>
+                      <span>{products ? femaleProducts?.length : 0} sản phẩm</span>
                     </p>
                   </Tab>
                   <Tab className={cx("tab-link", "item", tabProductIndex === 2 ? "current" : "")}>
@@ -355,7 +411,7 @@ export default function Home() {
                     </div>
                     <p>
                       Thời trang Gym
-                      <span>24 sản phẩm</span>
+                      <span>{products ? gymProducts?.length : 0} sản phẩm</span>
                     </p>
                   </Tab>
                 </TabList>
@@ -386,9 +442,9 @@ export default function Home() {
               </h2>
             </div>
             <Swiper modules={[Navigation]} spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation>
-              {[...Array(8).keys()].map((productIndex) => (
-                <SwiperSlide key={productIndex} className={cx("product-container")}>
-                  <Product productCount={5} />
+              {gymProducts?.map((product, index) => (
+                <SwiperSlide key={index} className={cx("product-container")}>
+                  <Product product={product} />
                 </SwiperSlide>
               ))}
             </Swiper>

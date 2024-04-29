@@ -495,7 +495,11 @@
     transition: all 0.3s;
 }
 
-main img {
+.img-icon img,
+.one-banner img,
+.brand img,
+.banner-tab img,
+.big-sale img {
     border: 0 none;
     max-width: 100%;
     height: auto;
@@ -642,6 +646,11 @@ main img {
         flex: 0 0 75%;
         max-width: 75%;
         padding: 0 10px;
+    }
+
+    .trending .product-container {
+        margin-bottom: 0;
+        width: 24.5% !important;
     }
 }
 
