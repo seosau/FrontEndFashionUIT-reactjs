@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 import { TbEdit } from "react-icons/tb";
 import { CiSquareRemove } from "react-icons/ci";
 import { FaTrashAlt } from "react-icons/fa";
 import { GoSearch } from "react-icons/go";
 import { IoMdAdd } from "react-icons/io";
+import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
 import { useDebounce } from "../../../../hooks";
 
@@ -14,14 +16,14 @@ const cx = classNames.bind(style);
 
 function ListProducts() {
   const navigate = useNavigate();
+  // products
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
-
+  // loading
+  const [loading, setLoading] = useState(false);
+  // search
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-
-  const [loading, setLoading] = useState(false);
-
   const debounced = useDebounce(searchValue, 500);
   const inputRef = useRef();
   const handleClear = () => {
@@ -36,30 +38,46 @@ function ListProducts() {
       setSearchValue(searchValue);
     }
   };
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const handlePageClick = (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
+  const fetchData = async () => {
+    await axiosClient
+      .get(`/admin/products?page=${currentPage}&limit=${currentLimit}`)
+      .then(({ data }) => {
+        setProducts(data.data);
+        setTotalPages(data.pagination.totalPages);
+      })
+      .catch((error) => console.log(error));
+  };
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
   useEffect(() => {
     if (!debounced.trim()) {
-      // setSearchResult([]);
-      // return;
-      axiosClient
-        .get("/admin/products")
-        .then((res) => setProducts(res.data))
-        .catch((error) => console.log(error));
-    }
-    const fetchApi = async () => {
-      setLoading(true);
+    } else {
+      const fetchApi = async () => {
+        setLoading(true);
 
-      await axiosClient
-        .get(`/product/search/${debounced}`)
-        .then(({ data }) => {
-          setProducts(data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    fetchApi();
+        await axiosClient
+          .get(`/product/search/${debounced}`)
+          .then(({ data }) => {
+            setProducts(data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+      fetchApi();
+    }
   }, [debounced]);
+
+  // utils
   const convertStringDate = (stringTime) => {
     var date = new Date(stringTime);
     var nam = date.getFullYear();
@@ -81,6 +99,7 @@ function ListProducts() {
       time: gio + "h" + phut + "m" + giay + "s",
     };
   };
+  // delete 1 product
   const deleteProduct = (slug) => {
     setProducts((prevProducts) =>
       prevProducts.filter((product) => product.slug !== slug)
@@ -94,6 +113,7 @@ function ListProducts() {
         console.log(err);
       });
   };
+  // selected 1 product
   const selectedProduct = (slug) => {
     if (selectedProducts.includes(slug)) {
       const fillteredArr = selectedProducts.filter(
@@ -104,6 +124,7 @@ function ListProducts() {
       setSelectedProducts([...selectedProducts, slug]);
     }
   };
+  // selected all producsts
   const selectedAllProducts = () => {
     const slugArr = products.map((product) => product.slug);
     if (selectedProducts.length > 0) {
@@ -112,14 +133,15 @@ function ListProducts() {
       setSelectedProducts([...slugArr]);
     }
   };
+  // delete many products
   const deleteSelectedproduct = (e) => {
     e.preventDefault();
     axiosClient
       .delete("/admin/product/delete/all", { data: selectedProducts })
       .then((res) => {
         setProducts((prevProducts) =>
-          prevProducts.filter((product) =>
-            !selectedProducts.includes(product.slug)
+          prevProducts.filter(
+            (product) => !selectedProducts.includes(product.slug)
           )
         );
         setSelectedProducts([]);
@@ -195,7 +217,7 @@ function ListProducts() {
           <tbody className={cx("table-body")}>
             {products.length > 0 ? (
               products.map((product, index) => (
-                <tr className={cx("product-item")}>
+                <tr className={cx("product-item")} key={index}>
                   <td className={cx("action-checkbox")}>
                     <input
                       type="checkbox"
@@ -231,8 +253,8 @@ function ListProducts() {
                     </span>
                   </td>
                   <td className={cx("product-stock")}>
-                    {product.stock.map((stockItem) => (
-                      <p className={cx("product-stock-detail")}>
+                    {product.stock.map((stockItem, index) => (
+                      <p className={cx("product-stock-detail")} key={index}>
                         Size : {stockItem.size} - Màu : {stockItem.color} -{" "}
                         {stockItem.quantity} cái
                       </p>
@@ -269,6 +291,30 @@ function ListProducts() {
           </tbody>
         </table>
       </div>
+      {totalPages > 0 && (
+        <div className={cx("paginations-container")}>
+          <ReactPaginate
+            nextLabel={<GrNext />}
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={2}
+            pageCount={totalPages}
+            previousLabel={<GrPrevious />}
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            previousClassName="page-item"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            containerClassName="pagination"
+            activeClassName="active"
+            renderOnZeroPageCount={null}
+          />
+        </div>
+      )}
     </div>
   );
 }

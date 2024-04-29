@@ -175,6 +175,10 @@ const routes = [
     component: AllProducts,
   },
   {
+    path: "/products/:keyword",
+    component: AllProducts,
+  },
+  {
     path: "/product/detail/:slug",
     component: ProductDetail,
   },

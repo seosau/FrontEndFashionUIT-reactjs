@@ -13,7 +13,7 @@ export const checkEmptyKeys = (product) => {
         );
       }
     } else {
-      if (!product[key] && key !== "discount") {
+      if (!product[key] && key !== "discount" && key !== "sold" && key !== "__v") {
         emptyKeys.push(key);
       }
     }

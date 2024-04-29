@@ -233,11 +233,11 @@ export default function Product({
             <div className={cx("price-box")}>
               {newPrice ? (
                 <>
-                  <span className={cx("price")}>{newPrice}₫</span>
-                  <span className={cx("compare-price")}>{product.price}₫</span>
+                  <span className={cx("price")}>{newPrice}.000₫</span>
+                  <span className={cx("compare-price")}>{product.price}.000₫</span>
                 </>
               ) : (
-                <span className={cx("price")}>{product.price}₫</span>
+                <span className={cx("price")}>{product.price}.000₫</span>
               )}
               {productCount && (
                 <div className={cx("productcount")}>

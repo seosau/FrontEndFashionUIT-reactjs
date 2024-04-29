@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 import { FaPlus, FaFilter } from "react-icons/fa6";
 import { BsSortDown } from "react-icons/bs";
+import { GrNext, GrPrevious } from "react-icons/gr";
+
 import style from "./AllProducts.module.scss";
 import className from "classnames/bind";
 import Product from "../../components/Product/Product";
@@ -53,15 +56,22 @@ export default function AllProducts() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const getProducts = async () => {
     await axiosClient
-      .get("/products")
+      .get(`/products?page=${currentPage}&limit=${currentLimit}`)
       .then(({ data }) => {
-        setProducts(data);
+        setProducts(data.data);
+        setTotalPages(data.pagination.totalPages)
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const handlePageClick = (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
   const filterProducts = () => {
     let amountPrice = 0;
     let amountType = 0;
@@ -287,7 +297,9 @@ export default function AllProducts() {
     tmp.splice(selectedFilter.indexOf(item), 1);
     setSelectedFilter([...tmp]);
   };
-
+  useEffect(() => {
+    getProducts();
+  }, [currentPage]);
   useEffect(() => {
     getProducts();
     function handleResize() {
@@ -518,6 +530,30 @@ export default function AllProducts() {
           </div>
         </div>
       </div>
+      {totalPages > 0 && (
+        <div className={cx("paginations-container")}>
+          <ReactPaginate
+            nextLabel={<GrNext />}
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={2}
+            pageCount={totalPages}
+            previousLabel={<GrPrevious />}
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            previousClassName="page-item"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            containerClassName="pagination"
+            activeClassName="active"
+            renderOnZeroPageCount={null}
+          />
+        </div>
+      )}
     </div>
   );
 }

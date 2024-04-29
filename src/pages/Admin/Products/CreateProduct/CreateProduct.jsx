@@ -10,6 +10,10 @@ import axiosClient from "../../../../config/axios";
 
 // use validation form
 import { checkEmptyKeys, generateErrorMessage } from "../../../../utils";
+
+// use component
+import Editor from "../../../../components/Editor/Editor";
+
 // use style
 import style from "./CreateProduct.module.scss";
 import className from "classnames/bind";
@@ -19,6 +23,7 @@ const productSample = {
   name: "",
   images: [],
   description: "",
+  shortDesc: "",
   price: 0,
   category: {
     categoryType: "",
@@ -26,8 +31,8 @@ const productSample = {
     fabricType: "",
     categoryDetail: "",
   },
-  color: [],
-  size: [],
+  colors: [],
+  sizes: [],
   stock: [],
   discount: 0,
 };
@@ -41,62 +46,80 @@ function CreateProduct() {
   const addSize = (e) => {
     e.preventDefault();
     if (currentSize.trim() !== "") {
-      const isExistedSize = productInfo.size.includes(
+      const isExistedSize = productInfo.sizes.includes(
         currentSize.toUpperCase()
       );
       if (!isExistedSize) {
         setProductInfo({
           ...productInfo,
-          size: [...productInfo.size, currentSize.toUpperCase()],
+          sizes: [...productInfo.sizes, currentSize.toUpperCase()],
         });
       }
       setCurrentSize("");
     }
   };
   const removeSize = (index) => {
-    const sizeRemoved = productInfo.size[index];
-    const newSizeArr = productInfo.size.filter((size, idx) => idx !== index);
+    const sizeRemoved = productInfo.sizes[index];
+    const newSizeArr = productInfo.sizes.filter((size, idx) => idx !== index);
     const newStock = productInfo.stock.filter(
       (item) => item.size !== sizeRemoved
     );
     setProductInfo({
       ...productInfo,
-      size: newSizeArr,
+      sizes: newSizeArr,
       stock: newStock,
     });
   };
   const addColor = (e) => {
     e.preventDefault();
     if (currentColor.trim() !== "") {
-      const isExistedColor = productInfo.color.includes(
-        currentColor.toLowerCase()
+      const isExistedColor = productInfo.colors.find(
+        (color) => color.colorName === currentColor.toLowerCase()
       );
+
       if (!isExistedColor) {
         setProductInfo({
           ...productInfo,
-          color: [...productInfo.color, currentColor.toLowerCase()],
+          colors: [
+            ...productInfo.colors,
+            { colorName: currentColor.toLowerCase() },
+          ],
         });
       }
       setCurrentColor("");
     }
   };
+  const addColorCode = (colorCode, index) => {
+    setProductInfo((prevProductInfo) => {
+      const currentColorArr = [...prevProductInfo.colors];
+      currentColorArr[index].colorCode = colorCode;
+      return { ...prevProductInfo, colors: currentColorArr };
+    });
+  };
+
   const removeColor = (index) => {
-    const colorRemoved = productInfo.color[index];
-    const newColorArr = productInfo.color.filter((size, idx) => idx !== index);
+    const colorRemoved = productInfo.colors[index];
+    const newColorArr = productInfo.colors.filter(
+      (color, idx) => idx !== index
+    );
     const newStock = productInfo.stock.filter(
-      (item) => item.color !== colorRemoved
+      (item) => item.color !== colorRemoved.colorName
     );
     setProductInfo({
       ...productInfo,
-      color: newColorArr,
+      colors: newColorArr,
       stock: newStock,
     });
   };
   useEffect(() => {
-    if (productInfo.size.length > 0 && productInfo.color.length > 0) {
-      const newProductInStock = productInfo.size
+    if (productInfo.sizes.length > 0 && productInfo.colors.length > 0) {
+      const newProductInStock = productInfo.sizes
         .map((size) =>
-          productInfo.color.map((color) => ({ size, color, quantity: 0 }))
+          productInfo.colors.map((color) => ({
+            size,
+            color: color.colorName,
+            quantity: 0,
+          }))
         )
         .flat();
       const newProductInStockMerged = [...productInfo.stock];
@@ -119,12 +142,15 @@ function CreateProduct() {
         stock: [],
       }));
     }
-  }, [productInfo.size, productInfo.color]);
+  }, [productInfo.sizes, productInfo.colors]);
 
   const updateStockQuantity = (index, quantity) => {
     const newProductInStock = [...productInfo.stock];
     newProductInStock[index].quantity = quantity;
     setProductInfo({ ...productInfo, stock: [...newProductInStock] });
+  };
+  const handleChange = (html) => {
+    setProductInfo({ ...productInfo, description: html });
   };
 
   const onImageChoose = (e, color) => {
@@ -159,7 +185,6 @@ function CreateProduct() {
 
   const addProduct = (e) => {
     e.preventDefault();
-
     const emptyKeys = checkEmptyKeys(productInfo);
     const newErrors = {};
     emptyKeys.forEach((key) => {
@@ -323,10 +348,10 @@ function CreateProduct() {
               <span className={cx("error-text")}>{errors.size}</span>
             ) : null}
           </div>
-          {productInfo.size.length > 0 && (
+          {productInfo.sizes.length > 0 && (
             <ul className={cx("list-size")}>
-              {productInfo.size.map((size, index) => (
-                <li className={cx("item-size")}>
+              {productInfo.sizes.map((size, index) => (
+                <li className={cx("item-size-v2")} key={index}>
                   <span>Size {size}</span>
                   <CiCircleRemove
                     className={cx("icon-remove")}
@@ -358,14 +383,35 @@ function CreateProduct() {
               <span className={cx("error-text")}>{errors.color}</span>
             ) : null}
           </div>
-          {productInfo.color.length > 0 && (
+          {productInfo.colors.length > 0 && (
             <ul className={cx("list-size")}>
-              {productInfo.color.map((color, index) => (
-                <li className={cx("item-size")}>
-                  <span className={cx("img-color")}>Màu {color}</span>
-                  <CiCircleRemove
-                    className={cx("icon-remove")}
-                    onClick={() => removeColor(index)}
+              {productInfo?.colors.map((color, index) => (
+                <li className={cx("item-size")} key={index}>
+                  <div className={cx("item-size-detail")}>
+                    <span className={cx("img-color")}>
+                      Màu {color.colorName}
+                    </span>
+                    <div
+                      className={cx("show-color")}
+                      style={{
+                        backgroundColor: color.colorCode,
+                        display: color.colorCode ? "block" : "none",
+                      }}
+                    ></div>
+                    <CiCircleRemove
+                      className={cx("icon-remove")}
+                      onClick={() => removeColor(index)}
+                    />
+                  </div>
+
+                  <input
+                    type="text"
+                    className={cx("input-color-code")}
+                    placeholder="#hex color"
+                    value={color.colorCode ? color.colorCode : ""}
+                    onChange={(e) => {
+                      addColorCode(e.target.value, index);
+                    }}
                   />
                 </li>
               ))}
@@ -398,7 +444,7 @@ function CreateProduct() {
             </label>
             <ul className={cx("list-stock")}>
               {productInfo.stock.map((item, index) => (
-                <li className={cx("item-stock")}>
+                <li className={cx("item-stock")} key={index}> 
                   <span>
                     Size {item.size} - Màu {item.color}:
                   </span>
@@ -426,19 +472,29 @@ function CreateProduct() {
             Mô tả sản phẩm
           </label>
           <br />
+          <Editor handleChange={handleChange} value={productInfo.description} />
+          {errors?.description ? (
+            <span className={cx("error-text")}>{errors.description}</span>
+          ) : null}
+        </div>
+        <div className={cx("form-group")}>
+          <label htmlFor="productname" className={cx("form-label")}>
+            Mô tả tóm tắt
+          </label>
+          <br />
           <textarea
             className={cx("form-control")}
             name="description"
             rows={5}
             placeholder="Chất liệu Cotton tự nhiên mềm mại, thấm hút mồ hôi và thoáng khí mang lang lại cảm giác thoải mái, dễ chịu mỗi ngày.
 Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp với các trang phục khác."
-            value={productInfo.description}
+            value={productInfo.shortDesc}
             onChange={(e) =>
-              setProductInfo({ ...productInfo, description: e.target.value })
+              setProductInfo({ ...productInfo, shortDesc: e.target.value })
             }
           />
-          {errors?.description ? (
-            <span className={cx("error-text")}>{errors.description}</span>
+          {errors?.shortDesc ? (
+            <span className={cx("error-text")}>{errors.shortDesc}</span>
           ) : null}
         </div>
         <div className={cx("form-group")}>
@@ -446,10 +502,10 @@ Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp
             Hình ảnh
           </label>
           <br />
-          {productInfo.color.map((color) => (
-            <div className={cx("form-action")}>
+          {productInfo.colors.map((color, index) => (
+            <div className={cx("form-action")} key={index}>
               <div className={cx("form-flex")}>
-                <span className={cx("img-color")}>Màu {color}</span>
+                <span className={cx("img-color")}>Màu {color.colorName}</span>
                 <button className={cx("btn-chooseImg")}>
                   <input
                     className={cx("img-choose-input")}
@@ -457,7 +513,7 @@ Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp
                     type="file"
                     name="image"
                     accept="image/*"
-                    onChange={(e) => onImageChoose(e, color)}
+                    onChange={(e) => onImageChoose(e, color.colorName)}
                   />
                   Chọn
                 </button>
@@ -465,8 +521,8 @@ Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp
               {productInfo.images.length > 0 && (
                 <div className={cx("imgs-container")}>
                   {productInfo.images.map((image, index) => {
-                    return image.color === color ? (
-                      <span className={cx("img-item")}>
+                    return image.color ===  color.colorName ? (
+                      <span className={cx("img-item")} key={index}>
                         <CiCircleRemove
                           className={cx("icon-remove", "icon-remove-position")}
                           onClick={() => removeImage(index)}

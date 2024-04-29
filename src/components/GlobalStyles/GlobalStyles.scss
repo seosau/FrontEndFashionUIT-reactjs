@@ -21,7 +21,13 @@ body {
 html {
   scroll-behavior: smooth;
 }
-
+a {
+  text-decoration: none;
+}
+ol,
+ul {
+  padding-left: 0;
+}
 // Global variables
 :root {
   --hover-color: #01567f;
