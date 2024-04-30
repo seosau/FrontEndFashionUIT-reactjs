@@ -99,7 +99,6 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
       addingObj.province = JSON.parse(province).name;
       addingObj.district = JSON.parse(district).name;
       addingObj.ward = ward;
-      console.log(addingObj);
       axiosClient
         .post(`/user/address/add`, { address: addingObj })
         .then(({ data }) => {
