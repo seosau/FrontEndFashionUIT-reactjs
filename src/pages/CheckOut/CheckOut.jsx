@@ -44,7 +44,9 @@ function CheckOut() {
       setPickedAddress(false);
       return false;
     } else if (payment === "") {
-      if (pickedAddress == false) setPickedAddress(true);
+      if (pickedAddress == false) {
+        setPickedAddress(true);
+      }
       setPickedPayment(false);
       return false;
     } else if (pickedAddress == false) {
@@ -106,6 +108,7 @@ function CheckOut() {
     if (validate()) {
       if (payment === "banking") {
         handleCheckoutBanking();
+        setPayment("");
       } else {
         handleCheckoutCOD();
       }
