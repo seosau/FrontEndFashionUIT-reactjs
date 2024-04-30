@@ -65,7 +65,8 @@ function Register() {
           navigate("/login");
         })
         .catch((error) => {
-          console.log(`Đăng ký thất bại!`);
+          window.alert("Đăng ký không thành công! Vui lòng thử lại.");
+          console.log(error.response);
         });
     }
   };
