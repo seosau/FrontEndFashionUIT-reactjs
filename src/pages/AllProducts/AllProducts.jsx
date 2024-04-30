@@ -10,7 +10,8 @@ import style from "./AllProducts.module.scss";
 import className from "classnames/bind";
 import Product from "../../components/Product/Product";
 import axiosClient from "../../config/axios";
-
+import AddToCartPopup from "../../components/AddToCartPopup/AddToCartPopup";
+import QuickViewPopup from "../../components/QuickViewPopup/QuickViewPopup";
 const cx = className.bind(style);
 
 export default function AllProducts() {
@@ -156,6 +157,22 @@ export default function AllProducts() {
     }
   };
 
+  const [hidePopup, setHidePopup] = useState(true);
+  const [showPopupQuickView, setShowPopupQuickView] = useState(false);
+
+  const [cartProduct, setCartProduct] = useState()
+  const [quickViewProduct, setQuickViewProduct] = useState()
+
+  const handleClickCart = (product = {}) => {
+    setCartProduct(product)
+    setHidePopup(!hidePopup);
+  };
+
+  const handleClickEye = (product = {}) => {
+    setQuickViewProduct(product)
+    setShowPopupQuickView(!showPopupQuickView);
+  }
+
   const filterProducts = () => {
     let amountPrice = 0;
     let amountType = 0;
@@ -290,6 +307,10 @@ export default function AllProducts() {
   useEffect(() => {
     getProducts();
   }, [currentPage]);
+
+
+
+
   useEffect(() => {
     getProducts();
     function handleResize() {
@@ -383,7 +404,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -405,7 +426,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -427,7 +448,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -449,7 +470,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -502,13 +523,21 @@ export default function AllProducts() {
               selectedFilter.length > 0 ? (
                 filteredProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product product={product} />
+                    <Product 
+                    product={product} 
+                    handleClickCart={() => handleClickCart(product)}
+                    handleClickEye={() => handleClickEye(product)}
+                    />
                   </div>
                 ))
               ) : (
                 products.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product product={product} />
+                    <Product 
+                    product={product} 
+                    handleClickCart={() => handleClickCart(product)}
+                    handleClickEye={() => handleClickEye(product)}
+                    />
                   </div>
                 ))
               )
@@ -542,6 +571,9 @@ export default function AllProducts() {
           />
         </div>
       )}
+      {showPopupQuickView && <QuickViewPopup product={quickViewProduct} togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)} />}
+      {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
+      {!hidePopup && <AddToCartPopup product={cartProduct} togglePopup={() => setHidePopup(prevState => !prevState)} />}
     </div>
   );
 }

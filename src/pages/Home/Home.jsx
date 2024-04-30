@@ -15,6 +15,9 @@ import styles from "./Home.module.scss";
 import className from "classnames/bind";
 import axiosClient from "../../config/axios";
 import { FiInfo } from "react-icons/fi";
+import AddToCartPopup from "../../components/AddToCartPopup/AddToCartPopup";
+import QuickViewPopup from "../../components/QuickViewPopup/QuickViewPopup";
+
 
 const cx = className.bind(styles);
 
@@ -128,8 +131,6 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(saleProductsInTabIndex)
-
   const settings = {
     autoPlay: true,
     infinite: true,
@@ -179,6 +180,23 @@ export default function Home() {
     />
   );
 
+
+  const [hidePopup, setHidePopup] = useState(true);
+  const [showPopupQuickView, setShowPopupQuickView] = useState(false);
+
+  const [cartProduct, setCartProduct] = useState()
+  const [quickViewProduct, setQuickViewProduct] = useState()
+
+  const handleClickCart = (product = {}) => {
+    setCartProduct(product)
+    setHidePopup(!hidePopup);
+  };
+
+  const handleClickEye = (product = {}) => {
+    setQuickViewProduct(product)
+    setShowPopupQuickView(!showPopupQuickView);
+  }
+
   useEffect(() => {
     getProducts()
   }, [])
@@ -205,7 +223,6 @@ export default function Home() {
     getSaleProducts()
   }, []);
 
-  console.log(saleProductsInTabIndex)
   return (
     <main>
       <div className={cx("slider-container")}>
@@ -280,7 +297,12 @@ export default function Home() {
             <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
               {products ? bestSellerProducts?.map((product, index) => (
                 <SwiperSlide key={index} className={cx("product-container")}>
-                  <Product product={product} ranking={index + 1} productCount={true} />
+                  <Product
+                    product={product}
+                    ranking={index + 1}
+                    productCount={true}
+                    handleClickEye={() => handleClickEye(product)}
+                    handleClickCart={() => handleClickCart(product)} />
                 </SwiperSlide>
               )) : <></>}
             </Swiper>
@@ -325,7 +347,12 @@ export default function Home() {
                             <Swiper spaceBetween={10} slidesPerView={width > 768 ? 5 : 2} modules={[Navigation]} navigation>
                               {saleProductsInTabIndex[index].map((product, productIndex) => (
                                 <SwiperSlide key={productIndex} className={cx("product-container")}>
-                                  <Product productCountSale={5} product={product} />
+                                  <Product
+                                    productCountSale={true}
+                                    product={product}
+                                    handleClickCart={() => handleClickCart(product)}
+                                    handleClickEye={() => handleClickEye(product)}
+                                  />
                                 </SwiperSlide>
                               ))}
                             </Swiper>
@@ -414,7 +441,10 @@ export default function Home() {
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
                           {products ? maleProducts?.map((product, index) => (
                             <SwiperSlide key={index} className={cx("product-container")}>
-                              <Product product={product} />
+                              <Product
+                                product={product}
+                                handleClickCart={() => handleClickCart(product)}
+                                handleClickEye={() => handleClickEye(product)} />
                             </SwiperSlide>
                           )) : <></>}
                         </Swiper>
@@ -429,7 +459,11 @@ export default function Home() {
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
                           {products ? femaleProducts?.map((product, index) => (
                             <SwiperSlide key={index} className={cx("product-container")}>
-                              <Product product={product} />
+                              <Product
+                                product={product}
+                                handleClickCart={() => handleClickCart(product)}
+                                handleClickEye={() => handleClickEye(product)}
+                              />
                             </SwiperSlide>
                           )) : <></>}
                         </Swiper>
@@ -444,7 +478,11 @@ export default function Home() {
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
                           {products ? gymProducts?.map((product, index) => (
                             <SwiperSlide key={index} className={cx("product-container")}>
-                              <Product product={product} />
+                              <Product
+                                product={product}
+                                handleClickCart={() => handleClickCart(product)}
+                                handleClickEye={() => handleClickEye(product)}
+                              />
                             </SwiperSlide>
                           )) : <></>}
                         </Swiper>
@@ -510,7 +548,11 @@ export default function Home() {
             <Swiper modules={[Navigation]} spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation>
               {gymProducts?.map((product, index) => (
                 <SwiperSlide key={index} className={cx("product-container")}>
-                  <Product product={product} />
+                  <Product
+                    product={product}
+                    handleClickCart={() => handleClickCart(product)}
+                    handleClickEye={() => handleClickEye(product)}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -559,6 +601,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {showPopupQuickView && <QuickViewPopup product={quickViewProduct} togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)} />}
+      {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
+      {!hidePopup && <AddToCartPopup product={cartProduct} togglePopup={() => setHidePopup(prevState => !prevState)} />}
     </main>
   );
 }
