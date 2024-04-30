@@ -14,6 +14,8 @@ import "react-multi-carousel/lib/styles.css";
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
 import axiosClient from "../../config/axios";
+import { FiInfo } from "react-icons/fi";
+
 const cx = className.bind(styles);
 
 export default function Home() {
@@ -24,10 +26,14 @@ export default function Home() {
   const [maleProducts, setMaleProducts] = useState();
   const [femaleProducts, setFemaleProducts] = useState();
   const [gymProducts, setGymProducts] = useState();
+  const [saleProductsInTabIndex, setSaleProductsInTabIndex] = useState()
   const currentTime = new Date();
 
   const [width, setWidth] = useState(window.innerWidth);
 
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(Number.MAX_SAFE_INTEGER);
   const getProducts = async () => {
     await axiosClient
       .get(`/products?page=${currentPage}&limit=${currentLimit}`)
@@ -38,9 +44,57 @@ export default function Home() {
         console.log(error);
       });
   };
-  // pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(Number.MAX_SAFE_INTEGER);
+
+  const getSaleProducts = async () => {
+    try {
+      const month = currentTime.getMonth() + 1;
+      const paddedMonth = month < 10 ? `0${month}` : month;
+      const day = currentTime.getDate();
+      const paddedDay = day < 10 ? `0${day}` : day;
+      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const saleProducts = response.data;
+
+      const itemInTabIndex0 = saleProducts.filter(saleProduct => saleProduct.saleHour === 1);
+      const itemInTabIndex1 = saleProducts.filter(saleProduct => saleProduct.saleHour === 7);
+      const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 13);
+      const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 21);
+      const saleProductsInTabIndex0 = await Promise.all(itemInTabIndex0.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      const saleProductsInTabIndex1 = await Promise.all(itemInTabIndex1.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      const saleProductsInTabIndex2 = await Promise.all(itemInTabIndex2.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      const saleProductsInTabIndex3 = await Promise.all(itemInTabIndex3.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      setSaleProductsInTabIndex([saleProductsInTabIndex0, saleProductsInTabIndex1, saleProductsInTabIndex2, saleProductsInTabIndex3])
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getProductBySlug = async (slug) => {
+    try {
+      const response = await axiosClient.get(`/product/${slug}`);
+      // console.log(response.data)
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
   const getBestSellerProduct = () => {
     const productsCopy = [...products];
@@ -73,6 +127,8 @@ export default function Home() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  console.log(saleProductsInTabIndex)
 
   const settings = {
     autoPlay: true,
@@ -146,8 +202,10 @@ export default function Home() {
     } else if (currentTime.getHours() >= 20 && currentTime.getHours() < 24) {
       setTabIndex(3);
     }
+    getSaleProducts()
   }, []);
 
+  console.log(saleProductsInTabIndex)
   return (
     <main>
       <div className={cx("slider-container")}>
@@ -263,18 +321,26 @@ export default function Home() {
                     <div className={cx("tab-products")}>
                       <div className={cx("tab-content", "tab-time", tabIndex === index ? "current" : "")}>
                         <div className={cx("box-container")}>
-                          <Swiper spaceBetween={10} slidesPerView={width > 768 ? 5 : 2} modules={[Navigation]} navigation>
-                            {[...Array(8).keys()].map((productIndex) => (
-                              <SwiperSlide key={productIndex} className={cx("product-container")}>
-                                <Product productCountSale={5} />
-                              </SwiperSlide>
-                            ))}
-                          </Swiper>
+                          {saleProductsInTabIndex ? saleProductsInTabIndex[index].length > 0 ? (
+                            <Swiper spaceBetween={10} slidesPerView={width > 768 ? 5 : 2} modules={[Navigation]} navigation>
+                              {saleProductsInTabIndex[index].map((product, productIndex) => (
+                                <SwiperSlide key={productIndex} className={cx("product-container")}>
+                                  <Product productCountSale={5} product={product} />
+                                </SwiperSlide>
+                              ))}
+                            </Swiper>
+                          ) : (
+                            <div className={cx("no-sale-product")}>
+                              <FiInfo className={cx("no-sale-product-icon")} />
+                              <p>Không có sản phẩm nào được giảm giá vào khung giờ này</p>
+                            </div>
+                          ) : <></>}
                         </div>
                       </div>
                     </div>
                   </TabPanel>
                 ))}
+
               </Tabs>
             </div>
           </div>

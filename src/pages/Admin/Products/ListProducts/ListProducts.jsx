@@ -3,11 +3,14 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { TbEdit } from "react-icons/tb";
 import { CiSquareRemove } from "react-icons/ci";
+import { CiSquarePlus } from "react-icons/ci";
 import { FaTrashAlt } from "react-icons/fa";
 import { GoSearch } from "react-icons/go";
 import { IoMdAdd } from "react-icons/io";
+import { IoClose } from "react-icons/io5";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
+import DateTimePicker from 'react-datetime-picker';
 import { useDebounce } from "../../../../hooks";
 
 import style from "./ListProducts.module.scss";
@@ -101,17 +104,18 @@ function ListProducts() {
   };
   // delete 1 product
   const deleteProduct = (slug) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.slug !== slug)
-    );
-    axiosClient
-      .delete(`/admin/product/delete/${slug}`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log(slug)
+    // setProducts((prevProducts) =>
+    //   prevProducts.filter((product) => product.slug !== slug)
+    // );
+    // axiosClient
+    //   .delete(`/admin/product/delete/${slug}`)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
   // selected 1 product
   const selectedProduct = (slug) => {
@@ -150,6 +154,47 @@ function ListProducts() {
         console.log(error);
       });
   };
+
+  // sale hour
+  const [saleHour, setSaleHour] = useState(-1)
+  const [hidePopup, setHidePopup] = useState(true)
+  const [slug, setSlug] = useState('')
+  const currentDate = new Date();
+  const initialSaleDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  const [saleDay, setSaleDay] = useState(initialSaleDay);
+
+  const handleChangeSaleDay = (event) => {
+    setSaleDay(event.target.value);
+  };
+
+  const addProductToSale = async () => {
+    const tmp = [...products];
+    const productToSale = tmp.find(product => product.slug === slug);
+    console.log(productToSale.slug)
+
+    if (saleHour === -1) {
+      alert("Vui lòng chọn khung giờ")
+      return
+    }
+
+    await axiosClient.post('/admin/sale/add', {
+      slug: productToSale.slug,
+      saleHour: saleHour,
+      saleDay: saleDay
+    })
+      .then(res => {
+        console.log(res)
+        setHidePopup(prevState => !prevState)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const togglePopup = (slug = '') => {
+    setHidePopup(prevState => !prevState)
+    setSlug(slug)
+  }
 
   return (
     <div className={cx("addproduct__container")}>
@@ -280,6 +325,61 @@ function ListProducts() {
                           onClick={() => deleteProduct(product.slug)}
                         />
                         Remove
+                      </li>
+                      <li className={cx("product-action-item")} >
+                        <div onClick={() => togglePopup(product.slug)}>
+                          <CiSquarePlus
+                            className={cx("icon", "icon-add-sale")}
+                          />
+                          Add Sale
+                        </div>
+                        {!hidePopup && <div className={cx("popup-backdrop")}></div>}
+                        {!hidePopup && (
+                          <div className={cx("popup-container")}>
+                            <div className={cx("popup-header")}>
+                              <span>
+                                <CiSquarePlus className={cx("popup-icon")} />
+                                Nhập thông tin
+                                <IoClose
+                                  className={cx("popup-close-icon")}
+                                  onClick={() => setHidePopup(true)}
+                                />
+                              </span>
+                            </div>
+                            <div className={cx("popup-content")}>
+                              <div className={cx("hour")}>
+                                <span>Chọn khung giờ:</span>
+                                <select value={saleHour} onChange={(e) => setSaleHour(e.target.value)}>
+                                  <option value={-1}>Chọn khung giờ</option>
+                                  <option value={1}>00:00 - 06:00</option>
+                                  <option value={7}>06:00 - 12:00</option>
+                                  <option value={13}>12:00 - 20:00</option>
+                                  <option value={21}>20:00 - 24:00</option>
+                                </select>
+                              </div>
+                              <div className={cx("date")}>
+                                <span>Chọn ngày:</span>
+                                <input type="date" value={saleDay} onChange={handleChangeSaleDay} />
+                              </div>
+                              <div className={cx("popup-button-group")}>
+                                <button
+                                  type="button"
+                                  className={cx("btn-continue")}
+                                  onClick={() => togglePopup()}
+                                >
+                                  Hủy
+                                </button>
+                                <button
+                                  type="button"
+                                  className={cx("btn-checkout")}
+                                  onClick={addProductToSale}
+                                >
+                                  Thêm
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </li>
                     </ul>
                   </td>
