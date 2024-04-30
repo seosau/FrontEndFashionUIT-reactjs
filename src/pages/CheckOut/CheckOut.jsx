@@ -17,10 +17,9 @@ function CheckOut() {
   const navigate = useNavigate();
   const { decodedToken } = useContext(AuthContext);
   const location = useLocation();
-  const totalPrice = location?.state?.totalPrice;
-  const checkoutItems = location?.state?.checkoutItems;
+  const [totalPrice, setTotalPrice] = useState(null);
+  const [checkoutItems, setCheckoutItems] = useState(null);
   const [payment, setPayment] = useState("");
-  console.log(checkoutItems);
   const [addresses, setAddresses] = useState([]);
   const [address, setAddress] = useState(null);
   const [pickedAddress, setPickedAddress] = useState(true);
@@ -39,6 +38,10 @@ function CheckOut() {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
       });
   }, [hiddenForm]);
+  useEffect(() => {
+    totalPrice != null ? setTotalPrice(null) : setTotalPrice(location?.state?.totalPrice);
+    checkoutItems != null ? setCheckoutItems(null) : setCheckoutItems(location?.state?.checkoutItems);
+  }, []);
   const validate = () => {
     if (address === null) {
       setPickedAddress(false);
@@ -78,40 +81,49 @@ function CheckOut() {
   };
 
   const handleCheckoutBanking = () => {
-    var checkoutInfoTmp = {};
-    checkoutInfoTmp.address = addresses[address];
-    checkoutInfoTmp.note = note;
-    checkoutInfoTmp.paymentMethod = payment;
-    checkoutInfoTmp.isConfirmed = true;
-    checkoutInfoTmp.totalPrice = totalPrice + 40;
-    checkoutInfoTmp.products = checkoutItems;
-    checkoutInfoTmp.paid = false;
+    if (checkoutItems != null) {
+      var checkoutInfoTmp = {};
+      checkoutInfoTmp.address = addresses[address];
+      checkoutInfoTmp.note = note;
+      checkoutInfoTmp.paymentMethod = payment;
+      checkoutInfoTmp.isConfirmed = true;
+      checkoutInfoTmp.totalPrice = totalPrice + 40;
+      checkoutInfoTmp.products = checkoutItems;
+      checkoutInfoTmp.paid = false;
 
-    var amount = (totalPrice + 40) * 1000;
-    var language = "vn";
-    var bankCode = "";
-    axiosClient
-      .post(`/order/vnpay/url`, {
-        amount,
-        language,
-        bankCode,
-        orderInfo: checkoutInfoTmp,
-      })
-      .then(({ data }) => {
-        window.location.href = data.vnpUrl;
-      })
-      .catch((error) => {
-        console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
-      });
+      var amount = (totalPrice + 40) * 1000;
+      var language = "vn";
+      var bankCode = "";
+      axiosClient
+        .post(`/order/vnpay/url`, {
+          amount,
+          language,
+          bankCode,
+          orderInfo: checkoutInfoTmp,
+        })
+        .then(({ data }) => {
+          window.open(data.vnpUrl, "_blank");
+          setTimeout(function () {
+            window.close();
+          }, 100);
+        })
+        .catch((error) => {
+          console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
+        });
+    }
   };
   const handleCheckout = () => {
-    if (validate()) {
-      if (payment === "banking") {
-        handleCheckoutBanking();
-        setPayment("");
-      } else {
-        handleCheckoutCOD();
+    if (checkoutItems != null) {
+      if (validate()) {
+        if (payment === "banking") {
+          handleCheckoutBanking();
+        } else {
+          handleCheckoutCOD();
+          checkoutItems = [];
+        }
       }
+    } else {
+      window.alert("Đơn hàng trống!");
     }
   };
   return (
