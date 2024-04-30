@@ -1,13 +1,15 @@
 import style from "./ChangePass.module.scss";
 import className from "classnames/bind";
 import { IoIosArrowForward } from "react-icons/io";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import SideBar from "../../components/Account/SideBar/SideBar";
 import axiosClient from "../../config/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useStateContext } from "../../context/CartContextProvider";
+import { Messages } from "primereact/messages";
+
 const cx = className.bind(style);
 
 function ChangePass() {
@@ -43,7 +45,7 @@ function ChangePass() {
       axiosClient
         .post(`/auth/change-password`, { oldPassword: changePassInfo.oldPass, newPassword: changePassInfo.pass })
         .then((response) => {
-          window.alert("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
+          addMessages();
           axiosClient
             .get(`/auth/logout`)
             .then((response) => {
@@ -62,10 +64,24 @@ function ChangePass() {
         });
     }
   };
+  const msgs = useRef(null);
+  const addMessages = () => {
+    msgs.current.show([
+      { severity: "success", summary: "Success", detail: "Message Content", sticky: true, closable: false },
+      { severity: "info", summary: "Info", detail: "Message Content", sticky: true, closable: false },
+      { severity: "warn", summary: "Warning", detail: "Message Content", sticky: true, closable: false },
+      { severity: "error", summary: "Error", detail: "Message Content", sticky: true, closable: false },
+    ]);
+  };
+
+  const clearMessages = () => {
+    msgs.current.clear();
+  };
   return (
     <div className={cx("content")}>
       <div className={cx("wrapper")}>
         <SideBar />
+        <Messages ref={msgs} />
         <div className={cx("main")}>
           <div className={cx("title")}>ĐỔI MẬT KHẨU</div>
           <div className={cx("warning")}>Để đảm bảo tính bảo mật bạn vui lòng đặt lại mật khẩu với ít nhất 8 kí tự</div>
