@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useStateContext } from "../../context/CartContextProvider";
 import { Messages } from "primereact/messages";
+import { Toast } from "primereact/toast";
 
 const cx = className.bind(style);
 
@@ -24,6 +25,12 @@ function ChangePass() {
   });
   const [isFullFilled, setIsFullFilled] = useState(true);
   const [isPassValid, setIsPassValid] = useState(true);
+  const toast = useRef(null);
+
+  const error = (message) => {
+    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: message, life: 3000 });
+  }
+
   const validateForm = () => {
     if (changePassInfo.oldPass === "" || changePassInfo.pass === "" || changePassInfo.cpass === "") {
       setIsFullFilled(false);
@@ -60,7 +67,7 @@ function ChangePass() {
             });
         })
         .catch((error) => {
-          window.alert(`Password changed failed! ${error.response.data.message}`);
+          toast.current.show({ severity: 'error', summary: 'Lỗi', detail: error.response.data.message, life: 3000 });
         });
     }
   };
@@ -77,8 +84,10 @@ function ChangePass() {
   const clearMessages = () => {
     msgs.current.clear();
   };
+
   return (
     <div className={cx("content")}>
+      <Toast ref={toast} />
       <div className={cx("wrapper")}>
         <SideBar />
         <Messages ref={msgs} />

@@ -3,9 +3,11 @@ import style from "./ProductCart.module.scss";
 import className from "classnames/bind";
 import { SlArrowRight } from "react-icons/sl";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useStateContext } from "../../context/CartContextProvider";
 import axiosClient from "../../config/axios";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 const cx = className.bind(style);
 
 export default function ProductCart() {
@@ -16,13 +18,36 @@ export default function ProductCart() {
   const [cart, setCart] = useState([]);
   const tmpCartItems = cartItems ? [...new Set(cartItems.map((item) => item.productId))] : [];
 
+  const toast = useRef(null);
+
+  const reject = () => {
+    toast.current.show({ severity: 'warn', summary: 'Thông Báo', detail: 'Đã hủy xóa sản phẩm', life: 3000 });
+  }
+
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thông Báo", detail: "Xóa thành công!", life: 3000 });
+  };
+
+  const handleDelete = (product) => {
+    confirmDialog({
+      message: "Bạn có muốn xóa sản phẩm này?",
+      header: "Xác nhận xóa",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () => removeFromCart(product),
+      reject,
+    });
+  }
+
   const removeFromCart = (product) => {
-    const newCartItems = cartItems.filter((item) => !(item.productId === product.productId && item.color === product.color && item.size === product.size));
-    setCartItems(newCartItems);
-    setQuantityInCart((prev) => prev - 1);
+    const tmp = [...cartItems];
+    const newCartItems = tmp.filter((item) => !(item.productId === product.productId && item.color === product.color && item.size === product.size));
     if (checkoutItems.some((item) => item.productId === product.productId && item.color === product.color && item.size === product.size)) {
       removeCheckoutItem(product);
     }
+    setCartItems(newCartItems);
+    setQuantityInCart((prev) => prev - 1);
     axiosClient
       .delete("/cart/remove", {
         data: {
@@ -31,7 +56,8 @@ export default function ProductCart() {
           size: product.size,
         },
       })
-      .then((response) => { 
+      .then((response) => {
+        show()
         getCartItems()
       })
       .catch((err) => {
@@ -103,10 +129,10 @@ export default function ProductCart() {
   }, [quantityInCart, cartItems]);
 
   useEffect(() => {
-    if (productItem.length > 0) {
+    if (productItem.length > 0 || quantityInCart) {
       getCart();
     }
-  }, [productItem, cartItems, quantityInCart]);
+  }, [productItem, quantityInCart]);
 
   useEffect(() => {
     calculateTotalPrice();
@@ -204,6 +230,8 @@ export default function ProductCart() {
 
   return (
     <div className={cx("body-wrap")}>
+      <ConfirmDialog style={{ width: "24vw" }} />
+      <Toast ref={toast} />
       <div className={cx("bread_crumb")}>
         <div className={cx("container")}>
           <ul className={cx("breadcrumb")}>
@@ -282,7 +310,8 @@ export default function ProductCart() {
                                     <span className={cx("item-info-size")}>Size: {item.size}</span>
                                     <span className={cx("item-info-size")}>Màu: {item.color}</span>
                                   </div>
-                                  <button className={cx("btn-remove-item-cart")} onClick={() => removeFromCart(item)}>
+
+                                  <button className={cx("btn-remove-item-cart")} onClick={() => handleDelete(item)}>
                                     Xóa
                                   </button>
                                 </div>

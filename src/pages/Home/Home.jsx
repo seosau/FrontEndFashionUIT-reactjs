@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import Product from "../../components/Product/Product";
-
+import { Toast } from "primereact/toast";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -119,7 +119,7 @@ export default function Home() {
 
   const getGymProducts = () => {
     const productsCopy = [...products];
-    const tmpProducts = productsCopy.filter(product => product.category.categoryDetail.toLowerCase() === 'gym')
+    const tmpProducts = productsCopy.filter(product => product.category.categoryDetail.toLowerCase().includes('gym'))
     setGymProducts(tmpProducts);
   }
 
@@ -197,6 +197,16 @@ export default function Home() {
     setShowPopupQuickView(!showPopupQuickView);
   }
 
+  const toast = useRef(null);
+
+  const error = () => {
+    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Thêm sản phẩm thất bại', life: 3000 });
+  }
+
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!" });
+  };
+
   useEffect(() => {
     getProducts()
   }, [])
@@ -225,6 +235,7 @@ export default function Home() {
 
   return (
     <main>
+      <Toast ref={toast} />
       <div className={cx("slider-container")}>
         <div className={cx("slideBox")}>
           <div className={cx("slider")}>
@@ -601,9 +612,21 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {showPopupQuickView && <QuickViewPopup product={quickViewProduct} togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)} />}
+      {showPopupQuickView &&
+        <QuickViewPopup
+          product={quickViewProduct}
+          togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
       {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
-      {!hidePopup && <AddToCartPopup product={cartProduct} togglePopup={() => setHidePopup(prevState => !prevState)} />}
+      {!hidePopup &&
+        <AddToCartPopup
+          product={cartProduct}
+          togglePopup={() => setHidePopup(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
     </main>
   );
 }

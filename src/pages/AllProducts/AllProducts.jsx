@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactPaginate from "react-paginate";
 import { Link, useLocation } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 import { FaPlus, FaFilter } from "react-icons/fa6";
 import { BsSortDown } from "react-icons/bs";
 import { GrNext, GrPrevious } from "react-icons/gr";
-
+import { Toast } from "primereact/toast";
 import style from "./AllProducts.module.scss";
 import className from "classnames/bind";
 import Product from "../../components/Product/Product";
@@ -308,7 +308,15 @@ export default function AllProducts() {
     getProducts();
   }, [currentPage]);
 
+  const toast = useRef(null);
 
+  const error = () => {
+    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Thêm sản phẩm thất bại', life: 3000 });
+  }
+
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!" });
+  };
 
 
   useEffect(() => {
@@ -523,20 +531,20 @@ export default function AllProducts() {
               selectedFilter.length > 0 ? (
                 filteredProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product 
-                    product={product} 
-                    handleClickCart={() => handleClickCart(product)}
-                    handleClickEye={() => handleClickEye(product)}
+                    <Product
+                      product={product}
+                      handleClickCart={() => handleClickCart(product)}
+                      handleClickEye={() => handleClickEye(product)}
                     />
                   </div>
                 ))
               ) : (
                 products.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product 
-                    product={product} 
-                    handleClickCart={() => handleClickCart(product)}
-                    handleClickEye={() => handleClickEye(product)}
+                    <Product
+                      product={product}
+                      handleClickCart={() => handleClickCart(product)}
+                      handleClickEye={() => handleClickEye(product)}
                     />
                   </div>
                 ))
@@ -571,9 +579,22 @@ export default function AllProducts() {
           />
         </div>
       )}
-      {showPopupQuickView && <QuickViewPopup product={quickViewProduct} togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)} />}
+      <Toast ref={toast} />
+      {showPopupQuickView &&
+        <QuickViewPopup
+          product={quickViewProduct}
+          togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
       {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
-      {!hidePopup && <AddToCartPopup product={cartProduct} togglePopup={() => setHidePopup(prevState => !prevState)} />}
+      {!hidePopup &&
+        <AddToCartPopup
+          product={cartProduct}
+          togglePopup={() => setHidePopup(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import { IoClose } from "react-icons/io5";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
 import { useDebounce } from "../../../../hooks";
+import { Toast } from "primereact/toast";
 
 import style from "./ListProducts.module.scss";
 import classNames from "classnames/bind";
@@ -161,7 +162,7 @@ function ListProducts() {
   const currentDate = new Date();
   const initialSaleDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
   const [saleDay, setSaleDay] = useState(initialSaleDay);
-
+  const toast = useRef(null);
   const handleChangeSaleDay = (event) => {
     setSaleDay(event.target.value);
   };
@@ -172,7 +173,7 @@ function ListProducts() {
     console.log(productToSale.slug)
 
     if (saleHour === -1) {
-      alert("Vui lòng chọn khung giờ")
+      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn khung giờ', life: 3000 });
       return
     }
 
@@ -183,9 +184,11 @@ function ListProducts() {
     })
       .then(res => {
         console.log(res)
+        toast.current.show({ severity: 'success', summary: 'Thành công', detail: 'Thêm sản phẩm thành công', life: 3000 });
         setHidePopup(prevState => !prevState)
       })
       .catch(error => {
+        toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Đã có lỗi xảy ra', life: 3000 });
         console.log(error)
       })
   }
@@ -197,6 +200,7 @@ function ListProducts() {
 
   return (
     <div className={cx("addproduct__container")}>
+      <Toast ref={toast} />
       <div className={cx("addproduct__header")}>
         <h1 className={cx("addproduct__header-title")}>Danh sách sản phẩm</h1>
         <Link
