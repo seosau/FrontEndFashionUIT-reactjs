@@ -495,7 +495,11 @@
     transition: all 0.3s;
 }
 
-main img {
+.img-icon img,
+.one-banner img,
+.brand img,
+.banner-tab img,
+.big-sale img {
     border: 0 none;
     max-width: 100%;
     height: auto;
@@ -609,6 +613,26 @@ main img {
     animation: shine 1.1s;
 }
 
+.no-sale-product {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-sale-product p{
+    color: #fff;
+    font-weight: bold;
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.no-sale-product-icon {
+    width: 15rem;
+    height: 15rem;
+    color: #fff;
+}
+
 @media screen and (min-width: 1200px) {
     .container {
         padding-right: 45px;
@@ -643,7 +667,22 @@ main img {
         max-width: 75%;
         padding: 0 10px;
     }
+
+    .tab-products .product-container {
+        width: 19.3% !important;
+    }
+
+    .trending .product-container {
+        margin-bottom: 0;
+        width: 24.2% !important;
+    }
+
+    .no-sale-product {
+        height: 435px;
+    }
 }
+
+
 
 @media screen and (min-width: 992px) {
     .service .box-container .box {

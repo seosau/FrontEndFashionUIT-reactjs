@@ -243,7 +243,7 @@ export default function Product({
                 <div className={cx("productcount")}>
                   <div className={cx("countitem", "visible")}>
                     <span className={cx("a-center")}>
-                      Đã bán {productCount}
+                      Đã bán {product.sold}
                     </span>
                     <div className={cx("countdown")}>
                       <span></span>
