@@ -10,7 +10,6 @@ import { IoMdAdd } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
-import DateTimePicker from 'react-datetime-picker';
 import { useDebounce } from "../../../../hooks";
 
 import style from "./ListProducts.module.scss";
