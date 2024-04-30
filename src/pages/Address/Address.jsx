@@ -1,11 +1,12 @@
 import style from "./Address.module.scss";
 import className from "classnames/bind";
 import { IoIosArrowForward } from "react-icons/io";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SideBar from "../../components/Account/SideBar/SideBar";
 import AddAddressForm from "../../components/AddAddressForm/AddAddressForm";
 import axiosClient from "../../config/axios";
-
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 const cx = className.bind(style);
 
 function Address() {
@@ -21,29 +22,45 @@ function Address() {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
       });
   };
+  const deleteAddress = (index) => {
+    axiosClient
+      .post(`/user/address/delete`, { index })
+      .then(({ data }) => {
+        show();
+        fetchAddresses();
+      })
+      .catch((error) => {
+        console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
+      });
+  };
+  const reject = () => {
+    return 0;
+  };
   useEffect(() => {
     fetchAddresses();
-  }, []);
+  }, [hiddenForm]);
+
   const handleDelete = (index) => {
-    if (window.confirm("Bạn có muốn xóa địa chỉ này?")) {
-      axiosClient
-        .post(`/user/address/delete`, { index })
-        .then(({ data }) => {
-          window.alert("Xóa địa chỉ thành công!");
-          fetchAddresses();
-        })
-        .catch((error) => {
-          console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
-        });
-    } else {
-      return;
-    }
+    confirmDialog({
+      message: "Bạn có muốn xóa địa chỉ này?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () => deleteAddress(index),
+      reject,
+    });
+  };
+  const toast = useRef(null);
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thông Báo", detail: "Xóa địa chỉ thành công!" });
   };
   return (
     <div className={cx("content")}>
       {!hiddenForm ? <div className={cx("isOverlay")}></div> : null}
       {!hiddenForm ? <AddAddressForm hiddenForm={hiddenForm} setHiddenForm={setHiddenForm} /> : null}
-
+      <ConfirmDialog style={{ width: "24vw" }} />
+      <Toast ref={toast} />
       <div className={cx("wrapper")}>
         <SideBar />
         <div className={cx("main")}>

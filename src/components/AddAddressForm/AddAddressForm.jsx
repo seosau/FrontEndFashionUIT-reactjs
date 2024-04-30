@@ -1,10 +1,11 @@
 import axios from "axios";
 import style from "./AddAddressForm.module.scss";
 import className from "classnames/bind";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import axiosClient from "../../config/axios";
+import { Toast } from "primereact/toast";
 
 const cx = className.bind(style);
 
@@ -63,7 +64,10 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
         });
     }
   };
-
+  const toast = useRef(null);
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thông Báo", detail: "Thêm địa chỉ thành công!" });
+  };
   const fetchWard = () => {
     if (!district) {
       setWards([]);
@@ -99,7 +103,7 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
       axiosClient
         .post(`/user/address/add`, { address: addingObj })
         .then(({ data }) => {
-          window.alert("Thêm địa chỉ thành công!");
+          show();
           setHiddenForm(true);
         })
         .catch((error) => {
@@ -109,6 +113,7 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
   };
   return (
     <div className={cx("formCenter")}>
+      <Toast ref={toast} />
       {!hiddenForm ? (
         <div className={cx("formContainer")}>
           <div className={cx("formFlex")}>

@@ -2,15 +2,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap");
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   outline: none;
   border: none;
   text-decoration: none;
   list-style: none;
 }
-
+input {
+  margin: 0;
+  padding: 0;
+}
 body {
   font-family: "Quicksand", sans-serif;
   background-repeat: no-repeat;
@@ -43,4 +44,7 @@ ul {
   --dark-bg: #222b3c;
   --soft-color: #ddd;
   --dark-color: #2a3447;
+}
+.p-button {
+  margin: 0px 6px;
 }
