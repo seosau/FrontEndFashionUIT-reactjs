@@ -61,11 +61,11 @@ function Register() {
       axiosClient
         .post(`/auth/register`, user)
         .then((response) => {
-          window.alert("Registration successful! Please check your email to verify your account.");
+          window.alert("Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản của bạn.");
           navigate("/login");
         })
         .catch((error) => {
-          window.alert(`Registration failed! ${error.response.data.message}`);
+          console.log(`Đăng ký thất bại!`);
         });
     }
   };
