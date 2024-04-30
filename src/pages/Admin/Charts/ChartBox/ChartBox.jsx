@@ -2,21 +2,21 @@ import { Link } from "react-router-dom";
 import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts";
 import style from "./ChartBox.module.scss";
 import className from "classnames/bind";
-const cx = className.bind(style)
+const cx = className.bind(style);
 
-
-const ChartBox = ({props}) => {
+const ChartBox = ({ props }) => {
   return (
     <div className={cx("chartBox")}>
       <div className={cx("boxInfo")}>
         <div className={cx("title")}>
-          <img src={props.icon} alt="" />
           <span>{props.title}</span>
         </div>
         <h1>{props.number}</h1>
-        <Link to="/" style={{ color: props.color }}>
-          View all
-        </Link>
+        {props?.href && (
+          <Link to={props.href} style={{ color: props.color }}>
+            View all
+          </Link>
+        )}
       </div>
       <div className={cx("chartInfo")}>
         <div className={cx("chart")}>
@@ -44,7 +44,7 @@ const ChartBox = ({props}) => {
           >
             {props.percentage}%
           </span>
-          <span className={cx("duration")}>this month</span>
+          <span className={cx("duration")}>this week</span>
         </div>
       </div>
     </div>
