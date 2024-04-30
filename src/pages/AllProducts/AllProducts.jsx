@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { Link, useLocation } from "react-router-dom";
+import { Await, Link, useLocation } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 import { FaPlus, FaFilter } from "react-icons/fa6";
 import { BsSortDown } from "react-icons/bs";
@@ -79,7 +79,7 @@ export default function AllProducts() {
   };
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(10);
+  const [currentLimit, setCurrentLimit] = useState(16);
   const [totalPages, setTotalPages] = useState(0);
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
@@ -291,20 +291,28 @@ export default function AllProducts() {
     getProducts();
   }, [currentPage]);
   useEffect(() => {
-    getProducts();
-    function handleResize() {
-      if (window.innerWidth > 980) {
-        setSideBarVisible(true);
+    const fetchData = async () => {
+      await setCurrentPage(1);
+      getProducts();
+
+      function handleResize() {
+        if (window.innerWidth > 980) {
+          setSideBarVisible(true);
+        }
+        if (window.innerWidth < 980) {
+          setSideBarVisible(false);
+        }
       }
-      if (window.innerWidth < 980) {
-        setSideBarVisible(false);
-      }
-    }
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
     };
+
+    fetchData();
   }, [location.search]);
+
   useEffect(() => {
     filterProducts();
   }, [selectedFilter]);

@@ -55,8 +55,9 @@ export const chartBoxUser = {
   color: "#8884d8",
   icon: "/userIcon.svg",
   title: "Total Users",
-  number: "11.238",
   dataKey: "users",
+  
+  number: "11.238",
   percentage: 45,
   chartData: [
     { name: "Sun", users: 400 },
