@@ -11,5 +11,6 @@ import ListBlogs from "./Blogs/ListBlogs/ListBlogs";
 import ListUsers from "./ListUsers/ListUsers";
 // Component order
 
-import ListOrders from "./ListOrders/ListOrders";
-export { Dashboard, CreateProduct, ListProducts, EditProduct, CreateBlog, EditBlog, ListBlogs, ListUsers, ListOrders };
+import ListOrders from "./Order/ListOrders/ListOrders";
+import OrderDetail from "./Order/OrderDetail/OrderDetail";
+export { Dashboard, CreateProduct, ListProducts, EditProduct, CreateBlog, EditBlog, ListBlogs, ListUsers, ListOrders, OrderDetail as adminOrderDetail };

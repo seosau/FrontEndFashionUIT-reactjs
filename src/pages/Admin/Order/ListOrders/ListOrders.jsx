@@ -7,8 +7,8 @@ import { FaTrashAlt } from "react-icons/fa";
 import { GoSearch } from "react-icons/go";
 import { IoMdAdd } from "react-icons/io";
 import { GrNext, GrPrevious } from "react-icons/gr";
-import axiosClient from "../../../config/axios";
-import { useDebounce } from "../../../hooks";
+import axiosClient from "../../../../config/axios";
+import { useDebounce } from "../../../../hooks";
 import { Dropdown } from "primereact/dropdown";
 import style from "./ListOrders.module.scss";
 import classNames from "classnames/bind";
@@ -193,7 +193,11 @@ function ListOrders() {
                       <div className={cx("order-info")}>
                         <div className={cx("order-info-detail")}>
                           <p className={cx("order-name")}>
-                            <strong>{order?._id}</strong>
+                            <Link to={`/admin/order-detail/${order?._id}`} className={cx("link")}>
+                              <div className={cx("tableDataContainer")}>
+                                <strong>{order?._id}</strong>
+                              </div>
+                            </Link>
                           </p>
                         </div>
                       </div>
