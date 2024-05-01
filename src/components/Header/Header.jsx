@@ -55,7 +55,13 @@ function Header({ setShowModal }) {
       });
   };
   const location = useLocation();
-  const home = { icon: "pi pi-home", url: "https://primereact.org" };
+  const home = {
+    template: () => (
+      <Link to="/">
+        <i className="pi pi-home"></i>
+      </Link>
+    ),
+  };
   const [breadCrumbItems, setBreadCrumbItems] = useState([]);
 
   const generateBreadCrumb = () => {
@@ -66,12 +72,12 @@ function Header({ setShowModal }) {
       console.log(part);
       console.log("-----------");
       if (part === "" && index === 1) {
-      } else {
+      } else if (part !== "") {
         switch (part) {
-          case "": {
-            tmpArr.push({ label: "Trang chủ", template: () => <Link to="/">Trang chủ</Link> });
-            break;
-          }
+          // case "": {
+          //   tmpArr.push({ label: "Trang chủ", template: () => <Link to="/">Trang chủ</Link> });
+          //   break;
+          // }
           case "cart": {
             tmpArr.push({ label: "Giỏ hàng" });
             break;
@@ -964,9 +970,7 @@ function Header({ setShowModal }) {
       )}
 
       <div className={cx("breadCrumbFullWidth")}>
-        <div className={cx("breadCrumb")}>
-          {breadCrumbItems.length === 1 && breadCrumbItems[0].label === "Trang chủ" ? null : <BreadCrumb model={breadCrumbItems ? breadCrumbItems : []} home={home ? home : {}} />}
-        </div>
+        <div className={cx("breadCrumb")}>{location.pathname === "/" ? null : <BreadCrumb model={breadCrumbItems ? breadCrumbItems : []} home={home} />}</div>
       </div>
     </div>
   );
