@@ -12,8 +12,8 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
 import { useDebounce } from "../../../../hooks";
 
-import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
-import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
+import { ConfirmDialog } from "primereact/confirmdialog";
+import { confirmDialog } from "primereact/confirmdialog";
 
 import { Toast } from "primereact/toast";
 
@@ -48,7 +48,7 @@ function ListProducts() {
   };
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(10);
+  const [currentLimit, setCurrentLimit] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
@@ -67,10 +67,10 @@ function ListProducts() {
   }, [currentPage]);
   useEffect(() => {
     if (!debounced.trim()) {
+      fetchData();
     } else {
       const fetchApi = async () => {
         setLoading(true);
-
         await axiosClient
           .get(`/product/search/${debounced}`)
           .then(({ data }) => {
@@ -109,17 +109,7 @@ function ListProducts() {
   };
   // delete 1 product
   const deleteProduct = (slug) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.slug !== slug)
-    );
-    axiosClient
-      .delete(`/admin/product/delete/${slug}`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    confirm(slug);
   };
   // selected 1 product
   const selectedProduct = (slug) => {
@@ -144,19 +134,7 @@ function ListProducts() {
   // delete many products
   const deleteSelectedproduct = (e) => {
     e.preventDefault();
-    axiosClient
-      .delete("/admin/product/delete/all", { data: selectedProducts })
-      .then((res) => {
-        setProducts((prevProducts) =>
-          prevProducts.filter(
-            (product) => !selectedProducts.includes(product.slug)
-          )
-        );
-        setSelectedProducts([]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    confirm("")
   };
 
   // sale hour
@@ -223,18 +201,69 @@ function ListProducts() {
   };
 
   // confirm popup
-  const [visible, setVisible] = useState(false);
-  const accept = () => {
-    console.log("ok");
+  const accept = (slug) => {
+    if (!!slug) {
+      toast.current.show({
+        severity: "success",
+        summary: "Thông báo",
+        detail: "Xóa sản phẩm thành công",
+        life: 3000,
+      });
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.slug !== slug)
+      );
+      axiosClient
+        .delete(`/admin/product/delete/${slug}`)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axiosClient
+        .delete("/admin/product/delete/all", { data: selectedProducts })
+        .then((res) => {
+          setProducts((prevProducts) =>
+            prevProducts.filter(
+              (product) => !selectedProducts.includes(product.slug)
+            )
+          );
+          setSelectedProducts([]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
-  const reject = () => {
-    console.log("c");
+  const reject = () => {};
+  const confirm = (slug) => {
+    if (!!slug) {
+      confirmDialog({
+        message: "Bạn có muốn xóa sản phẩm này?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () => accept(slug),
+        reject,
+      });
+    } else {
+      confirmDialog({
+        message: "Bạn có muốn xóa tất cả các sản phẩm được chọn?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () => accept(slug),
+        reject,
+      });
+    }
   };
-  
   return (
     <div className={cx("addproduct__container")}>
       <Toast ref={toast} />
-
+      <ConfirmDialog />
       <div className={cx("addproduct__header")}>
         <h1 className={cx("addproduct__header-title")}>Danh sách sản phẩm</h1>
         <Link
@@ -356,21 +385,10 @@ function ListProducts() {
                           Edit
                         </Link>
                       </li>
-                      <ConfirmPopup
-                      
-                        visible={visible}
-                        onHide={() => setVisible(false)}
-                        message="Bạn có muốn xoá sản phẩm này"
-                        icon="pi pi-exclamation-triangle"
-                        accept={accept}
-                        reject={reject}
-                      />
+
                       <li
                         className={cx("product-action-item")}
-                        onClick={
-                          () => setVisible(true)
-                          // () => deleteProduct(product.slug)
-                        }
+                        onClick={() => deleteProduct(product.slug)}
                       >
                         <CiSquareRemove className={cx("icon", "icon-remove")} />
                         Remove
