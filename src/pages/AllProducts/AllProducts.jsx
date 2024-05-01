@@ -80,7 +80,7 @@ export default function AllProducts() {
   };
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(16);
+  const [currentLimit, setCurrentLimit] = useState(24);
   const [totalPages, setTotalPages] = useState(0);
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
