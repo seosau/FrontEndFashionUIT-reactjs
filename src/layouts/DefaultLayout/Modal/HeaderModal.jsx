@@ -616,9 +616,11 @@ function HeaderModal({ isShowModal,setShowModal }) {
             if (navItemLv1?.navListLv2) {
               let IconOpen = navItemLv1.iconOpen;
               return (
-                <li className={cx("header__nav-item")}>
+                <li className={cx("header__nav-item")} key={indexLv1}>
                   <div className={cx("header__nav-item-action")}>
-                    <Link to={navItemLv1.href}>{navItemLv1.titleLv1}</Link>
+                    <Link to={`/products?keyword=${navItemLv1.titleLv1}`}
+                    onClick={() => setShowModal(false)}
+                    >{navItemLv1.titleLv1}</Link>
                     {/* <LuMinus className={cx("header__nav-icon")}/> */}
                     <IconOpen
                       className={cx("header__nav-icon")}
@@ -634,9 +636,9 @@ function HeaderModal({ isShowModal,setShowModal }) {
                     {navItemLv1.navListLv2.map((navItemLv2, indexLv2) => {
                       let IconOpen = navItemLv2.iconOpen;
                       return (
-                        <li className={cx("header__nav-item-lv2")}>
+                        <li className={cx("header__nav-item-lv2")} key={indexLv2}>
                           <div className={cx("header__nav-item-action")}>
-                            <Link to={navItemLv2.href}>
+                            <Link to={`/products?keyword=${navItemLv2.titleLv2}`}   onClick={() => setShowModal(false)}>
                               {navItemLv2.titleLv2}
                             </Link>
                             {/* <LuMinus className={cx("header__nav-icon")}/> */}
@@ -654,8 +656,8 @@ function HeaderModal({ isShowModal,setShowModal }) {
                             )}
                           >
                             {navItemLv2.navListLv3.map((navItemLv3, index) => (
-                              <li className={cx("header__nav-item-lv3")}>
-                                <Link to={navItemLv3.href}>
+                              <li className={cx("header__nav-item-lv3")} key={index}>
+                                <Link to={`/products?keyword=${navItemLv3.titleLv3}`}   onClick={() => setShowModal(false)}>
                                   {navItemLv3.titleLv3}
                                 </Link>
                               </li>

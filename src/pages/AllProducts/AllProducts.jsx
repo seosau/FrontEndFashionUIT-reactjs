@@ -25,8 +25,8 @@ export default function AllProducts() {
   // Lấy keyword
 
   // products
-  const [products, setProducts] = useState();
-  const [officialProducts, setOfficialProducts] = useState();
+  const [products, setProducts] = useState([]);
+  const [officialProducts, setOfficialProducts] = useState([]);
   const [keyword, setKeyWord] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [sortProducts, setSortProducts] = useState("default");
@@ -104,7 +104,7 @@ export default function AllProducts() {
   };
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(16);
+  const [currentLimit, setCurrentLimit] = useState(24);
   const [totalPages, setTotalPages] = useState(0);
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
@@ -483,7 +483,7 @@ export default function AllProducts() {
           </div>
         </div>
       </div>
-      {totalPages > 0 && (
+      {totalPages > 1 && (
         <div className={cx("paginations-container")}>
           <ReactPaginate
             nextLabel={<GrNext />}
