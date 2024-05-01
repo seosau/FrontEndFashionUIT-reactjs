@@ -30,7 +30,7 @@ export default function Product({
                 alt={product.name}
               />
             </Link>
-            {discount && <span className={cx("sale")}>{discount}</span>}
+            {discount && <span className={cx("sale")}>{-product.discount}%</span>}
             {ranking ? (
               <div className={cx("product-index-num")}>
                 <span className={cx("cri_index")}></span>
@@ -61,13 +61,13 @@ export default function Product({
               <h3 className={cx("product-name")}>{product.name}</h3>
             </Link>
             <div className={cx("price-box")}>
-              {newPrice ? (
+              {discount ? (
                 <>
-                  <span className={cx("price")}>{newPrice.toLocaleString('de-DE')}.000₫</span>
-                  <span className={cx("compare-price")}>{product.price.toLocaleString('de-DE')}.000₫</span>
+                  <span className={cx("price")}>{((product.price - product.price * product.discount / 100)*1000).toLocaleString('de-DE')}₫</span>
+                  <span className={cx("compare-price")}>{(product.price * 1000).toLocaleString('de-DE')}₫</span>
                 </>
               ) : (
-                <span className={cx("price")}>{product.price.toLocaleString('de-DE')}.000₫</span>
+                <span className={cx("price")}>{(product.price * 1000).toLocaleString('de-DE')}₫</span>
               )}
               {productCount && (
                 <div className={cx("productcount")}>

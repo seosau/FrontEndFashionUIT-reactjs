@@ -62,23 +62,27 @@ export default function Home() {
       const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 13);
       const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 21);
       const saleProductsInTabIndex0 = await Promise.all(itemInTabIndex0.map(async (item) => {
-        const product = await getProductBySlug(item.slug);
+        const product = await getProductById(item.productId);
         product.saleCount = item.saleCount;
+        product.discount = item.discountPercent
         return product;
       }));
       const saleProductsInTabIndex1 = await Promise.all(itemInTabIndex1.map(async (item) => {
-        const product = await getProductBySlug(item.slug);
+        const product = await getProductById(item.productId);
         product.saleCount = item.saleCount;
+        product.discount = item.discountPercent
         return product;
       }));
       const saleProductsInTabIndex2 = await Promise.all(itemInTabIndex2.map(async (item) => {
-        const product = await getProductBySlug(item.slug);
+        const product = await getProductById(item.productId);
         product.saleCount = item.saleCount;
+        product.discount = item.discountPercent
         return product;
       }));
       const saleProductsInTabIndex3 = await Promise.all(itemInTabIndex3.map(async (item) => {
-        const product = await getProductBySlug(item.slug);
+        const product = await getProductById(item.productId);
         product.saleCount = item.saleCount;
+        product.discount = item.discountPercent
         return product;
       }));
       setSaleProductsInTabIndex([saleProductsInTabIndex0, saleProductsInTabIndex1, saleProductsInTabIndex2, saleProductsInTabIndex3])
@@ -88,9 +92,9 @@ export default function Home() {
     }
   }
 
-  const getProductBySlug = async (slug) => {
+  const getProductById = async (productId) => {
     try {
-      const response = await axiosClient.get(`/product/${slug}`);
+      const response = await axiosClient.get(`/getProductById/${productId}`);
       // console.log(response.data)
       return response.data;
     } catch (error) {
@@ -313,7 +317,9 @@ export default function Home() {
                     ranking={index + 1}
                     productCount={true}
                     handleClickEye={() => handleClickEye(product)}
-                    handleClickCart={() => handleClickCart(product)} />
+                    handleClickCart={() => handleClickCart(product)}
+                    discount={product.discount ? true : false}
+                  />
                 </SwiperSlide>
               )) : <></>}
             </Swiper>
@@ -363,6 +369,7 @@ export default function Home() {
                                     product={product}
                                     handleClickCart={() => handleClickCart(product)}
                                     handleClickEye={() => handleClickEye(product)}
+                                    discount={product.discount ? true : false}
                                   />
                                 </SwiperSlide>
                               ))}
@@ -453,6 +460,7 @@ export default function Home() {
                           {products ? maleProducts?.map((product, index) => (
                             <SwiperSlide key={index} className={cx("product-container")}>
                               <Product
+                                discount={product.discount ? true : false}
                                 product={product}
                                 handleClickCart={() => handleClickCart(product)}
                                 handleClickEye={() => handleClickEye(product)} />
@@ -471,6 +479,7 @@ export default function Home() {
                           {products ? femaleProducts?.map((product, index) => (
                             <SwiperSlide key={index} className={cx("product-container")}>
                               <Product
+                                discount={product.discount ? true : false}
                                 product={product}
                                 handleClickCart={() => handleClickCart(product)}
                                 handleClickEye={() => handleClickEye(product)}
@@ -491,6 +500,7 @@ export default function Home() {
                             <SwiperSlide key={index} className={cx("product-container")}>
                               <Product
                                 product={product}
+                                discount={product.discount ? true : false}
                                 handleClickCart={() => handleClickCart(product)}
                                 handleClickEye={() => handleClickEye(product)}
                               />
@@ -561,6 +571,7 @@ export default function Home() {
                 <SwiperSlide key={index} className={cx("product-container")}>
                   <Product
                     product={product}
+                    discount={product.discount ? true : false}
                     handleClickCart={() => handleClickCart(product)}
                     handleClickEye={() => handleClickEye(product)}
                   />
