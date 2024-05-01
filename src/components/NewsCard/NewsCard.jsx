@@ -85,9 +85,7 @@ export default function NewsCard({ blog }) {
         <div className={cx("block-thumb")}>
           <Link className={cx("thumb ")} to={`/blog/${blog.slug}`} title={blog.title}>
             <img
-              width={320}
-              height={240}
-              className={cx("lazyload")}
+              className={cx("lazyload", "fixed-size-image")}
               src={convertImageUrl(blog.description)}
               alt={blog.title}
             />

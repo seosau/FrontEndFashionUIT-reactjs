@@ -92,7 +92,7 @@ export default function ProductMainInfo({ product }) {
           <div className={cx("small-container")}>
             <div className={cx("left-image")}>
               <div className={cx("main-image")}>
-                <img src={product.images[0].imgUrl} />
+                <img src={product.images[mainImgIndex].imgUrl} />
               </div>
               <div className={cx("small-images")}>
                 <Swiper
