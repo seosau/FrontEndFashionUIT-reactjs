@@ -11,6 +11,10 @@ import { IoClose } from "react-icons/io5";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
 import { useDebounce } from "../../../../hooks";
+
+import { ConfirmDialog } from "primereact/confirmdialog";
+import { confirmDialog } from "primereact/confirmdialog";
+
 import { Toast } from "primereact/toast";
 
 import style from "./ListProducts.module.scss";
@@ -29,6 +33,7 @@ function ListProducts() {
   const [searchResult, setSearchResult] = useState([]);
   const debounced = useDebounce(searchValue, 500);
   const inputRef = useRef();
+
   const handleClear = () => {
     setSearchValue("");
     setSearchResult([]);
@@ -43,7 +48,7 @@ function ListProducts() {
   };
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(10);
+  const [currentLimit, setCurrentLimit] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
@@ -62,10 +67,10 @@ function ListProducts() {
   }, [currentPage]);
   useEffect(() => {
     if (!debounced.trim()) {
+      fetchData();
     } else {
       const fetchApi = async () => {
         setLoading(true);
-
         await axiosClient
           .get(`/product/search/${debounced}`)
           .then(({ data }) => {
@@ -104,18 +109,7 @@ function ListProducts() {
   };
   // delete 1 product
   const deleteProduct = (slug) => {
-    console.log(slug)
-    // setProducts((prevProducts) =>
-    //   prevProducts.filter((product) => product.slug !== slug)
-    // );
-    // axiosClient
-    //   .delete(`/admin/product/delete/${slug}`)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    confirm(slug);
   };
   // selected 1 product
   const selectedProduct = (slug) => {
@@ -140,27 +134,21 @@ function ListProducts() {
   // delete many products
   const deleteSelectedproduct = (e) => {
     e.preventDefault();
-    axiosClient
-      .delete("/admin/product/delete/all", { data: selectedProducts })
-      .then((res) => {
-        setProducts((prevProducts) =>
-          prevProducts.filter(
-            (product) => !selectedProducts.includes(product.slug)
-          )
-        );
-        setSelectedProducts([]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    confirm("")
   };
 
   // sale hour
+
   const [saleHour, setSaleHour] = useState(-1)
   const [hidePopup, setHidePopup] = useState(true)
   const [productId, setProductId] = useState('')
+
   const currentDate = new Date();
-  const initialSaleDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  const initialSaleDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
   const [saleDay, setSaleDay] = useState(initialSaleDay);
   const [discountPercent, setDiscountPercent] = useState(0)
   const toast = useRef(null);
@@ -169,6 +157,7 @@ function ListProducts() {
   };
 
   const addProductToSale = async () => {
+
     if (parseInt(saleHour) === -1) {
       toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn khung giờ', life: 3000 });
       return
@@ -192,20 +181,96 @@ function ListProducts() {
         setSaleHour(-1)
         setSaleDay(new Date())
       })
-      .catch(error => {
-        toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Đã có lỗi xảy ra', life: 3000 });
-        console.log(error)
+      .then((res) => {
+        console.log(res);
+        toast.current.show({
+          severity: "success",
+          summary: "Thành công",
+          detail: "Thêm sản phẩm thành công",
+          life: 3000,
+        });
+        setHidePopup((prevState) => !prevState);
       })
-  }
+      .catch((error) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Lỗi",
+          detail: "Đã có lỗi xảy ra",
+          life: 3000,
+        });
+        console.log(error);
+      });
+  };
 
   const togglePopup = (productId = '') => {
     setHidePopup(prevState => !prevState)
     setProductId(productId)
   }
 
+  // confirm popup
+  const accept = (slug) => {
+    if (!!slug) {
+      toast.current.show({
+        severity: "success",
+        summary: "Thông báo",
+        detail: "Xóa sản phẩm thành công",
+        life: 3000,
+      });
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.slug !== slug)
+      );
+      axiosClient
+        .delete(`/admin/product/delete/${slug}`)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axiosClient
+        .delete("/admin/product/delete/all", { data: selectedProducts })
+        .then((res) => {
+          setProducts((prevProducts) =>
+            prevProducts.filter(
+              (product) => !selectedProducts.includes(product.slug)
+            )
+          );
+          setSelectedProducts([]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+  const reject = () => {};
+  const confirm = (slug) => {
+    if (!!slug) {
+      confirmDialog({
+        message: "Bạn có muốn xóa sản phẩm này?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () => accept(slug),
+        reject,
+      });
+    } else {
+      confirmDialog({
+        message: "Bạn có muốn xóa tất cả các sản phẩm được chọn?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () => accept(slug),
+        reject,
+      });
+    }
+  };
   return (
     <div className={cx("addproduct__container")}>
       <Toast ref={toast} />
+      <ConfirmDialog />
       <div className={cx("addproduct__header")}>
         <h1 className={cx("addproduct__header-title")}>Danh sách sản phẩm</h1>
         <Link
@@ -327,11 +392,12 @@ function ListProducts() {
                           Edit
                         </Link>
                       </li>
-                      <li className={cx("product-action-item")}>
-                        <CiSquareRemove
-                          className={cx("icon", "icon-remove")}
-                          onClick={() => deleteProduct(product.slug)}
-                        />
+
+                      <li
+                        className={cx("product-action-item")}
+                        onClick={() => deleteProduct(product.slug)}
+                      >
+                        <CiSquareRemove className={cx("icon", "icon-remove")} />
                         Remove
                       </li>
                       <li className={cx("product-action-item")} >
@@ -341,7 +407,9 @@ function ListProducts() {
                           />
                           Add Sale
                         </div>
-                        {!hidePopup && <div className={cx("popup-backdrop")}></div>}
+                        {!hidePopup && (
+                          <div className={cx("popup-backdrop")}></div>
+                        )}
                         {!hidePopup && (
                           <div className={cx("popup-container")}>
                             <div className={cx("popup-header")}>
@@ -357,7 +425,10 @@ function ListProducts() {
                             <div className={cx("popup-content")}>
                               <div className={cx("hour")}>
                                 <span>Chọn khung giờ:</span>
-                                <select value={saleHour} onChange={(e) => setSaleHour(e.target.value)}>
+                                <select
+                                  value={saleHour}
+                                  onChange={(e) => setSaleHour(e.target.value)}
+                                >
                                   <option value={-1}>Chọn khung giờ</option>
                                   <option value={1}>00:00 - 06:00</option>
                                   <option value={7}>06:00 - 12:00</option>
@@ -367,7 +438,11 @@ function ListProducts() {
                               </div>
                               <div className={cx("date")}>
                                 <span>Chọn ngày:</span>
-                                <input type="date" value={saleDay} onChange={handleChangeSaleDay} />
+                                <input
+                                  type="date"
+                                  value={saleDay}
+                                  onChange={handleChangeSaleDay}
+                                />
                               </div>
                               <div className={cx("discount")}>
                                 <span>Phần trăm giảm giá:</span>

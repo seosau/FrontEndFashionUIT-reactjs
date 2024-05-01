@@ -40,9 +40,9 @@ export const generateErrorMessage = (field) => {
       return "Chất liệu chưa nhập";
     case "category.sex":
       return "Phân loại  giới tính chưa nhập";
-    case "color":
+    case "colors":
       return "Màu sắc chưa nhập";
-    case "size":
+    case "sizes":
       return "Kích cỡ chưa nhập";
     case "stock":
       return "Số lượng sản phẩm trong kho chưa nhập";
@@ -54,6 +54,8 @@ export const generateErrorMessage = (field) => {
       return "Email chưa nhập";
     case "content":
       return "Nội dung chưa nhập";
+    case "shortDesc":
+      return "Mô tả tóm tắt chưa nhập";
     default:
       return "";
   }

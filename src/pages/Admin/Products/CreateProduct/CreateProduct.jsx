@@ -1,5 +1,5 @@
 // use hooks
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 // use icons
 import { CiCircleRemove } from "react-icons/ci";
@@ -14,6 +14,8 @@ import { checkEmptyKeys, generateErrorMessage } from "../../../../utils";
 // use component
 import Editor from "../../../../components/Editor/Editor";
 
+// use toast
+import { Toast } from "primereact/toast";
 // use style
 import style from "./CreateProduct.module.scss";
 import className from "classnames/bind";
@@ -43,6 +45,7 @@ function CreateProduct() {
   const [currentSize, setCurrentSize] = useState("");
   const [currentColor, setCurrentColor] = useState("");
   const [errors, setErrors] = useState({});
+  const toast = useRef(null);
   const addSize = (e) => {
     e.preventDefault();
     if (currentSize.trim() !== "") {
@@ -190,19 +193,39 @@ function CreateProduct() {
     emptyKeys.forEach((key) => {
       newErrors[key] = generateErrorMessage(key);
     });
+    console.log(newErrors);
     if (Object.keys(newErrors).length > 1) {
+      toast.current.show({
+        severity: "warn",
+        summary: "Thông Báo",
+        detail: "Kiểm tra lại các thông tin!",
+      });
       setErrors(newErrors);
     } else {
       axiosClient
         .post("/admin/product/store", productInfo)
         .then((res) => {
+          toast.current.show({
+            severity: "success",
+            summary: "Thông Báo",
+            detail: "Thêm sản phẩm thành công!",
+          });
           navigate("/admin/products");
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          toast.current.show({
+            severity: "error",
+            summary: "Thông Báo",
+            detail: "Thêm sản phẩm thất bại!",
+          });
+
+          console.log(error);
+        });
     }
   };
   return (
     <div className={cx("container")}>
+      <Toast ref={toast} />
       <form className={cx("formcontainer")}>
         <h2 className={cx("title")}>Biểu mẫu thêm sản phẩm</h2>
         <div className={cx("form-group")}>
@@ -444,7 +467,7 @@ function CreateProduct() {
             </label>
             <ul className={cx("list-stock")}>
               {productInfo.stock.map((item, index) => (
-                <li className={cx("item-stock")} key={index}> 
+                <li className={cx("item-stock")} key={index}>
                   <span>
                     Size {item.size} - Màu {item.color}:
                   </span>
@@ -521,7 +544,7 @@ Thiết kế ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp
               {productInfo.images.length > 0 && (
                 <div className={cx("imgs-container")}>
                   {productInfo.images.map((image, index) => {
-                    return image.color ===  color.colorName ? (
+                    return image.color === color.colorName ? (
                       <span className={cx("img-item")} key={index}>
                         <CiCircleRemove
                           className={cx("icon-remove", "icon-remove-position")}
