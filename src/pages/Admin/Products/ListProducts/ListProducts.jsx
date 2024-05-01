@@ -11,6 +11,10 @@ import { IoClose } from "react-icons/io5";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
 import { useDebounce } from "../../../../hooks";
+
+import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
+import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
+
 import { Toast } from "primereact/toast";
 
 import style from "./ListProducts.module.scss";
@@ -29,6 +33,7 @@ function ListProducts() {
   const [searchResult, setSearchResult] = useState([]);
   const debounced = useDebounce(searchValue, 500);
   const inputRef = useRef();
+
   const handleClear = () => {
     setSearchValue("");
     setSearchResult([]);
@@ -104,18 +109,17 @@ function ListProducts() {
   };
   // delete 1 product
   const deleteProduct = (slug) => {
-    console.log(slug)
-    // setProducts((prevProducts) =>
-    //   prevProducts.filter((product) => product.slug !== slug)
-    // );
-    // axiosClient
-    //   .delete(`/admin/product/delete/${slug}`)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product.slug !== slug)
+    );
+    axiosClient
+      .delete(`/admin/product/delete/${slug}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   // selected 1 product
   const selectedProduct = (slug) => {
@@ -156,11 +160,15 @@ function ListProducts() {
   };
 
   // sale hour
-  const [saleHour, setSaleHour] = useState(-1)
-  const [hidePopup, setHidePopup] = useState(true)
-  const [slug, setSlug] = useState('')
+  const [saleHour, setSaleHour] = useState(-1);
+  const [hidePopup, setHidePopup] = useState(true);
+  const [slug, setSlug] = useState("");
   const currentDate = new Date();
-  const initialSaleDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  const initialSaleDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
   const [saleDay, setSaleDay] = useState(initialSaleDay);
   const toast = useRef(null);
   const handleChangeSaleDay = (event) => {
@@ -169,38 +177,64 @@ function ListProducts() {
 
   const addProductToSale = async () => {
     const tmp = [...products];
-    const productToSale = tmp.find(product => product.slug === slug);
-    console.log(productToSale.slug)
+    const productToSale = tmp.find((product) => product.slug === slug);
+    console.log(productToSale.slug);
 
     if (saleHour === -1) {
-      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn khung giờ', life: 3000 });
-      return
+      toast.current.show({
+        severity: "error",
+        summary: "Lỗi",
+        detail: "Vui lòng chọn khung giờ",
+        life: 3000,
+      });
+      return;
     }
 
-    await axiosClient.post('/admin/sale/add', {
-      slug: productToSale.slug,
-      saleHour: saleHour,
-      saleDay: saleDay
-    })
-      .then(res => {
-        console.log(res)
-        toast.current.show({ severity: 'success', summary: 'Thành công', detail: 'Thêm sản phẩm thành công', life: 3000 });
-        setHidePopup(prevState => !prevState)
+    await axiosClient
+      .post("/admin/sale/add", {
+        slug: productToSale.slug,
+        saleHour: saleHour,
+        saleDay: saleDay,
       })
-      .catch(error => {
-        toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Đã có lỗi xảy ra', life: 3000 });
-        console.log(error)
+      .then((res) => {
+        console.log(res);
+        toast.current.show({
+          severity: "success",
+          summary: "Thành công",
+          detail: "Thêm sản phẩm thành công",
+          life: 3000,
+        });
+        setHidePopup((prevState) => !prevState);
       })
-  }
+      .catch((error) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Lỗi",
+          detail: "Đã có lỗi xảy ra",
+          life: 3000,
+        });
+        console.log(error);
+      });
+  };
 
-  const togglePopup = (slug = '') => {
-    setHidePopup(prevState => !prevState)
-    setSlug(slug)
-  }
+  const togglePopup = (slug = "") => {
+    setHidePopup((prevState) => !prevState);
+    setSlug(slug);
+  };
 
+  // confirm popup
+  const [visible, setVisible] = useState(false);
+  const accept = () => {
+    console.log("ok");
+  };
+  const reject = () => {
+    console.log("c");
+  };
+  
   return (
     <div className={cx("addproduct__container")}>
       <Toast ref={toast} />
+
       <div className={cx("addproduct__header")}>
         <h1 className={cx("addproduct__header-title")}>Danh sách sản phẩm</h1>
         <Link
@@ -322,21 +356,35 @@ function ListProducts() {
                           Edit
                         </Link>
                       </li>
-                      <li className={cx("product-action-item")}>
-                        <CiSquareRemove
-                          className={cx("icon", "icon-remove")}
-                          onClick={() => deleteProduct(product.slug)}
-                        />
+                      <ConfirmPopup
+                      
+                        visible={visible}
+                        onHide={() => setVisible(false)}
+                        message="Bạn có muốn xoá sản phẩm này"
+                        icon="pi pi-exclamation-triangle"
+                        accept={accept}
+                        reject={reject}
+                      />
+                      <li
+                        className={cx("product-action-item")}
+                        onClick={
+                          () => setVisible(true)
+                          // () => deleteProduct(product.slug)
+                        }
+                      >
+                        <CiSquareRemove className={cx("icon", "icon-remove")} />
                         Remove
                       </li>
-                      <li className={cx("product-action-item")} >
+                      <li className={cx("product-action-item")}>
                         <div onClick={() => togglePopup(product.slug)}>
                           <CiSquarePlus
                             className={cx("icon", "icon-add-sale")}
                           />
                           Add Sale
                         </div>
-                        {!hidePopup && <div className={cx("popup-backdrop")}></div>}
+                        {!hidePopup && (
+                          <div className={cx("popup-backdrop")}></div>
+                        )}
                         {!hidePopup && (
                           <div className={cx("popup-container")}>
                             <div className={cx("popup-header")}>
@@ -352,7 +400,10 @@ function ListProducts() {
                             <div className={cx("popup-content")}>
                               <div className={cx("hour")}>
                                 <span>Chọn khung giờ:</span>
-                                <select value={saleHour} onChange={(e) => setSaleHour(e.target.value)}>
+                                <select
+                                  value={saleHour}
+                                  onChange={(e) => setSaleHour(e.target.value)}
+                                >
                                   <option value={-1}>Chọn khung giờ</option>
                                   <option value={1}>00:00 - 06:00</option>
                                   <option value={7}>06:00 - 12:00</option>
@@ -362,7 +413,11 @@ function ListProducts() {
                               </div>
                               <div className={cx("date")}>
                                 <span>Chọn ngày:</span>
-                                <input type="date" value={saleDay} onChange={handleChangeSaleDay} />
+                                <input
+                                  type="date"
+                                  value={saleDay}
+                                  onChange={handleChangeSaleDay}
+                                />
                               </div>
                               <div className={cx("popup-button-group")}>
                                 <button

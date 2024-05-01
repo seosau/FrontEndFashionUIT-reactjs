@@ -122,7 +122,6 @@ function CheckOut() {
           handleCheckoutBanking();
         } else {
           handleCheckoutCOD();
-          checkoutItems = [];
         }
       }
     } else {

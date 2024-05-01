@@ -1,5 +1,5 @@
 // use hooks
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 // use icons
 import { CiCircleRemove } from "react-icons/ci";
@@ -13,6 +13,9 @@ import { checkEmptyKeys, generateErrorMessage } from "../../../../utils";
 
 // use component
 import Editor from "../../../../components/Editor/Editor";
+
+// use toast
+import { Toast } from "primereact/toast";
 
 // use style
 import style from "./EditProduct.module.scss";
@@ -42,6 +45,7 @@ function EditProduct() {
   const [currentSize, setCurrentSize] = useState("");
   const [errors, setErrors] = useState({});
   const [currentColor, setCurrentColor] = useState("");
+  const toast = useRef(null);
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -200,28 +204,40 @@ function EditProduct() {
 
   const updateProduct = (e) => {
     e.preventDefault();
-    console.log(productInfo)
+    console.log(productInfo);
     const emptyKeys = checkEmptyKeys(productInfo);
     const newErrors = {};
     emptyKeys.forEach((key) => {
       newErrors[key] = generateErrorMessage(key);
     });
     if (Object.keys(newErrors).length > 1) {
-      console.log("Có lỗi kkk", newErrors)
+      console.log("Có lỗi kkk", newErrors);
       setErrors(newErrors);
     } else {
       axiosClient
         .put(`/admin/product/update/${slug}`, productInfo)
         .then((res) => {
+          toast.current.show({
+            severity: "success",
+            summary: "Thông Báo",
+            detail: "Thêm sản phẩm thành công!",
+          });
           navigate("/admin/products");
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          toast.current.show({
+            severity: "error",
+            summary: "Thông Báo",
+            detail: "Thêm sản phẩm thất bại!",
+          });
+        });
     }
   };
   return (
     <>
       {!loading && (
         <div className={cx("container")}>
+          <Toast ref={toast} />
           <form className={cx("formcontainer")}>
             <h2 className={cx("title")}>Biểu mẫu sửa sản phẩm</h2>
             <div className={cx("form-group")}>
@@ -605,4 +621,3 @@ function EditProduct() {
 }
 
 export default EditProduct;
-
