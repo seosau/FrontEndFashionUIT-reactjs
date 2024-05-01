@@ -91,6 +91,7 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
 
   return (
     <>
+    <Toast ref={toast} />
       {product && (
         <div className={cx("ProductMainInfo-container")}>
           <div className={cx("small-container")}>

@@ -102,6 +102,7 @@ export default function ProductCart() {
         newCart.push({
           productId: item.productId,
           name: product.name,
+          discount: product.discount,
           image: img.imgUrl,
           color: item.color,
           size: item.size,
@@ -115,7 +116,7 @@ export default function ProductCart() {
 
   const calculateTotalPrice = () => {
     let total = checkoutItems.reduce((acc, item) => {
-      return acc + item.price * item.quantity;
+      return acc + (item.price - item.price * item.discount / 100) * item.quantity;
     }, 0);
     setTotalPrice(total);
   };
@@ -317,7 +318,7 @@ export default function ProductCart() {
                                 </div>
                                 <div className={cx("grid-price")}>
                                   <div className={cx("grid-item-cart-price")}>
-                                    <span className={cx("cart-price")}>{(item.discount).toLocaleString("de-DE")}đ</span>
+                                    <span className={cx("cart-price")}>{((item.price - item.price * item.discount / 100) * 1000).toLocaleString("de-DE")}đ</span>
                                   </div>
                                 </div>
                                 <div className={cx("grid-qty")}>
@@ -336,7 +337,7 @@ export default function ProductCart() {
                                 </div>
                                 <div className={cx("grid-total")}>
                                   <div className={cx("grid-cart-price")}>
-                                    <span className={cx("cart-price-total")}>{(item.price * item.quantity).toLocaleString("de-DE")}.000đ</span>
+                                    <span className={cx("cart-price-total")}>{((item.price - item.price * item.discount / 100) * 1000 * item.quantity).toLocaleString("de-DE")}đ</span>
                                   </div>
                                 </div>
                               </div>
