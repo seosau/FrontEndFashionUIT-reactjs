@@ -9,32 +9,53 @@ import { IoMdAdd } from "react-icons/io";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import axiosClient from "../../../../config/axios";
 import { useDebounce } from "../../../../hooks";
-import { Dropdown } from "primereact/dropdown";
 import style from "./ListOrders.module.scss";
 import classNames from "classnames/bind";
+import { ConfirmDialog } from "primereact/confirmdialog";
+import { confirmDialog } from "primereact/confirmdialog";
+import { Dropdown } from "primereact/dropdown";
+import { Toast } from "primereact/toast";
 const cx = classNames.bind(style);
 
 function ListOrders() {
   const navigate = useNavigate();
   // orders
   const [orders, setOrders] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
   // loading
   const [loading, setLoading] = useState(false);
   // search
   const [searchValue, setSearchValue] = useState("");
   const [userId, setUserId] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
   const debounced = useDebounce(searchValue, 500);
   const debouncedUserId = useDebounce(userId, 500);
-
-  const inputRef = useRef();
-  const handleClear = () => {
-    setSearchValue("");
-    setUserId("");
-    setSearchResult([]);
-    inputRef.current.focus();
+  const toast = useRef(null);
+  const accept = (order) => {
+    toast.current.show({ severity: "success", summary: "Thông báo", detail: "Đơn hàng đã được xóa", life: 3000 });
+    setLoading(true);
+    axiosClient
+      .delete(`/admin/orders/delete?orderId=${order._id}`)
+      .then(({ data }) => {
+        fetchData();
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+  const reject = () => {};
+  const confirm = (order) => {
+    confirmDialog({
+      message: "Bạn có muốn xóa đơn hàng này?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () => accept(order),
+      reject,
+    });
+  };
+  const inputRef = useRef();
+
   const handleChange = (e) => {
     const searchValue = e.target.value;
     if (!searchValue.startsWith(" ")) {
@@ -123,16 +144,7 @@ function ListOrders() {
     };
   };
   const deleteOrder = (order) => {
-    setLoading(true);
-    axiosClient
-      .delete(`/admin/orders/delete?orderId=${order._id}`)
-      .then(({ data }) => {
-        fetchData();
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    confirm(order);
   };
   const [selectedState, setSelectedState] = useState(null);
   const [selectedIndex, setSeletedIndex] = useState(null);
@@ -147,6 +159,7 @@ function ListOrders() {
       .then(({ data }) => {
         fetchData();
         setLoading(false);
+        toast.current.show({ severity: "success", summary: "Thông báo", detail: "Cập nhật trạng thái đơn hàng thành công!", life: 3000 });
       })
       .catch((error) => {
         console.log(error);
@@ -156,6 +169,8 @@ function ListOrders() {
   const states = ["Chờ xác nhận", "Đã xác nhận", "Đang vận chuyển", "Đã giao", "Đã hủy"];
   return (
     <div className={cx("addproduct__container")}>
+      <Toast ref={toast} />
+      <ConfirmDialog />
       <div className={cx("addproduct__header")}>
         <h1 className={cx("addproduct__header-title")}>Danh sách đơn hàng</h1>
       </div>
