@@ -24,6 +24,9 @@
   // width: 87%;
   width: 1300px;
 }
+.news-container .small-container .news-side{
+  flex: 3;
+}
 
 .news-container .small-container .title-page {
   font-size: 16px;
@@ -36,14 +39,15 @@
   margin-bottom: 20px;
 }
 
-.news-container .small-container .row {
+.news-container .small-container .news-side .row {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 
 .news-container .small-container .nav-side {
-  width: 40%;
+  flex: 1;
+  // width: 40%;
 }
 
 // CSS của thanh điều hướng =======================================================
@@ -107,5 +111,102 @@
   .breadcrumb li.active span,
   .breadcrumb li strong span {
     color: #fcaf17;
+  }
+}
+//============================================================
+@media (max-width: 1024px) {
+  .news-container .small-container {
+    display:block;
+    flex-direction: row;
+    gap: 1.3em;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 1000px;
+  }
+  .news-container .small-container .nav-side {
+    width: 40%;
+  }
+}
+
+@media (max-width: 768px) {
+  .news-container .small-container {
+    display:block;
+    flex-direction: row;
+    gap: 1.3em;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 750px;
+  }
+  .news-container .small-container .nav-side {
+    width: 40%;
+  }
+  .news-container .small-container .news-side .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-left: 50px;
+  }
+}
+
+@media (max-width: 426px) {
+  .news-container .small-container {
+    display:block;
+    flex-direction: row;
+    gap: 1.3em;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 420px;
+  }
+  .news-container .small-container .nav-side {
+    width: 95%;
+    padding-left: 1em;
+  }
+  .news-container .small-container .news-side .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-left: 50px;
+  }
+}
+
+@media (max-width: 376px) {
+  .news-container .small-container {
+    display:block;
+    flex-direction: row;
+    gap: 1.3em;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 370px;
+  }
+  .news-container .small-container .nav-side {
+    width: 95%;
+    padding-left: 1em;
+  }
+  .news-container .small-container .news-side .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-left: 25px;
+  }
+}
+
+@media (max-width: 320px) {
+  .news-container .small-container {
+    display:block;
+    flex-direction: row;
+    gap: 1.3em;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 315px;
+  }
+  .news-container .small-container .nav-side {
+    width: 95%;
+    padding-left: 1em;
+  }
+  .news-container .small-container .news-side .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-left: 10px;
   }
 }

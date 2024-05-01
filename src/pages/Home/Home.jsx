@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import Product from "../../components/Product/Product";
-
+import { Toast } from "primereact/toast";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -13,15 +13,115 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
-import Backtop from "../../components/Backtop/Backtop";
+import axiosClient from "../../config/axios";
+import { FiInfo } from "react-icons/fi";
+import AddToCartPopup from "../../components/AddToCartPopup/AddToCartPopup";
+import QuickViewPopup from "../../components/QuickViewPopup/QuickViewPopup";
+
+
 const cx = className.bind(styles);
 
 export default function Home() {
   const [tabIndex, setTabIndex] = useState(0);
   const [tabProductIndex, setProductTabIndex] = useState(0);
+  const [products, setProducts] = useState();
+  const [bestSellerProducts, setBestSellerProducts] = useState();
+  const [maleProducts, setMaleProducts] = useState();
+  const [femaleProducts, setFemaleProducts] = useState();
+  const [gymProducts, setGymProducts] = useState();
+  const [saleProductsInTabIndex, setSaleProductsInTabIndex] = useState()
   const currentTime = new Date();
 
   const [width, setWidth] = useState(window.innerWidth);
+
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(Number.MAX_SAFE_INTEGER);
+  const getProducts = async () => {
+    await axiosClient
+      .get(`/products?page=${currentPage}&limit=${currentLimit}`)
+      .then(({ data }) => {
+        setProducts(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getSaleProducts = async () => {
+    try {
+      const month = currentTime.getMonth() + 1;
+      const paddedMonth = month < 10 ? `0${month}` : month;
+      const day = currentTime.getDate();
+      const paddedDay = day < 10 ? `0${day}` : day;
+      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const saleProducts = response.data;
+
+      const itemInTabIndex0 = saleProducts.filter(saleProduct => saleProduct.saleHour === 1);
+      const itemInTabIndex1 = saleProducts.filter(saleProduct => saleProduct.saleHour === 7);
+      const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 13);
+      const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 21);
+      const saleProductsInTabIndex0 = await Promise.all(itemInTabIndex0.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      const saleProductsInTabIndex1 = await Promise.all(itemInTabIndex1.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      const saleProductsInTabIndex2 = await Promise.all(itemInTabIndex2.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      const saleProductsInTabIndex3 = await Promise.all(itemInTabIndex3.map(async (item) => {
+        const product = await getProductBySlug(item.slug);
+        product.saleCount = item.saleCount;
+        return product;
+      }));
+      setSaleProductsInTabIndex([saleProductsInTabIndex0, saleProductsInTabIndex1, saleProductsInTabIndex2, saleProductsInTabIndex3])
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getProductBySlug = async (slug) => {
+    try {
+      const response = await axiosClient.get(`/product/${slug}`);
+      // console.log(response.data)
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const getBestSellerProduct = () => {
+    const productsCopy = [...products];
+    const sortedProducts = productsCopy.sort((a, b) => b.sold - a.sold);
+    setBestSellerProducts(sortedProducts.slice(0, 6));
+  }
+
+  const getMaleProducts = () => {
+    const productsCopy = [...products];
+    const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nam')
+    setMaleProducts(tmpProducts);
+  }
+
+  const getFemaleProducts = () => {
+    const productsCopy = [...products];
+    const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nữ')
+    setFemaleProducts(tmpProducts);
+  }
+
+  const getGymProducts = () => {
+    const productsCopy = [...products];
+    const tmpProducts = productsCopy.filter(product => product.category.categoryDetail.toLowerCase().includes('gym'))
+    setGymProducts(tmpProducts);
+  }
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -80,6 +180,46 @@ export default function Home() {
     />
   );
 
+
+  const [hidePopup, setHidePopup] = useState(true);
+  const [showPopupQuickView, setShowPopupQuickView] = useState(false);
+
+  const [cartProduct, setCartProduct] = useState()
+  const [quickViewProduct, setQuickViewProduct] = useState()
+
+  const handleClickCart = (product = {}) => {
+    setCartProduct(product)
+    setHidePopup(!hidePopup);
+  };
+
+  const handleClickEye = (product = {}) => {
+    setQuickViewProduct(product)
+    setShowPopupQuickView(!showPopupQuickView);
+  }
+
+  const toast = useRef(null);
+
+  const error = () => {
+    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Thêm sản phẩm thất bại', life: 3000 });
+  }
+
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!" });
+  };
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  useEffect(() => {
+    if (products) {
+      getBestSellerProduct()
+      getMaleProducts()
+      getFemaleProducts()
+      getGymProducts()
+    }
+  }, [products])
+
   useEffect(() => {
     if (currentTime.getHours() >= 0 && currentTime.getHours() < 6) {
       setTabIndex(0);
@@ -90,10 +230,12 @@ export default function Home() {
     } else if (currentTime.getHours() >= 20 && currentTime.getHours() < 24) {
       setTabIndex(3);
     }
+    getSaleProducts()
   }, []);
 
   return (
     <main>
+      <Toast ref={toast} />
       <div className={cx("slider-container")}>
         <div className={cx("slideBox")}>
           <div className={cx("slider")}>
@@ -164,11 +306,16 @@ export default function Home() {
               </h2>
             </div>
             <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
-              {[...Array(8).keys()].map((productIndex) => (
-                <SwiperSlide key={productIndex} className={cx("product-container")}>
-                  <Product ranking={1} productCount={5} />
+              {products ? bestSellerProducts?.map((product, index) => (
+                <SwiperSlide key={index} className={cx("product-container")}>
+                  <Product
+                    product={product}
+                    ranking={index + 1}
+                    productCount={true}
+                    handleClickEye={() => handleClickEye(product)}
+                    handleClickCart={() => handleClickCart(product)} />
                 </SwiperSlide>
-              ))}
+              )) : <></>}
             </Swiper>
           </div>
         </div>
@@ -190,9 +337,9 @@ export default function Home() {
                         </div>
                         <div className={cx("text-timing")}>
                           {(index === 0 && currentTime.getHours() >= 0 && currentTime.getHours() < 6) ||
-                          (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
-                          (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
-                          (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
+                            (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
+                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
+                            (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
                             ? "Đang diễn ra"
                             : "Sắp diễn ra"}
                         </div>
@@ -207,18 +354,31 @@ export default function Home() {
                     <div className={cx("tab-products")}>
                       <div className={cx("tab-content", "tab-time", tabIndex === index ? "current" : "")}>
                         <div className={cx("box-container")}>
-                          <Swiper spaceBetween={10} slidesPerView={width > 768 ? 5 : 2} modules={[Navigation]} navigation>
-                            {[...Array(8).keys()].map((productIndex) => (
-                              <SwiperSlide key={productIndex} className={cx("product-container")}>
-                                <Product productCountSale={5} />
-                              </SwiperSlide>
-                            ))}
-                          </Swiper>
+                          {saleProductsInTabIndex ? saleProductsInTabIndex[index].length > 0 ? (
+                            <Swiper spaceBetween={10} slidesPerView={width > 768 ? 5 : 2} modules={[Navigation]} navigation>
+                              {saleProductsInTabIndex[index].map((product, productIndex) => (
+                                <SwiperSlide key={productIndex} className={cx("product-container")}>
+                                  <Product
+                                    productCountSale={true}
+                                    product={product}
+                                    handleClickCart={() => handleClickCart(product)}
+                                    handleClickEye={() => handleClickEye(product)}
+                                  />
+                                </SwiperSlide>
+                              ))}
+                            </Swiper>
+                          ) : (
+                            <div className={cx("no-sale-product")}>
+                              <FiInfo className={cx("no-sale-product-icon")} />
+                              <p>Không có sản phẩm nào được giảm giá vào khung giờ này</p>
+                            </div>
+                          ) : <></>}
                         </div>
                       </div>
                     </div>
                   </TabPanel>
                 ))}
+
               </Tabs>
             </div>
           </div>
@@ -290,11 +450,14 @@ export default function Home() {
                     <div className={cx("tab-content", "tab-category", tabProductIndex === 0 ? "current" : "")}>
                       <div className={cx("box-container")}>
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
+                          {products ? maleProducts?.map((product, index) => (
+                            <SwiperSlide key={index} className={cx("product-container")}>
+                              <Product
+                                product={product}
+                                handleClickCart={() => handleClickCart(product)}
+                                handleClickEye={() => handleClickEye(product)} />
                             </SwiperSlide>
-                          ))}
+                          )) : <></>}
                         </Swiper>
                       </div>
                     </div>
@@ -305,11 +468,15 @@ export default function Home() {
                     <div className={cx("tab-content", "tab-category", tabProductIndex === 1 ? "current" : "")}>
                       <div className={cx("box-container")}>
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
+                          {products ? femaleProducts?.map((product, index) => (
+                            <SwiperSlide key={index} className={cx("product-container")}>
+                              <Product
+                                product={product}
+                                handleClickCart={() => handleClickCart(product)}
+                                handleClickEye={() => handleClickEye(product)}
+                              />
                             </SwiperSlide>
-                          ))}
+                          )) : <></>}
                         </Swiper>
                       </div>
                     </div>
@@ -320,11 +487,15 @@ export default function Home() {
                     <div className={cx("tab-content", "tab-category", tabProductIndex === 2 ? "current" : "")}>
                       <div className={cx("box-container")}>
                         <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {[...Array(8).keys()].map((productIndex) => (
-                            <SwiperSlide key={productIndex} className={cx("product-container")}>
-                              <Product />
+                          {products ? gymProducts?.map((product, index) => (
+                            <SwiperSlide key={index} className={cx("product-container")}>
+                              <Product
+                                product={product}
+                                handleClickCart={() => handleClickCart(product)}
+                                handleClickEye={() => handleClickEye(product)}
+                              />
                             </SwiperSlide>
-                          ))}
+                          )) : <></>}
                         </Swiper>
                       </div>
                     </div>
@@ -337,7 +508,7 @@ export default function Home() {
                     </div>
                     <p>
                       Thời trang Nam
-                      <span>24 sản phẩm</span>
+                      <span>{products ? maleProducts?.length : 0} sản phẩm</span>
                     </p>
                   </Tab>
                   <Tab className={cx("tab-link", "item", tabProductIndex === 1 ? "current" : "")}>
@@ -346,7 +517,7 @@ export default function Home() {
                     </div>
                     <p>
                       Thời trang Nữ
-                      <span>24 sản phẩm</span>
+                      <span>{products ? femaleProducts?.length : 0} sản phẩm</span>
                     </p>
                   </Tab>
                   <Tab className={cx("tab-link", "item", tabProductIndex === 2 ? "current" : "")}>
@@ -355,7 +526,7 @@ export default function Home() {
                     </div>
                     <p>
                       Thời trang Gym
-                      <span>24 sản phẩm</span>
+                      <span>{products ? gymProducts?.length : 0} sản phẩm</span>
                     </p>
                   </Tab>
                 </TabList>
@@ -386,9 +557,13 @@ export default function Home() {
               </h2>
             </div>
             <Swiper modules={[Navigation]} spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation>
-              {[...Array(8).keys()].map((productIndex) => (
-                <SwiperSlide key={productIndex} className={cx("product-container")}>
-                  <Product productCount={5} />
+              {gymProducts?.map((product, index) => (
+                <SwiperSlide key={index} className={cx("product-container")}>
+                  <Product
+                    product={product}
+                    handleClickCart={() => handleClickCart(product)}
+                    handleClickEye={() => handleClickEye(product)}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -437,6 +612,21 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {showPopupQuickView &&
+        <QuickViewPopup
+          product={quickViewProduct}
+          togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
+      {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
+      {!hidePopup &&
+        <AddToCartPopup
+          product={cartProduct}
+          togglePopup={() => setHidePopup(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
     </main>
   );
 }

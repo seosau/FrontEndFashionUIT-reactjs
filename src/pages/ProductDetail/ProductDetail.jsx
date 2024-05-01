@@ -163,7 +163,7 @@ export default function ProductDetail() {
                       <div
                         className={cx("tab-content-trending", "tab-category")}
                       >
-                        <div className={cx("box-container")}>
+                        <div className={cx("box-container-swiper")}>
                           <Swiper
                             spaceBetween={10}
                             slidesPerView={4}

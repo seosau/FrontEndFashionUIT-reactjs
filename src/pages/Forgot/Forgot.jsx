@@ -2,13 +2,16 @@ import style from "./Forgot.module.scss";
 import className from "classnames/bind";
 import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Toast } from "primereact/toast";
+
 const cx = className.bind(style);
 function Forgot() {
   const [isFullFilled, setIsFullFilled] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [email, setEmail] = useState("");
+  const toast = useRef(null);
   const navigate = useNavigate();
   const validateForm = () => {
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
@@ -37,11 +40,11 @@ function Forgot() {
         .catch((error) => {
           switch (error.response.status) {
             case 404: {
-              window.alert("Email không tồn tại!");
+              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Email không tồn tại", life: 3000 });
               break;
             }
             case 500: {
-              window.alert("Đã có lỗi xãy ra, vui lòng thử lại!");
+              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Đã có lỗi xãy ra, vui lòng thử lại!', life: 3000 });
               break;
             }
           }
@@ -50,6 +53,7 @@ function Forgot() {
   };
   return (
     <div>
+      <Toast ref={toast} />
       <div className={cx("mainContainer")}>
         <form className={cx("formContainer")}>
           <div className={cx("title")}>Nhập email của bạn</div>

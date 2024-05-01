@@ -2,9 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 import style from "./Register.module.scss";
 import className from "classnames/bind";
 import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axiosClient from "../../config/axios";
-
+import { Toast } from "primereact/toast";
 const cx = className.bind(style);
 function Register() {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ function Register() {
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPassValid, setIsPassValid] = useState(true);
+  const toast = useRef(null);
   const validateForm = () => {
     const phoneNumberRegex = new RegExp(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g);
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
@@ -61,11 +62,11 @@ function Register() {
       axiosClient
         .post(`/auth/register`, user)
         .then((response) => {
-          window.alert("Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản của bạn.");
+          toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản của bạn.", life: 3000 });
           navigate("/login");
         })
         .catch((error) => {
-          window.alert("Đăng ký không thành công! Vui lòng thử lại.");
+          toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đăng ký không thành công! Vui lòng thử lại.", life: 3000 });
           console.log(error.response);
         });
     }
@@ -75,6 +76,7 @@ function Register() {
   // }, [registerInfo]);
   return (
     <div>
+      <Toast ref={toast} />
       <div className={cx("mainContainer")}>
         <form className={cx("formContainer")}>
           <div className={cx("title")}>ĐĂNG KÝ</div>

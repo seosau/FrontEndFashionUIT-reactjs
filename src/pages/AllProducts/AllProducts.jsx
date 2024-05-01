@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactPaginate from "react-paginate";
-import { Link, useLocation } from "react-router-dom";
+import { Await, Link, useLocation } from "react-router-dom";
 import { FiX } from "react-icons/fi";
 import { FaPlus, FaFilter } from "react-icons/fa6";
 import { BsSortDown } from "react-icons/bs";
 import { GrNext, GrPrevious } from "react-icons/gr";
-
+import { Toast } from "primereact/toast";
 import style from "./AllProducts.module.scss";
 import className from "classnames/bind";
 import Product from "../../components/Product/Product";
 import axiosClient from "../../config/axios";
-
+import AddToCartPopup from "../../components/AddToCartPopup/AddToCartPopup";
+import QuickViewPopup from "../../components/QuickViewPopup/QuickViewPopup";
 const cx = className.bind(style);
 
 export default function AllProducts() {
@@ -79,7 +80,7 @@ export default function AllProducts() {
   };
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(10);
+  const [currentLimit, setCurrentLimit] = useState(16);
   const [totalPages, setTotalPages] = useState(0);
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
@@ -155,6 +156,22 @@ export default function AllProducts() {
       return;
     }
   };
+
+  const [hidePopup, setHidePopup] = useState(true);
+  const [showPopupQuickView, setShowPopupQuickView] = useState(false);
+
+  const [cartProduct, setCartProduct] = useState()
+  const [quickViewProduct, setQuickViewProduct] = useState()
+
+  const handleClickCart = (product = {}) => {
+    setCartProduct(product)
+    setHidePopup(!hidePopup);
+  };
+
+  const handleClickEye = (product = {}) => {
+    setQuickViewProduct(product)
+    setShowPopupQuickView(!showPopupQuickView);
+  }
 
   const filterProducts = () => {
     let amountPrice = 0;
@@ -290,21 +307,41 @@ export default function AllProducts() {
   useEffect(() => {
     getProducts();
   }, [currentPage]);
+
+  const toast = useRef(null);
+
+  const error = () => {
+    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Thêm sản phẩm thất bại', life: 3000 });
+  }
+
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!" });
+  };
+
+
   useEffect(() => {
-    getProducts();
-    function handleResize() {
-      if (window.innerWidth > 980) {
-        setSideBarVisible(true);
+    const fetchData = async () => {
+      await setCurrentPage(1);
+      getProducts();
+
+      function handleResize() {
+        if (window.innerWidth > 980) {
+          setSideBarVisible(true);
+        }
+        if (window.innerWidth < 980) {
+          setSideBarVisible(false);
+        }
       }
-      if (window.innerWidth < 980) {
-        setSideBarVisible(false);
-      }
-    }
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
     };
+
+    fetchData();
   }, [location.search]);
+
   useEffect(() => {
     filterProducts();
   }, [selectedFilter]);
@@ -383,7 +420,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -405,7 +442,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -427,7 +464,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -449,7 +486,7 @@ export default function AllProducts() {
                       }
                       className={cx("filterCheckBox")}
                       type="checkbox"
-                      onChange={() => {}}
+                      onChange={() => { }}
                     ></input>
                     <p className={cx("filterOptItemTxt")}>{item}</p>
                   </li>
@@ -502,13 +539,21 @@ export default function AllProducts() {
               selectedFilter.length > 0 ? (
                 filteredProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product product={product} />
+                    <Product
+                      product={product}
+                      handleClickCart={() => handleClickCart(product)}
+                      handleClickEye={() => handleClickEye(product)}
+                    />
                   </div>
                 ))
               ) : (
                 products.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
-                    <Product product={product} />
+                    <Product
+                      product={product}
+                      handleClickCart={() => handleClickCart(product)}
+                      handleClickEye={() => handleClickEye(product)}
+                    />
                   </div>
                 ))
               )
@@ -542,6 +587,22 @@ export default function AllProducts() {
           />
         </div>
       )}
+      <Toast ref={toast} />
+      {showPopupQuickView &&
+        <QuickViewPopup
+          product={quickViewProduct}
+          togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
+      {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
+      {!hidePopup &&
+        <AddToCartPopup
+          product={cartProduct}
+          togglePopup={() => setHidePopup(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
     </div>
   );
 }

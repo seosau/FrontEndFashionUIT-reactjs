@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import style from "./ProductMainInfo.module.scss";
 import className from "classnames/bind";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,11 +8,13 @@ import "swiper/scss/navigation";
 import { useStateContext } from "../../context/CartContextProvider";
 import axiosClient from "../../config/axios";
 import { AuthContext } from "../../context/AuthContext";
+import { Toast } from "primereact/toast";
 
 const cx = className.bind(style);
 
-export default function ProductMainInfo({ product }) {
+export default function ProductMainInfo({ product, addToCartSuccess, addToCartFail}) {
   const {isAuth} = useContext(AuthContext)
+  const toast = useRef(null);
   const {cartItems, setCartItems, setQuantityInCart} = useStateContext()
   const [mainImgIndex, setMainImgIndex] = useState(0);
   const switchMainImg = (index) => {
@@ -42,7 +44,8 @@ export default function ProductMainInfo({ product }) {
   const handleAddToCart = async () => {
     if (isAuth) {
       if (product.stock === 0) {
-        return alert("Hết sản phẩm");
+        toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Xin lỗi! Sản phẩm này đã bán hết', life: 3000 });
+        return;
       }
 
       const data = {
@@ -59,6 +62,7 @@ export default function ProductMainInfo({ product }) {
         .post("/cart/add", data)
         .then((response) => {
           console.log(response.data.message);
+          addToCartSuccess()
           setQuantityInCart(response.data.quantity);
           const tmp = [...cartItems];
 
@@ -75,13 +79,13 @@ export default function ProductMainInfo({ product }) {
             tmp.push(data.products);
           }
           setCartItems(tmp);
-          alert(response.data.message);
         })
         .catch((err) => {
+          addToCartFail();
           console.log(err);
         });
     } else {
-      alert("Bạn chưa đăng nhập");
+      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Bạn chưa đăng nhập', life: 3000 });
     }
   };
 
@@ -92,7 +96,7 @@ export default function ProductMainInfo({ product }) {
           <div className={cx("small-container")}>
             <div className={cx("left-image")}>
               <div className={cx("main-image")}>
-                <img src={product.images[0].imgUrl} />
+                <img src={product.images[mainImgIndex].imgUrl} />
               </div>
               <div className={cx("small-images")}>
                 <Swiper
@@ -149,8 +153,12 @@ export default function ProductMainInfo({ product }) {
                   <span className={cx("currency-symbols")}>₫</span>
                 </h3>
                 <h3 className={cx("old-price")}>
-                  {product.price - product.discount * product.price}.000
-                  <span className={cx("currency-symbols")}>₫</span>
+                  {product.discount !== 0 ? 
+                   <>
+                    {product.price - product.discount * product.price}.000
+                    <span className={cx("currency-symbols")}>₫</span>
+                   </>
+                   : ""}
                 </h3>
               </div>
               <p className={cx("short-descripions")}>
