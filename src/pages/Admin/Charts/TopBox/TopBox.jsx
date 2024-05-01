@@ -26,7 +26,7 @@ const TopBox = ({ topDealUsers }) => {
                   </div>
                 </div>
                 <span className={cx("amount")}>
-                  {user.totalAmount.toLocaleString("vi-VN")}.000đ
+                  {Math.round(user.totalAmount).toLocaleString("vi-VN")}.000đ
                 </span>
               </div>
             ))}
