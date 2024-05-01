@@ -12,10 +12,10 @@ import { Toast } from "primereact/toast";
 
 const cx = className.bind(style);
 
-export default function ProductMainInfo({ product, addToCartSuccess, addToCartFail}) {
-  const {isAuth} = useContext(AuthContext)
+export default function ProductMainInfo({ product, addToCartSuccess, addToCartFail }) {
+  const { isAuth } = useContext(AuthContext)
   const toast = useRef(null);
-  const {cartItems, setCartItems, setQuantityInCart} = useStateContext()
+  const { cartItems, setCartItems, setQuantityInCart } = useStateContext()
   const [mainImgIndex, setMainImgIndex] = useState(0);
   const switchMainImg = (index) => {
     setMainImgIndex(index);
@@ -91,7 +91,7 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
 
   return (
     <>
-    <Toast ref={toast} />
+      <Toast ref={toast} />
       {product && (
         <div className={cx("ProductMainInfo-container")}>
           <div className={cx("small-container")}>
@@ -150,16 +150,16 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
               </div>
               <div className={cx("product-price")}>
                 <h3 className={cx("new-price")}>
-                  {product.price}.000
+                  {((product.price - product.discount * product.price / 100) * 1000).toLocaleString('de-DE')}
                   <span className={cx("currency-symbols")}>₫</span>
                 </h3>
                 <h3 className={cx("old-price")}>
-                  {product.discount !== 0 ? 
-                   <>
-                    {product.price - product.discount * product.price}.000
-                    <span className={cx("currency-symbols")}>₫</span>
-                   </>
-                   : ""}
+                  {product.discount !== 0 ?
+                    <>
+                      {(product.price * 1000).toLocaleString('de-DE')}
+                      <span className={cx("currency-symbols")}>₫</span>
+                    </>
+                    : ""}
                 </h3>
               </div>
               <p className={cx("short-descripions")}>
@@ -176,7 +176,7 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
                   </span>
                 </p>
                 <div className={cx("all-color")}>
-                  {product.colors.map((color,index) => (
+                  {product.colors.map((color, index) => (
                     <button
                       className={cx("each-color")}
                       style={{ backgroundColor: color.colorCode }}
@@ -203,7 +203,7 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
                   </span>
                 </p>
                 <div className={cx("all-size")}>
-                  {product.sizes.map((size,index) => (
+                  {product.sizes.map((size, index) => (
                     <div
                       className={cx(
                         activeSize === index ? "active-size" : "each-size"
