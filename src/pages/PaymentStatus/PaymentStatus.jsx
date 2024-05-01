@@ -41,7 +41,7 @@ function PaymentStatus() {
         setStatus(data.status == "00" ? "s" : "f");
         setIsStopped(false);
         setTimeout(() => {
-          navigate("/account/orders");
+          navigate("/products");
         }, 3000);
       })
       .catch((error) => {

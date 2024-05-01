@@ -78,7 +78,7 @@ function CheckOut() {
       .then(({ data }) => {
         setTimeout(() => {
           navigate("/order/success");
-        }, 2000);
+        }, 100);
       })
       .catch((error) => {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");

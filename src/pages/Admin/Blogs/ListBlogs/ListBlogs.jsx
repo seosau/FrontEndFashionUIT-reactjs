@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import { CiSquareRemove } from "react-icons/ci";
@@ -7,6 +7,12 @@ import { GoSearch } from "react-icons/go";
 import { IoMdAdd } from "react-icons/io";
 import axiosClient from "../../../../config/axios";
 import { useDebounce } from "../../../../hooks";
+
+import { ConfirmDialog } from "primereact/confirmdialog";
+import { confirmDialog } from "primereact/confirmdialog";
+
+import { Toast } from "primereact/toast";
+
 import style from "./ListBlogs.module.scss";
 import classNames from "classnames/bind";
 const cx = classNames.bind(style);
@@ -17,6 +23,8 @@ function ListBlogs() {
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
   const debounced = useDebounce(searchValue, 500);
+  const toast = useRef(null);
+
   const handleChange = (e) => {
     const searchValue = e.target.value;
     if (!searchValue.startsWith(" ")) {
@@ -88,31 +96,72 @@ function ListBlogs() {
   };
   const deleteSelectedBlogs = (e) => {
     e.preventDefault();
-    axiosClient
-      .delete("/admin/blog/delete/all", { data: selectedBlogs })
-      .then((res) => {
-        setBlogs((prevBlogs) =>
-          prevBlogs.filter((blog) => !selectedBlogs.includes(blog.slug))
-        );
-        setSelectedBlogs([]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    confirm("")
   };
   const deleteBlog = (slug) => {
-    setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.slug !== slug));
-    axiosClient
-      .delete(`/admin/blog/delete/${slug}`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
+    confirm(slug)
+  };
+
+  // confirm popup
+  const accept = (slug) => {
+    if (!!slug) {
+      toast.current.show({
+        severity: "success",
+        summary: "Thông báo",
+        detail: "Xóa sản phẩm thành công",
+        life: 3000,
       });
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.slug !== slug));
+      axiosClient
+        .delete(`/admin/blog/delete/${slug}`)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axiosClient
+        .delete("/admin/blog/delete/all", { data: selectedBlogs })
+        .then((res) => {
+          setBlogs((prevBlogs) =>
+            prevBlogs.filter((blog) => !selectedBlogs.includes(blog.slug))
+          );
+          setSelectedBlogs([]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+  const reject = () => {};
+  const confirm = (slug) => {
+    if (!!slug) {
+      confirmDialog({
+        message: "Bạn có muốn xóa bài viết này?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () => accept(slug),
+        reject,
+      });
+    } else {
+      confirmDialog({
+        message: "Bạn có muốn xóa tất cả các bài viết được chọn?",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        defaultFocus: "reject",
+        acceptClassName: "p-button-danger",
+        accept: () => accept(slug),
+        reject,
+      });
+    }
   };
   return (
     <div className={cx("listproducts__container")}>
+      <Toast ref={toast} />
+      <ConfirmDialog />
       <div className={cx("addproduct__header")}>
         <h1 className={cx("addproduct__header-title")}>Danh sách bài viết</h1>
         <Link
@@ -202,10 +251,10 @@ function ListBlogs() {
                           Edit
                         </Link>
                       </li>
-                      <li className={cx("product-action-item")}>
+                      <li className={cx("product-action-item")}  onClick={() => deleteBlog(blog.slug)}>
                         <CiSquareRemove
                           className={cx("icon", "icon-remove")}
-                          onClick={() => deleteBlog(blog.slug)}
+                         
                         />
                         Remove
                       </li>
