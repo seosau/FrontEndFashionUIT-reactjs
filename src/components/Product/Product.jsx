@@ -7,16 +7,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import className from "classnames/bind";
 const cx = className.bind(styles);
 
-export default function Product({
-  product,
-  ranking,
-  newPrice,
-  productCount,
-  productCountSale,
-  discount,
-  handleClickCart,
-  handleClickEye
-}) {
+export default function Product({ product, ranking, newPrice, productCount, productCountSale, discount, handleClickCart, handleClickEye }) {
   return (
     <>
       {product ? (
@@ -24,11 +15,7 @@ export default function Product({
           <div className={cx("product-thumbnail")}>
             <Link className={cx("product-overlay")}></Link>
             <Link className={cx("image-thumbnail", "no-underline")}>
-              <img
-                className={cx("lazyload", "loaded")}
-                src={product.images[0].imgUrl}
-                alt={product.name}
-              />
+              <img className={cx("lazyload", "loaded")} src={product?.images[0]?.imgUrl} alt={product.name} />
             </Link>
             {discount && <span className={cx("sale")}>{-product.discount}%</span>}
             {ranking ? (
@@ -43,16 +30,8 @@ export default function Product({
                 <Link to={`/product/detail/${product.slug}`}>
                   <CiSettings className={cx("icon")} title="" />
                 </Link>
-                <IoEyeOutline
-                  className={cx("icon")}
-                  title="Xem trước"
-                  onClick={handleClickEye}
-                />
-                <HiOutlineShoppingBag
-                  className={cx("icon")}
-                  title="Thêm vào giỏ"
-                  onClick={handleClickCart}
-                />
+                <IoEyeOutline className={cx("icon")} title="Xem trước" onClick={handleClickEye} />
+                <HiOutlineShoppingBag className={cx("icon")} title="Thêm vào giỏ" onClick={handleClickCart} />
               </div>
             </div>
           </div>
@@ -63,18 +42,16 @@ export default function Product({
             <div className={cx("price-box")}>
               {discount ? (
                 <>
-                  <span className={cx("price")}>{((product.price - product.price * product.discount / 100)*1000).toLocaleString('de-DE')}₫</span>
-                  <span className={cx("compare-price")}>{(product.price * 1000).toLocaleString('de-DE')}₫</span>
+                  <span className={cx("price")}>{((product.price - (product.price * product.discount) / 100) * 1000).toLocaleString("de-DE")}₫</span>
+                  <span className={cx("compare-price")}>{(product.price * 1000).toLocaleString("de-DE")}₫</span>
                 </>
               ) : (
-                <span className={cx("price")}>{(product.price * 1000).toLocaleString('de-DE')}₫</span>
+                <span className={cx("price")}>{(product.price * 1000).toLocaleString("de-DE")}₫</span>
               )}
               {productCount && (
                 <div className={cx("productcount")}>
                   <div className={cx("countitem", "visible")}>
-                    <span className={cx("a-center")}>
-                      Đã bán {product.sold}
-                    </span>
+                    <span className={cx("a-center")}>Đã bán {product.sold}</span>
                     <div className={cx("countdown")}>
                       <span></span>
                     </div>
@@ -85,9 +62,7 @@ export default function Product({
             {productCountSale && (
               <div className={cx("productcount-sale")}>
                 <div className={cx("countitem", "visible")}>
-                  <span className={cx("a-center")}>
-                    Đã bán {product.saleCount}
-                  </span>
+                  <span className={cx("a-center")}>Đã bán {product.saleCount}</span>
                   <div className={cx("countdown")}>
                     <span></span>
                   </div>
