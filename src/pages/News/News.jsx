@@ -79,24 +79,6 @@ export default function News() {
   }, []);
   return (
     <div className={cx("news-container")}>
-      <section className={cx("bread-crumb")}>
-        <div className={cx("container-this")}>
-          <ul className={cx("breadcrumb")}>
-            <li className={cx("home")}>
-              <Link className={cx("changeurl")} to="/" title="Trang chủ">
-                <span>Trang chủ</span>
-              </Link>
-              <FaChevronRight className={cx("mr_lr")} />
-            </li>
-            <li>
-              <strong>
-                <span>Tin tức</span>
-              </strong>
-            </li>
-            <li></li>
-          </ul>
-        </div>
-      </section>
       <div className={cx("small-container")}>
         <div className={cx("news-side")}>
           <h1 className={cx("title-page")}>Tin tức</h1>

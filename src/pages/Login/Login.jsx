@@ -56,25 +56,28 @@ function Login() {
               setIsAuth(true);
               navigate("/");
             } else {
-              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Vui lòng xác thực email!", life: 3000 });
+              toast.current.show({ severity: "error", summary: "Lỗi", detail: "Vui lòng xác thực email!", life: 3000 });
               console.log("Please verify your email!");
             }
           })
           .catch((error) => {
             switch (error.response.status) {
               case 401: {
-                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Email hoặc mật khẩu không đúng!", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Lỗi", detail: "Email hoặc mật khẩu không đúng!", life: 3000 });
                 break;
               }
               case 500: {
-                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Lỗi", detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
+                break;
+              }
+              default: {
                 break;
               }
             }
           });
       }
     } else {
-      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Bạn đã đăng nhập. Vui lòng đăng xuất trước khi đăng nhập tài khoản khác!", life: 3000 });
+      toast.current.show({ severity: "error", summary: "Lỗi", detail: "Bạn đã đăng nhập. Vui lòng đăng xuất trước khi đăng nhập tài khoản khác!", life: 3000 });
     }
   };
   return (

@@ -21,8 +21,8 @@ export default function ProductCart() {
   const toast = useRef(null);
 
   const reject = () => {
-    toast.current.show({ severity: 'warn', summary: 'Thông Báo', detail: 'Đã hủy xóa sản phẩm', life: 3000 });
-  }
+    toast.current.show({ severity: "warn", summary: "Thông Báo", detail: "Đã hủy xóa sản phẩm", life: 3000 });
+  };
 
   const show = () => {
     toast.current.show({ severity: "success", summary: "Thông Báo", detail: "Xóa thành công!", life: 3000 });
@@ -38,7 +38,7 @@ export default function ProductCart() {
       accept: () => removeFromCart(product),
       reject,
     });
-  }
+  };
 
   const removeFromCart = (product) => {
     const tmp = [...cartItems];
@@ -57,8 +57,8 @@ export default function ProductCart() {
         },
       })
       .then((response) => {
-        show()
-        getCartItems()
+        show();
+        getCartItems();
       })
       .catch((err) => {
         console.error(err);
@@ -116,7 +116,7 @@ export default function ProductCart() {
 
   const calculateTotalPrice = () => {
     let total = checkoutItems.reduce((acc, item) => {
-      return acc + (item.price - item.price * item.discount / 100) * item.quantity;
+      return acc + (item.price - (item.price * item.discount) / 100) * item.quantity;
     }, 0);
     setTotalPrice(total);
   };
@@ -233,23 +233,7 @@ export default function ProductCart() {
     <div className={cx("body-wrap")}>
       <ConfirmDialog style={{ width: "24vw" }} />
       <Toast ref={toast} />
-      <div className={cx("bread_crumb")}>
-        <div className={cx("container")}>
-          <ul className={cx("breadcrumb")}>
-            <li className={cx("home")}>
-              <a href="/" title="Trang chủ">
-                Trang chủ
-              </a>
-            </li>
-            <div className={cx("arrow-right")}>
-              <SlArrowRight />
-            </div>
-            <li className={cx("cart")}>
-              <b>Giỏ Hàng</b>
-            </li>
-          </ul>
-        </div>
-      </div>
+
       <div className={cx("main-cart-page")}>
         <div className={cx("container")}>
           <div className={cx("header-cart")}>
@@ -318,7 +302,7 @@ export default function ProductCart() {
                                 </div>
                                 <div className={cx("grid-price")}>
                                   <div className={cx("grid-item-cart-price")}>
-                                    <span className={cx("cart-price")}>{((item.price - item.price * item.discount / 100) * 1000).toLocaleString("de-DE")}đ</span>
+                                    <span className={cx("cart-price")}>{((item.price - (item.price * item.discount) / 100) * 1000).toLocaleString("de-DE")}đ</span>
                                   </div>
                                 </div>
                                 <div className={cx("grid-qty")}>
@@ -337,7 +321,7 @@ export default function ProductCart() {
                                 </div>
                                 <div className={cx("grid-total")}>
                                   <div className={cx("grid-cart-price")}>
-                                    <span className={cx("cart-price-total")}>{((item.price - item.price * item.discount / 100) * 1000 * item.quantity).toLocaleString("de-DE")}đ</span>
+                                    <span className={cx("cart-price-total")}>{((item.price - (item.price * item.discount) / 100) * 1000 * item.quantity).toLocaleString("de-DE")}đ</span>
                                   </div>
                                 </div>
                               </div>
@@ -456,5 +440,5 @@ export default function ProductCart() {
         </div>
       </div>
     </div>
-  )
+  );
 }

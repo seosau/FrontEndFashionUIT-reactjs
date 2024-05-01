@@ -1,24 +1,23 @@
 import style from "./OrderSuccess.module.scss";
 import className from "classnames/bind";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import Lottie from "react-lottie";
 import * as successAnimationData from "../../animation/Success.json";
-import * as failAnimationData from "../../animation/Fail.json";
 import { useStateContext } from "../../context/CartContextProvider";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosClient from "../../config/axios";
 const cx = className.bind(style);
 
 function OrderSuccess() {
-  const { cartItems, setCartItems, quantityInCart, setQuantityInCart } = useStateContext();
+  const { setCartItems, setQuantityInCart } = useStateContext();
   const navigate = useNavigate();
   useEffect(() => {
     const getCartItems = async () => {
       try {
         const response = await axiosClient.put(`/cart/get`);
         setQuantityInCart(response.data.quantity);
-        setCartItems(response.data.quantity != 0 ? response.data.products : []);
+        setCartItems(response.data.quantity !== 0 ? response.data.products : []);
       } catch (error) {
         console.error("Đã có lỗi xảy ra", error);
       }

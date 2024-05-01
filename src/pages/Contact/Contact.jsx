@@ -43,24 +43,6 @@ function Contact() {
   };
   return (
     <div className={cx("bodyWrap")}>
-      <div className={cx("Breadcrumb")}>
-        <div className={cx("container")}>
-          <ul className={cx("breadcrumb")}>
-            <li className={cx("home")}>
-              <a className={cx("textTrangChu")} href="/" title="Trang chủ">
-                <span>Trang chủ</span>
-              </a>
-              <div className={cx("rightArrow")}>
-                <IoIosArrowForward />
-              </div>
-            </li>
-            <li>
-              <div className={cx("textLienHe")}>Liên hệ</div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
       <div className={cx("layoutContact")}>
         <div className={cx("textFormMap")}>
           <div className={cx("textAndForm")}>
@@ -68,14 +50,10 @@ function Contact() {
               <div className={cx("infoTitle")}>
                 <b>NƠI GIẢI ĐÁP TOÀN BỘ MỌI THẮC MẮC CỦA BẠN?</b>
               </div>
-              <div className={cx("infoQuote")}>
-                Với sứ mệnh "Khách hàng là ưu tiên số 1" chúng tôi luôn mang lại
-                giá trị tốt nhất
-              </div>
+              <div className={cx("infoQuote")}>Với sứ mệnh "Khách hàng là ưu tiên số 1" chúng tôi luôn mang lại giá trị tốt nhất</div>
               <div className={cx("info")}>
                 <div className={cx("address")}>
-                  <b>Địa chỉ: </b>70 Lữ Gia, Phường 15, Quận 11, Thành phố Hồ
-                  Chí Minh
+                  <b>Địa chỉ: </b>70 Lữ Gia, Phường 15, Quận 11, Thành phố Hồ Chí Minh
                 </div>
                 <div className={cx("hotline")}>
                   <div>
@@ -108,22 +86,11 @@ function Contact() {
                       })
                     }
                   />
-                  {errors?.fullName ? (
-                    <div className={cx("error-text")}>{errors.fullName}</div>
-                  ) : null}
+                  {errors?.fullName ? <div className={cx("error-text")}>{errors.fullName}</div> : null}
                 </div>
                 <div className={cx("inputNameEmail")}>
-                  <input
-                    type="text"
-                    placeholder="Email"
-                    value={contactInfo.email}
-                    onChange={(e) =>
-                      setContactInfo({ ...contactInfo, email: e.target.value })
-                    }
-                  />
-                  {errors?.email ? (
-                    <div className={cx("error-text")}>{errors.email}</div>
-                  ) : null}
+                  <input type="text" placeholder="Email" value={contactInfo.email} onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })} />
+                  {errors?.email ? <div className={cx("error-text")}>{errors.email}</div> : null}
                 </div>
               </div>
               <div className={cx("inputPhone")}>
@@ -138,29 +105,14 @@ function Contact() {
                     })
                   }
                 />
-                {errors?.phoneNumber ? (
-                  <div className={cx("error-text")}>{errors.phoneNumber}</div>
-                ) : null}
+                {errors?.phoneNumber ? <div className={cx("error-text")}>{errors.phoneNumber}</div> : null}
               </div>
               <div className={cx("inputContent")}>
-                <input
-                  type="text"
-                  placeholder="Nội dung"
-                  value={contactInfo.content}
-                  onChange={(e) =>
-                    setContactInfo({ ...contactInfo, content: e.target.value })
-                  }
-                />
-                {errors?.content ? (
-                  <div className={cx("error-text")}>{errors.content}</div>
-                ) : null}
+                <input type="text" placeholder="Nội dung" value={contactInfo.content} onChange={(e) => setContactInfo({ ...contactInfo, content: e.target.value })} />
+                {errors?.content ? <div className={cx("error-text")}>{errors.content}</div> : null}
               </div>
               <div className={cx("submitInfo")}>
-                <button
-                  className={cx("buttonSubmit")}
-                  type="submit"
-                  onClick={sendContactInfo}
-                >
+                <button className={cx("buttonSubmit")} type="submit" onClick={sendContactInfo}>
                   Gửi thông tin
                 </button>
               </div>
