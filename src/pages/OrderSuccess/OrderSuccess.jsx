@@ -16,7 +16,7 @@ function OrderSuccess() {
   useEffect(() => {
     const getCartItems = async () => {
       try {
-        const response = await axiosClient.put(`/cart/updateQuantity`);
+        const response = await axiosClient.put(`/cart/get`);
         setQuantityInCart(response.data.quantity);
         setCartItems(response.data.quantity != 0 ? response.data.products : []);
       } catch (error) {
@@ -24,9 +24,9 @@ function OrderSuccess() {
       }
     };
     getCartItems();
-    // setTimeout(() => {
-    //   navigate("/account/orders");
-    // }, 3000);
+    setTimeout(() => {
+      navigate("/products");
+    }, 3000);
   }, []);
   const successOptions = {
     loop: false,
