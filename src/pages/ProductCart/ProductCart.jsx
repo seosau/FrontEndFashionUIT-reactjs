@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import style from "./ProductCart.module.scss";
 import className from "classnames/bind";
 import { SlArrowRight } from "react-icons/sl";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { useState, useEffect, useRef } from "react";
 import { useStateContext } from "../../context/CartContextProvider";
@@ -40,6 +41,18 @@ export default function ProductCart() {
     });
   }
 
+  const handleDeleteAll = () => {
+    confirmDialog({
+      message: "Bạn có muốn xóa tất cả sản phẩm được chọn?",
+      header: "Xác nhận xóa",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept: () => deleteManyItems(),
+      reject,
+    });
+  }
+
   const currentTime = new Date();
 
   const getSaleProducts = async () => {
@@ -66,7 +79,7 @@ export default function ProductCart() {
           }
         }
       }
-      else if (6 <= currentTime.getHours()  && currentTime.getHours() < 12) {
+      else if (6 <= currentTime.getHours() && currentTime.getHours() < 12) {
         for (let item of itemInTabIndex1) {
           for (let product of productsCopy) {
             if (item.productId === product._id) {
@@ -118,11 +131,32 @@ export default function ProductCart() {
       })
       .then((response) => {
         show()
-        getCartItems()
       })
       .catch((err) => {
         console.error(err);
       });
+  };
+
+  const deleteManyItems = async () => {
+    if (checkoutItems.length === cart.length) {
+      try {
+        await axiosClient.delete("/cart/destroy");
+        show();
+        setCartItems([]);
+        setQuantityInCart(0);
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      try {
+        await axiosClient.delete("/cart/delete-many", {data: checkoutItems});
+        show();
+        setQuantityInCart(prev => prev - checkoutItems.length);
+        setCheckoutItems([])
+      } catch (err) { 
+        console.error(err);
+      }
+    }
   };
 
   const getCartItems = async () => {
@@ -187,7 +221,7 @@ export default function ProductCart() {
 
   useEffect(() => {
     getProductList();
-  }, [quantityInCart, cartItems]);
+  }, [quantityInCart]);
 
   useEffect(() => {
     if (officialProducts) {
@@ -334,21 +368,18 @@ export default function ProductCart() {
                   </div>
                 ) : (
                   <div className={cx("cartMobilePage")}>
-                    <div className={cx("box-free-ship")}>
-                      <div className={cx("progress-free-shipping")} data-value={150000}>
-                        <div className={cx("progress-bar")} role={"progress-bar"} aria-valuemin={0} aria-valuemax={100}>
-                          <div className={cx("content-free-shipping")}>
-                            Mua tối thiểu 906.000đ để được
-                            <b> MIỄN PHÍ VẬN CHUYỂN</b>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div className={cx("cart-mobile-body")}>
                       <div className={cx("cart-header-info")}>
                         <div className={cx("cart-check-box-header")}>
                           <input type="checkbox" onChange={handleSelectAll} checked={checkoutItems.length === cart.length ? true : false} />
                         </div>
+                        {checkoutItems.length ?
+                          <button className={cx("delete-many-container")} onClick={handleDeleteAll}>
+                            <div>
+                              <FaRegTrashAlt className={cx("icon-trash")} />
+                              Xóa <span>{checkoutItems.length}</span>
+                            </div>
+                          </button> : <></>}
                         <div className={cx("cart-header-info-ttsp")}>THÔNG TIN SẢN PHẨM</div>
                         <div className={cx("cart-header-info-price")}>ĐƠN GIÁ</div>
                         <div className={cx("cart-header-info-qty")}>SỐ LƯỢNG</div>
@@ -415,7 +446,7 @@ export default function ProductCart() {
                         <div className={cx("cart-subtotal")}>
                           <div className={cx("cart-subtotal-text")}>Tổng tiền:</div>
                           <div className={cx("cart-subtotal-price")}>
-                            <div className={cx("total-price")}>{totalPrice ? (totalPrice*1000).toLocaleString("de-DE") : 0}đ</div>
+                            <div className={cx("total-price")}>{totalPrice ? (totalPrice * 1000).toLocaleString("de-DE") : 0}đ</div>
                           </div>
                         </div>
                         <div className={cx("cart-btn-continue")}>
