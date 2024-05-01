@@ -19,6 +19,7 @@ function Account() {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
       });
   }, []);
+
   return (
     <div className={cx("content")}>
       <div className={cx("wrapper")}>

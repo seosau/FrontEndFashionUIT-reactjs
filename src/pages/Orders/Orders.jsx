@@ -1,6 +1,5 @@
 import style from "./Orders.module.scss";
 import className from "classnames/bind";
-import { IoIosArrowForward } from "react-icons/io";
 import React, { useState, useEffect } from "react";
 import SideBar from "../../components/Account/SideBar/SideBar";
 import { Link } from "react-router-dom";
@@ -14,7 +13,6 @@ function Orders() {
       .get(`/order/get-all`)
       .then(({ data }) => {
         setOrders(data.orders);
-        console.log(data.orders);
       })
       .catch((error) => {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
@@ -67,7 +65,7 @@ function Orders() {
                       <div className={cx("tableDataContainer")}>{order?.totalPrice > 1000 ? Math.floor(order?.totalPrice / 1000) + "." + (order?.totalPrice % 1000) : order?.totalPrice}.000đ</div>
                     </td>
                     <td className={cx("tableData")}>
-                      <div className={order?.paid == true ? cx("tableDataContainer", "paid") : cx("tableDataContainer", "noPaid")}>{order?.paid == true ? "Đã thanh toán" : "Chưa thanh toán"}</div>
+                      <div className={order?.paid === true ? cx("tableDataContainer", "paid") : cx("tableDataContainer", "noPaid")}>{order?.paid === true ? "Đã thanh toán" : "Chưa thanh toán"}</div>
                     </td>
                   </tr>
                 );

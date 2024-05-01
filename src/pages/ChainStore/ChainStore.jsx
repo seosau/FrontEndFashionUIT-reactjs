@@ -8,10 +8,9 @@ import axios from "axios";
 import axiosClient from "../../config/axios";
 
 const cx = className.bind(style);
-const url = 'https://vapi.vnappmob.com';
+const url = "https://vapi.vnappmob.com";
 
 function ChainStore() {
-
   const [listProvinces, setListProvinces] = useState();
   const [listDistricts, setListDistricts] = useState();
   const [listTowns, setListTowns] = useState();
@@ -22,36 +21,34 @@ function ChainStore() {
 
   const [locationStore, setLocationStore] = useState();
 
-  const [selectedLocation, setSelectedLocation] = useState(
-    {
-      province: '',
-      district: '',
-      town: '',
-    }
-  );
+  const [selectedLocation, setSelectedLocation] = useState({
+    province: "",
+    district: "",
+    town: "",
+  });
 
   const getLocationStore = async () => {
     try {
-      const response = await axiosClient.get('/location/getLocation');
+      const response = await axiosClient.get("/location/getLocation");
       if (response.status === 200) {
         setLocationStore(response.data);
       } else {
-        console.error('Error:', response.statusText);
+        console.error("Error:", response.statusText);
       }
     } catch (error) {
       // Xử lý lỗi nếu có bất kỳ lỗi nào xảy ra
-      console.error('Error fetching location:', error);
+      console.error("Error fetching location:", error);
     }
-  }
+  };
 
   const handleProvinceChange = (event) => {
     const provinceId = event.target.value;
-    let provinceName = listProvinces.find(province => province.province_id === provinceId)?.province_name || '';
-    setSelectedLocation(prevState => ({
+    let provinceName = listProvinces.find((province) => province.province_id === provinceId)?.province_name || "";
+    setSelectedLocation((prevState) => ({
       ...prevState,
       province: provinceName,
-      district: '',
-      town: ''
+      district: "",
+      town: "",
     }));
     setSelectedProvince(provinceId);
     setSelectedDistrict("");
@@ -60,92 +57,71 @@ function ChainStore() {
 
   const handleDistrictChange = (event) => {
     const districtId = event.target.value;
-    let districtName = listDistricts.find(district => district.district_id === districtId)?.district_name || '';
-    setSelectedLocation(prevState => ({
+    let districtName = listDistricts.find((district) => district.district_id === districtId)?.district_name || "";
+    setSelectedLocation((prevState) => ({
       ...prevState,
       district: districtName,
-      town: ''
+      town: "",
     }));
     setSelectedDistrict(districtId);
     setSelectedTown("");
   };
 
-
   const handleTownChange = (event) => {
     const townId = event.target.value;
-    let townName = listTowns.find(ward => ward.ward_id === townId)?.ward_name || '';
-    setSelectedLocation(prevState => ({
+    let townName = listTowns.find((ward) => ward.ward_id === townId)?.ward_name || "";
+    setSelectedLocation((prevState) => ({
       ...prevState,
-      town: townName
+      town: townName,
     }));
     setSelectedTown(townId);
   };
 
-
   const getListProvinces = async () => {
-    const provincesData = await axios.get(url + '/api/province');
+    const provincesData = await axios.get(url + "/api/province");
     setListProvinces(provincesData.data.results);
-  }
+  };
 
   const getListDistricts = async (provinceId) => {
-    const districtsData = await axios.get(url + '/api/province/district/' + provinceId);
+    const districtsData = await axios.get(url + "/api/province/district/" + provinceId);
     setListDistricts(districtsData.data.results);
-  }
+  };
 
   const getListTowns = async (districtId) => {
-    const townsData = await axios.get(url + '/api/province/ward/' + districtId);
+    const townsData = await axios.get(url + "/api/province/ward/" + districtId);
     setListTowns(townsData.data.results);
-  }
+  };
 
   useEffect(() => {
     getListProvinces();
     getLocationStore();
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (selectedProvince !== '')
-      getListDistricts(selectedProvince)
-  }, [selectedProvince])
+    if (selectedProvince !== "") getListDistricts(selectedProvince);
+  }, [selectedProvince]);
 
   useEffect(() => {
-    if (selectedDistrict !== '')
-      getListTowns(selectedDistrict)
-  }, [selectedDistrict])
+    if (selectedDistrict !== "") getListTowns(selectedDistrict);
+  }, [selectedDistrict]);
 
   return (
     <>
-      <div className={cx("wrapper")}>
-        <div className={cx("container")}>
-          <ul className={cx("breadcrumb")}>
-            <li className={cx("Home")}>
-              <div className={cx("text1")}>
-                <a className={cx("text3")} href="/" title="Trang chủ">
-                  <span>Trang chủ</span>
-                </a>
-                <div className={cx("arrow")}>
-                  <IoIosArrowForward />
-                </div>
-              </div>
-            </li>
-            <li className={cx("text2")}>
-              <div>Hệ thống cửa hàng</div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
       <div className={cx("main")}>
         <div className={cx("side-bar")}>
           <div className={cx("province")}>
             <div className={cx("province-sort")}>
               <select value={selectedProvince} onChange={handleProvinceChange}>
                 <option value={""}>Chọn tỉnh thành</option>
-                {listProvinces ? listProvinces.map((province) => (
-                  <option key={province.province_id} value={province.province_id}>
-                    {province.province_name}
-                  </option>
-                )) : <>
-                </>}
+                {listProvinces ? (
+                  listProvinces.map((province) => (
+                    <option key={province.province_id} value={province.province_id}>
+                      {province.province_name}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
               </select>
             </div>
           </div>
@@ -153,12 +129,15 @@ function ChainStore() {
             <div className={cx("district-sort")}>
               <select value={selectedDistrict} onChange={handleDistrictChange}>
                 <option value={""}>Chọn quận/huyện</option>
-                {listDistricts ? listDistricts.map((district) => (
-                  <option key={district.district_id} value={district.district_id}>
-                    {district.district_name}
-                  </option>
-                )) : <>
-                </>}
+                {listDistricts ? (
+                  listDistricts.map((district) => (
+                    <option key={district.district_id} value={district.district_id}>
+                      {district.district_name}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
               </select>
             </div>
           </div>
@@ -166,34 +145,38 @@ function ChainStore() {
             <div className={cx("town-sort")}>
               <select value={selectedTown} onChange={handleTownChange}>
                 <option value={""}>Chọn phường xã</option>
-                {listTowns ? listTowns.map((ward) => (
-                  <option key={ward.ward_id} value={ward.ward_id}>
-                    {ward.ward_name}
-                  </option>
-                )) : <>
-                </>}
+                {listTowns ? (
+                  listTowns.map((ward) => (
+                    <option key={ward.ward_id} value={ward.ward_id}>
+                      {ward.ward_name}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
               </select>
             </div>
           </div>
           <div className={cx("store-location-container")}>
             <div className={cx("store-location-box")}>
-              {
-                locationStore ?
-                  (
-                    locationStore.length ? locationStore.filter(
-                      item => selectedLocation.province !== '' ? (
-                        selectedLocation.district !== '' ? (
-                          selectedLocation.town !== '' ? (
-                            item.city === selectedLocation.province && item.district === selectedLocation.district && item.ward === selectedLocation.town
-                          ) : item.city === selectedLocation.province && item.district === selectedLocation.district
-                        ) : item.city === selectedLocation.province
-                      ) : item
-                    ).map((location, index) => (
+              {locationStore ? (
+                locationStore.length ? (
+                  locationStore
+                    .filter((item) =>
+                      selectedLocation.province !== ""
+                        ? selectedLocation.district !== ""
+                          ? selectedLocation.town !== ""
+                            ? item.city === selectedLocation.province && item.district === selectedLocation.district && item.ward === selectedLocation.town
+                            : item.city === selectedLocation.province && item.district === selectedLocation.district
+                          : item.city === selectedLocation.province
+                        : item
+                    )
+                    .map((location, index) => (
                       <div key={index} className={cx("store-location-name")}>
-                        <h6>{'Bean Fashion ' + location.city}</h6>
+                        <h6>{"Bean Fashion " + location.city}</h6>
                         <span>
                           <FaLocationDot className={cx("icon")} />
-                          {location.addressDetail + ', ' + location.ward + ', ' + location.district + ', ' + location.city}
+                          {location.addressDetail + ", " + location.ward + ", " + location.district + ", " + location.city}
                         </span>
                         <span>
                           <FaPhoneVolume className={cx("icon")} />
@@ -201,12 +184,12 @@ function ChainStore() {
                         </span>
                       </div>
                     ))
-                      :
-                      <div className={cx("store-location-name")}>
-                      </div>
-                  ) :
-                  <></>
-              }
+                ) : (
+                  <div className={cx("store-location-name")}></div>
+                )
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>

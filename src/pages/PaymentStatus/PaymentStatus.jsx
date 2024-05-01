@@ -1,12 +1,12 @@
 import style from "./PaymentStatus.module.scss";
 import className from "classnames/bind";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Lottie from "react-lottie";
 import * as successAnimationData from "../../animation/Success.json";
 import * as failAnimationData from "../../animation/Fail.json";
 import { useStateContext } from "../../context/CartContextProvider";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axiosClient from "../../config/axios";
 const cx = className.bind(style);
 
@@ -15,7 +15,7 @@ function PaymentStatus() {
   const [isStopped, setIsStopped] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const { cartItems, setCartItems, quantityInCart, setQuantityInCart } = useStateContext();
+  const { setCartItems, setQuantityInCart } = useStateContext();
   const searchParams = new URLSearchParams(location.search);
   const params = {};
   searchParams.forEach((value, key) => {
@@ -26,7 +26,7 @@ function PaymentStatus() {
       const response = await axiosClient.get(`/cart/get`);
       console.log(1);
       setQuantityInCart(response.data.quantity);
-      setCartItems(response.data.quantity != 0 ? response.data.products : []);
+      setCartItems(response.data.quantity !== 0 ? response.data.products : []);
     } catch (error) {
       console.error("Đã có lỗi xảy ra", error);
     }
@@ -38,7 +38,7 @@ function PaymentStatus() {
         console.log(1);
         getCartItems();
         console.log(data.status);
-        setStatus(data.status == "00" ? "s" : "f");
+        setStatus(data.status === "00" ? "s" : "f");
         setIsStopped(false);
         setTimeout(() => {
           navigate("/products");

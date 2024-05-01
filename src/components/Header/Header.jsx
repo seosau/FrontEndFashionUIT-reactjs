@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import className from "classnames/bind";
 import style from "./Header.module.scss";
@@ -13,7 +13,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FaGift } from "react-icons/fa6";
 import { IoChevronDownSharp } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
-
+import { BreadCrumb } from "primereact/breadcrumb";
 import Search from "../../components/Search/Search";
 import axiosClient from "../../config/axios";
 import { AuthContext } from "../../context/AuthContext";
@@ -54,6 +54,167 @@ function Header({ setShowModal }) {
         console.log("Login Error", error.response.data.message);
       });
   };
+  const location = useLocation();
+  const home = {
+    template: () => <Link to="/">Trang chủ</Link>,
+  };
+  const [breadCrumbItems, setBreadCrumbItems] = useState([]);
+
+  const generateBreadCrumb = () => {
+    const path = location.pathname;
+    const parts = path.split("/");
+    let tmpArr = [];
+    parts.forEach((part, index) => {
+      console.log(part);
+      console.log("-----------");
+      if (part === "" && index === 1) {
+      } else if (part !== "") {
+        switch (part) {
+          // case "": {
+          //   tmpArr.push({ label: "Trang chủ", template: () => <Link to="/">Trang chủ</Link> });
+          //   break;
+          // }
+          case "cart": {
+            tmpArr.push({ label: "Giỏ hàng" });
+            break;
+          }
+          case "login": {
+            tmpArr.push({ label: "Đăng nhập" });
+            break;
+          }
+          case "forgot": {
+            tmpArr.push({ label: "Quên mật khẩu" });
+            break;
+          }
+          case "otp": {
+            tmpArr.push({ label: "Nhập OTP" });
+            break;
+          }
+          case "reset": {
+            tmpArr.push({ label: "Đổi mật khẩu" });
+            break;
+          }
+          case "account": {
+            tmpArr.push({
+              label: "Tài khoản",
+              template: () => <Link to="/account">Tài khoản</Link>,
+            });
+            break;
+          }
+          case "orders": {
+            tmpArr.push({ label: "Đơn hàng" });
+            break;
+          }
+          case "changepass": {
+            tmpArr.push({ label: "Đổi mật khẩu" });
+            break;
+          }
+          case "address": {
+            tmpArr.push({ label: "Sổ địa chỉ" });
+            break;
+          }
+          case "chainstore": {
+            tmpArr.push({ label: "Hệ thống cửa hàng" });
+            break;
+          }
+          case "checkout": {
+            tmpArr.push({ label: "Thanh toán" });
+            break;
+          }
+          case "contact-support": {
+            tmpArr.push({ label: "Liên hệ và hỗ trợ" });
+            break;
+          }
+          case "blogs": {
+            tmpArr.push({ label: "Tin tức" });
+            break;
+          }
+          case "inquiries-support": {
+            tmpArr.push({ label: "Giải đáp thắc mắc" });
+            break;
+          }
+          case "exchange-support": {
+            tmpArr.push({ label: "Hướng dẫn đổi trả" });
+            break;
+          }
+          case "size-support": {
+            tmpArr.push({ label: "Hướng dẫn chọn size" });
+            break;
+          }
+          case "payment-support": {
+            tmpArr.push({ label: "Hướng dẫn thanh toán" });
+            break;
+          }
+          case "collab-support": {
+            tmpArr.push({ label: "Chương trình cộng tác viên" });
+            break;
+          }
+          case "advice-support": {
+            tmpArr.push({ label: "Tư vấn bán sỉ" });
+            break;
+          }
+          case "gift-support": {
+            tmpArr.push({ label: "Quà tặng tri ân" });
+            break;
+          }
+          case "collab-policies": {
+            tmpArr.push({ label: "Chính sách cộng tác viên" });
+            break;
+          }
+          case "exchange-policies": {
+            tmpArr.push({ label: "Chính sách đổi trả" });
+            break;
+          }
+          case "membership-policies": {
+            tmpArr.push({ label: "Chính sách thành viên" });
+            break;
+          }
+          case "payment-policies": {
+            tmpArr.push({ label: "Chính sách thanh toán" });
+            break;
+          }
+          case "purchase-policies": {
+            tmpArr.push({ label: "Hướng dẫn mua hàng" });
+            break;
+          }
+          case "security-policies": {
+            tmpArr.push({ label: "Bảo mật thông tin cá nhân" });
+            break;
+          }
+          case "stock-policies": {
+            tmpArr.push({ label: "Nhập hàng giá sỉ" });
+            break;
+          }
+          case "register": {
+            tmpArr.push({ label: "Đăng ký" });
+            break;
+          }
+          case "products": {
+            tmpArr.push({ label: "Tất cả sản phẩm" });
+            break;
+          }
+          case "detail": {
+            tmpArr.push({ label: "Chi tiết sản phẩm" });
+            break;
+          }
+          case "order-detail": {
+            tmpArr.push({ label: "Chi tiết đơn hàng" });
+            break;
+          }
+          case "register": {
+            tmpArr.push({ label: "Hỗ trợ" });
+            break;
+          }
+        }
+      }
+    });
+    setBreadCrumbItems(tmpArr);
+  };
+
+  useEffect(() => {
+    generateBreadCrumb();
+  }, [location.pathname]);
+
   return (
     <div className={cx("container")}>
       <header className={cx("header")}>
@@ -1244,6 +1405,17 @@ function Header({ setShowModal }) {
           <Search />
         </div>
       )}
+
+      <div className={cx("breadCrumbFullWidth")}>
+        <div className={cx("breadCrumb")}>
+          {location.pathname === "/" ? null : (
+            <BreadCrumb
+              model={breadCrumbItems ? breadCrumbItems : []}
+              home={home}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

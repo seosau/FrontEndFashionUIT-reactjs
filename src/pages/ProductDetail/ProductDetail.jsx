@@ -29,11 +29,21 @@ export default function ProductDetail() {
   const toast = useRef(null);
 
   const error = () => {
-    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Thêm sản phẩm thất bại', life: 3000 });
-  }
+    toast.current.show({
+      severity: "error",
+      summary: "Lỗi",
+      detail: "Thêm sản phẩm thất bại",
+      life: 3000,
+    });
+  };
 
   const show = () => {
-    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!", life: 3000 });
+    toast.current.show({
+      severity: "success",
+      summary: "Thành công",
+      detail: "Thêm sản phẩm vào giỏ hàng thành công!",
+      life: 3000,
+    });
   };
 
   const [activeTab, setActiveTab] = useState(0);
@@ -55,8 +65,27 @@ export default function ProductDetail() {
     }
     fetchData();
   }, [slug]);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      if (product?.category?.categoryType) {
+        await axiosClient
+          .get(`/products?keyword=${product?.category?.categoryType}`)
+          .then(({ data }) => {
+            setRelatedProducts(data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+    fetchData();
+  }, [product]);
   const tabContents = [
-    <div className={cx("description")}  dangerouslySetInnerHTML={{__html:product.description}}></div>,
+    <div
+      className={cx("description")}
+      dangerouslySetInnerHTML={{ __html: product.description }}
+    ></div>,
 
     <div className={cx("policy")}>
       + Sản phẩm lỗi, hỏng do quá trình sản xuất hoặc vận chuyện
@@ -70,9 +99,7 @@ export default function ProductDetail() {
       + Chi phí bảo hành về sản phẩm, vận chuyển khách hàng chịu chi phí <br />
       <b>Điều kiện đổi trả hàng</b>
       <br />
-      Điều kiện về thời gian đổi trả: trong vòng 01 ngày kể từ khi nhận được
-      hàng và phải liên hệ gọi ngay cho chúng tôi theo số điện thoại trên để
-      được xác nhận đổi trả hàng.
+      Điều kiện về thời gian đổi trả: trong vòng 01 ngày kể từ khi nhận được hàng và phải liên hệ gọi ngay cho chúng tôi theo số điện thoại trên để được xác nhận đổi trả hàng.
       <br />
       <b>Điều kiện đổi trả hàng:</b>
       <br />
@@ -80,10 +107,8 @@ export default function ProductDetail() {
       <br />
       - Phiếu bảo hành (nếu có) và tem của công ty trên sản phẩm còn nguyên vẹn.
       <br />
-      - Sản phẩm đổi/ trả phải còn đầy đủ hộp, giấy Hướng dẫn sử dụng và chưa
-      qua sử dụng.
-      <br />- Quý khách chịu chi phí vận chuyển, đóng gói, thu hộ tiền, chi phí
-      liên lạc tối đa tương đương 20% giá trị đơn hàng.
+      - Sản phẩm đổi/ trả phải còn đầy đủ hộp, giấy Hướng dẫn sử dụng và chưa qua sử dụng.
+      <br />- Quý khách chịu chi phí vận chuyển, đóng gói, thu hộ tiền, chi phí liên lạc tối đa tương đương 20% giá trị đơn hàng.
     </div>,
   ];
 
@@ -98,66 +123,32 @@ export default function ProductDetail() {
   };
   return (
     <>
-    <Toast ref={toast} />
-      <div className={cx("set-z-index")}>
-        {isPopupOpen && <QuickViewInfo openPopup={openPopup} />}
-      </div>
+      <Toast ref={toast} />
+      <div className={cx("set-z-index")}>{isPopupOpen && <QuickViewInfo openPopup={openPopup} />}</div>
       <div className={cx("container")}>
         {/* Thanh tiêu đề (điều hướng) */}
-        <section className={cx("bread-crumb")}>
-          <div className={cx("container-this")}>
-            <ul className={cx("breadcrumb")}>
-              <li className={cx("home")}>
-                <Link className={cx("changeurl")} to="/" title="Trang chủ">
-                  <span>Trang chủ</span>
-                </Link>
-                <FaChevronRight className={cx("mr_lr")} />
-              </li>
-              <li>
-                <Link
-                  className={cx("changeurl")}
-                  to="/san-pham-ban-chay"
-                  title="Sản phẩm bán chạy"
-                >
-                  <span>Sản phẩm bán chạy</span>
-                </Link>
-                <FaChevronRight className={cx("mr_lr")} />
-              </li>
-              <li>
-                <strong>
-                  <span>{product.name}</span>
-                </strong>
-              </li>
-              <li></li>
-            </ul>
-          </div>
-        </section>
 
         <div className={cx("small-container")}>
           <div className={cx("product-detail-side")}>
             {/* Chi tiết sản phẩm chính */}
             {Object.keys(product).length > 0 && (
-              <ProductMainInfo product={product} addToCartFail={error} addToCartSuccess={show} />
+              <ProductMainInfo
+                product={product}
+                addToCartFail={error}
+                addToCartSuccess={show}
+              />
             )}
             {/* Mô tả và chính sách */}
             <div className={cx("description-policy")}>
               <div>
                 <div className={cx("tabs")}>
                   {tabs.map((tab, index) => (
-                    <button
-                      key={index}
-                      className={cx(
-                        index === activeTab ? ("tab", "active") : "tab"
-                      )}
-                      onClick={() => handleTabClick(index)}
-                    >
+                    <button key={index} className={cx(index === activeTab ? ("tab", "active") : "tab")} onClick={() => handleTabClick(index)}>
                       {tab}
                     </button>
                   ))}
                 </div>
-                <div className={cx("tab-content")}>
-                  {tabContents[activeTab]}
-                </div>
+                <div className={cx("tab-content")}>{tabContents[activeTab]}</div>
               </div>
             </div>
 
@@ -170,9 +161,7 @@ export default function ProductDetail() {
                   </div>
                   <div className={cx("tab-products-container")}>
                     <div className={cx("tab-products")}>
-                      <div
-                        className={cx("tab-content-trending", "tab-category")}
-                      >
+                      <div className={cx("tab-content-trending", "tab-category")}>
                         <div className={cx("box-container-swiper")}>
                           <Swiper
                             spaceBetween={10}
@@ -181,12 +170,15 @@ export default function ProductDetail() {
                             modules={[Navigation]}
                             navigation
                           >
-                            {[...Array(8).keys()].map((productIndex) => (
+                            {relatedProducts.map((product, productIndex) => (
                               <SwiperSlide
                                 key={productIndex}
                                 className={cx("product-container")}
                               >
-                                <Product openPopup={openPopup} />
+                                <Product
+                                  product={product}
+                                  openPopup={openPopup}
+                                />
                               </SwiperSlide>
                             ))}
                           </Swiper>
@@ -204,10 +196,7 @@ export default function ProductDetail() {
             <div className={cx("discount-code")}>
               <fieldset className={cx("pro-discount")}>
                 <legend className={cx("pro-discount__legend")}>
-                  <FaGift
-                    color="red"
-                    className={cx("pro-discount__gift-icon")}
-                  />
+                  <FaGift color="red" className={cx("pro-discount__gift-icon")} />
                   MÃ GIẢM GIÁ
                 </legend>
                 <div className={cx("item_discount")}>
@@ -216,12 +205,7 @@ export default function ProductDetail() {
                       <p className={cx("code_dis")}>10% OFF</p>
                       <span>Top Code</span>
                     </div>
-                    <img
-                      width={36}
-                      height={20}
-                      src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/coupon1_value_img.png?1706504358658"
-                      alt="10% OFF"
-                    />
+                    <img width={36} height={20} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/coupon1_value_img.png?1706504358658" alt="10% OFF" />
                   </div>
                   <div className={cx("coupon_desc")}>
                     Giảm <b>10%</b> cho đơn hàng từ <b>500k.</b>
@@ -230,11 +214,7 @@ export default function ProductDetail() {
                     <p className={cx("code_zip")} ref={textRefs[0]}>
                       BFAS10
                     </p>
-                    <button
-                      className={cx("btn", "dis_copy")}
-                      data-copy="BFAS10"
-                      onClick={() => copyToClipboard(0)}
-                    >
+                    <button className={cx("btn", "dis_copy")} data-copy="BFAS10" onClick={() => copyToClipboard(0)}>
                       <span>Copy</span>
                     </button>
                   </div>
@@ -244,12 +224,7 @@ export default function ProductDetail() {
                     <div className={cx("item-name")}>
                       <p className={cx("code_dis")}>15% OFF</p>
                     </div>
-                    <img
-                      width={36}
-                      height={20}
-                      src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/coupon2_value_img.png?1706504358658"
-                      alt="15% OFF"
-                    />
+                    <img width={36} height={20} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/coupon2_value_img.png?1706504358658" alt="15% OFF" />
                   </div>
                   <div className={cx("coupon_desc")}>
                     Giảm <b>15%</b> cho đơn hàng từ <b>900k.</b>
@@ -258,11 +233,7 @@ export default function ProductDetail() {
                     <p className={cx("code_zip")} ref={textRefs[1]}>
                       BFAS15
                     </p>
-                    <button
-                      className={cx("btn", "dis_copy")}
-                      data-copy="BFAS15"
-                      onClick={() => copyToClipboard(1)}
-                    >
+                    <button className={cx("btn", "dis_copy")} data-copy="BFAS15" onClick={() => copyToClipboard(1)}>
                       <span>Copy</span>
                     </button>
                   </div>
@@ -272,12 +243,7 @@ export default function ProductDetail() {
                     <div className={cx("item-name")}>
                       <p className={cx("code_dis")}>FREESHIP</p>
                     </div>
-                    <img
-                      width={36}
-                      height={20}
-                      src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/coupon3_value_img.png?1706504358658"
-                      alt="FREESHIP"
-                    />
+                    <img width={36} height={20} src="//bizweb.dktcdn.net/100/451/884/themes/857425/assets/coupon3_value_img.png?1706504358658" alt="FREESHIP" />
                   </div>
                   <div className={cx("coupon_desc")}>
                     <b>Freeship</b> cho đơn hàng <b>nội thành</b>
@@ -286,11 +252,7 @@ export default function ProductDetail() {
                     <p className={cx("code_zip")} ref={textRefs[2]}>
                       BFASFREE
                     </p>
-                    <button
-                      className={cx("btn", "dis_copy")}
-                      data-copy="BFASFREE"
-                      onClick={() => copyToClipboard(2)}
-                    >
+                    <button className={cx("btn", "dis_copy")} data-copy="BFASFREE" onClick={() => copyToClipboard(2)}>
                       <span>Copy</span>
                     </button>
                   </div>
@@ -304,189 +266,69 @@ export default function ProductDetail() {
             {/* Có thể bạn thích */}
             <div className={cx("blog_noibat")}>
               <h2 className={cx("h2_sidebar_blog")}>
-                <Link
-                  to="/blogs/all"
-                  title="Có thể bạn thích"
-                  className={cx("blog_noibat__title")}
-                >
+                <Link to="/blogs/all" title="Có thể bạn thích" className={cx("blog_noibat__title")}>
                   Có thể bạn thích
                 </Link>
               </h2>
               <div className={cx("blog_content")}>
-                <div className={cx("item")}>
-                  <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
-                      <img
-                        className={cx("img_blog", "lazyload", "loaded")}
-                        src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                        alt="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        data-was-processed="true"
-                      />
-                    </Link>
-                  </div>
-                  <div className={cx("contentright")}>
-                    <h3>
+                {relatedProducts.slice(0,4).map((product, index) => (
+                  <div className={cx("item")} key={index}>
+                    <div className={cx("post-thumb")}>
                       <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
+                        className={cx("image-blog", "scale_hover")}
+                        to={`/product/detail/${product.slug}`}
+                        title={product.name}
                       >
-                        Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
+                        <img
+                          className={cx("img_blog", "lazyload", "loaded")}
+                          src={product.images[0].imgUrl}
+                          alt={product.name}
+                          data-was-processed="true"
+                        />
                       </Link>
-                    </h3>
+                    </div>
+                    <div className={cx("contentright")}>
+                      <h3>
+                        <Link
+                          title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
+                          to={`/product/detail/${product.slug}`}
+                          className={cx("contentright__product-title")}
+                        >
+                          {product.name}
+                        </Link>
+                      </h3>
 
-                    <div className={cx("product-price")}>
-                      <h3 className={cx("new-price")}>
-                        349.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
-                      <h3 className={cx("old-price")}>
-                        500.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
+                      <div className={cx("product-price")}>
+                        <h3 className={cx("new-price")}>
+                          {Math.floor(
+                            product.price -
+                              (product.price * product.discount) / 100
+                          ).toLocaleString("vi-VN")}
+                          .000
+                          <span className={cx("currency-symbols")}>₫</span>
+                        </h3>
+                        <h3 className={cx("old-price")}>
+                          {product.price}.000
+                          <span className={cx("currency-symbols")}>₫</span>
+                        </h3>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className={cx("item")}>
-                  <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
-                      <img
-                        className={cx("img_blog", "lazyload", "loaded")}
-                        src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                        alt="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        data-was-processed="true"
-                      />
-                    </Link>
-                  </div>
-                  <div className={cx("contentright")}>
-                    <h3>
-                      <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
-                      >
-                        Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
-                      </Link>
-                    </h3>
-
-                    <div className={cx("product-price")}>
-                      <h3 className={cx("new-price")}>
-                        349.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
-                      <h3 className={cx("old-price")}>
-                        500.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-                <div className={cx("item")}>
-                  <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
-                      <img
-                        className={cx("img_blog", "lazyload", "loaded")}
-                        src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                        alt="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        data-was-processed="true"
-                      />
-                    </Link>
-                  </div>
-                  <div className={cx("contentright")}>
-                    <h3>
-                      <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
-                      >
-                        Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
-                      </Link>
-                    </h3>
-
-                    <div className={cx("product-price")}>
-                      <h3 className={cx("new-price")}>
-                        349.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
-                      <h3 className={cx("old-price")}>
-                        500.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-                <div className={cx("item")}>
-                  <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
-                      <img
-                        className={cx("img_blog", "lazyload", "loaded")}
-                        src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
-                        alt="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        data-was-processed="true"
-                      />
-                    </Link>
-                  </div>
-                  <div className={cx("contentright")}>
-                    <h3>
-                      <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
-                      >
-                        Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
-                      </Link>
-                    </h3>
-
-                    <div className={cx("product-price")}>
-                      <h3 className={cx("new-price")}>
-                        349.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
-                      <h3 className={cx("old-price")}>
-                        500.000
-                        <span className={cx("currency-symbols")}>₫</span>
-                      </h3>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
             {/* Sản phẩm đã xem */}
             <div className={cx("blog_noibat")}>
               <h2 className={cx("h2_sidebar_blog")}>
-                <Link
-                  to="/blogs/all"
-                  title="Sản phẩm đã xem"
-                  className={cx("blog_noibat__title")}
-                >
+                <Link to="/blogs/all" title="Sản phẩm đã xem" className={cx("blog_noibat__title")}>
                   Sản phẩm đã xem
                 </Link>
               </h2>
               <div className={cx("blog_content")}>
                 <div className={cx("item")}>
                   <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
+                    <Link className={cx("image-blog", "scale_hover")} to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend">
                       <img
                         className={cx("img_blog", "lazyload", "loaded")}
                         src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
@@ -497,11 +339,7 @@ export default function ProductDetail() {
                   </div>
                   <div className={cx("contentright")}>
                     <h3>
-                      <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
-                      >
+                      <Link title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend" to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" className={cx("contentright__product-title")}>
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
                     </h3>
@@ -520,11 +358,7 @@ export default function ProductDetail() {
                 </div>
                 <div className={cx("item")}>
                   <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
+                    <Link className={cx("image-blog", "scale_hover")} to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend">
                       <img
                         className={cx("img_blog", "lazyload", "loaded")}
                         src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
@@ -535,11 +369,7 @@ export default function ProductDetail() {
                   </div>
                   <div className={cx("contentright")}>
                     <h3>
-                      <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
-                      >
+                      <Link title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend" to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" className={cx("contentright__product-title")}>
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
                     </h3>
@@ -558,11 +388,7 @@ export default function ProductDetail() {
                 </div>
                 <div className={cx("item")}>
                   <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
+                    <Link className={cx("image-blog", "scale_hover")} to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend">
                       <img
                         className={cx("img_blog", "lazyload", "loaded")}
                         src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
@@ -573,11 +399,7 @@ export default function ProductDetail() {
                   </div>
                   <div className={cx("contentright")}>
                     <h3>
-                      <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
-                      >
+                      <Link title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend" to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" className={cx("contentright__product-title")}>
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
                     </h3>
@@ -596,11 +418,7 @@ export default function ProductDetail() {
                 </div>
                 <div className={cx("item")}>
                   <div className={cx("post-thumb")}>
-                    <Link
-                      className={cx("image-blog", "scale_hover")}
-                      to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                      title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                    >
+                    <Link className={cx("image-blog", "scale_hover")} to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend">
                       <img
                         className={cx("img_blog", "lazyload", "loaded")}
                         src={require("../../assets/image/aocottonnucotrondangsuonginchu.webp")}
@@ -611,11 +429,7 @@ export default function ProductDetail() {
                   </div>
                   <div className={cx("contentright")}>
                     <h3>
-                      <Link
-                        title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend"
-                        to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend"
-                        className={cx("contentright__product-title")}
-                      >
+                      <Link title="Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend" to="/ao-cotton-nu-co-tron-dang-suong-in-chu-trend" className={cx("contentright__product-title")}>
                         Áo Cotton Nữ Cổ Tròn Dáng Suông In Chữ Trend
                       </Link>
                     </h3>
@@ -634,11 +448,7 @@ export default function ProductDetail() {
                 </div>
               </div>
               <div className={cx("view-more-div")}>
-                <Link
-                  to="/san-pham-da-xem"
-                  title="Xem thêm"
-                  className={cx("view-more")}
-                >
+                <Link to="/san-pham-da-xem" title="Xem thêm" className={cx("view-more")}>
                   Xem thêm
                   <FaChevronRight className={cx("view-more-arrow")} />
                 </Link>

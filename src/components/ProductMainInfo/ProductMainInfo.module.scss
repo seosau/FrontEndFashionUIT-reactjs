@@ -157,6 +157,9 @@
       color: #01567f;
     }
     .all-size {
+      div:hover {
+        cursor: pointer;
+      }
       display: flex;
       gap: 0.5em;
       margin: 0.5em 0;

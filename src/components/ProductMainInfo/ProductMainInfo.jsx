@@ -12,10 +12,14 @@ import { Toast } from "primereact/toast";
 
 const cx = className.bind(style);
 
-export default function ProductMainInfo({ product, addToCartSuccess, addToCartFail }) {
-  const { isAuth } = useContext(AuthContext)
+export default function ProductMainInfo({
+  product,
+  addToCartSuccess,
+  addToCartFail,
+}) {
+  const { isAuth } = useContext(AuthContext);
   const toast = useRef(null);
-  const { cartItems, setCartItems, setQuantityInCart } = useStateContext()
+  const { cartItems, setCartItems, setQuantityInCart } = useStateContext();
   const [mainImgIndex, setMainImgIndex] = useState(0);
   const switchMainImg = (index) => {
     setMainImgIndex(index);
@@ -44,7 +48,12 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
   const handleAddToCart = async () => {
     if (isAuth) {
       if (product.stock === 0) {
-        toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Xin lỗi! Sản phẩm này đã bán hết', life: 3000 });
+        toast.current.show({
+          severity: "error",
+          summary: "Lỗi",
+          detail: "Xin lỗi! Sản phẩm này đã bán hết",
+          life: 3000,
+        });
         return;
       }
 
@@ -62,7 +71,7 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
         .post("/cart/add", data)
         .then((response) => {
           console.log(response.data.message);
-          addToCartSuccess()
+          addToCartSuccess();
           setQuantityInCart(response.data.quantity);
           const tmp = [...cartItems];
 
@@ -85,7 +94,12 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
           console.log(err);
         });
     } else {
-      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Bạn chưa đăng nhập', life: 3000 });
+      toast.current.show({
+        severity: "error",
+        summary: "Lỗi",
+        detail: "Bạn chưa đăng nhập",
+        life: 3000,
+      });
     }
   };
 
@@ -150,27 +164,27 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
               </div>
               <div className={cx("product-price")}>
                 <h3 className={cx("new-price")}>
-                  {((product.price - product.discount * product.price / 100) * 1000).toLocaleString('de-DE')}
+                  {Math.floor(
+                    product.price - (product.price * product.discount) / 100
+                  ).toLocaleString("vi-VN")}
+                  .000
                   <span className={cx("currency-symbols")}>₫</span>
                 </h3>
                 <h3 className={cx("old-price")}>
-                  {product.discount !== 0 ?
+                  {product.discount > 0 ? (
                     <>
-                      {(product.price * 1000).toLocaleString('de-DE')}
+                      {product.price}.000
                       <span className={cx("currency-symbols")}>₫</span>
                     </>
-                    : ""}
+                  ) : (
+                    ""
+                  )}
                 </h3>
               </div>
-              <p className={cx("short-descripions")}>
-                Chất liệu Cotton tự nhiên mềm mại, thấm hút mồ hôi và thoáng khí
-                mang lang lại cảm giác thoải mái, dễ chịu mỗi ngày. Thiết kế
-                ngắn tay, cổ tròn, kiểu dáng regular dễ dàng kết hợp với các
-                trang phục khác.
-              </p>
+              <p className={cx("short-descripions")}>{product.shortDesc}</p>
               <div className={cx("color-picker")}>
                 <p>
-                  Màu sắc:{" "}
+                  Màu sắc:
                   <span className={cx("picked-color")}>
                     {product.colors[activeColor].colorName}
                   </span>
@@ -237,14 +251,15 @@ export default function ProductMainInfo({ product, addToCartSuccess, addToCartFa
                   </button>
                 </div>
                 <div className={cx("add-to-card")}>
-                  <button onClick={handleAddToCart} className={cx("add-to-card-button")}>
+                  <button
+                    onClick={handleAddToCart}
+                    className={cx("add-to-card-button")}
+                  >
                     Thêm vào giỏ hàng
                   </button>
                 </div>
               </div>
-              <p className={cx("free-ship-tag")}>
-                Đơn hàng được miễn phí vận chuyển
-              </p>
+             
             </div>
           </div>
         </div>
