@@ -85,7 +85,7 @@ export default function AllProducts() {
           }
         }
       }
-      else if (6 <= currentTime.getHours()  && currentTime.getHours() < 12) {
+      else if (6 <= currentTime.getHours() && currentTime.getHours() < 12) {
         for (let item of itemInTabIndex1) {
           for (let product of productsCopy) {
             if (item.productId === product._id) {
@@ -124,24 +124,45 @@ export default function AllProducts() {
   const getProducts = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const keywordQuery =
-    urlParams.get("searchValue") || urlParams.get("keyword");
+      urlParams.get("searchValue") || urlParams.get("keyword");
     setKeyWord(keywordQuery);
     await axiosClient
-    .get(
-      `/products?page=${currentPage}&limit=${currentLimit}&keyword=${keywordQuery}`
-    )
-    .then(({ data }) => {
-      setProducts(data.data);
-      setTotalPages(data.pagination.totalPages);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .get(
+        `/products?page=${currentPage}&limit=${currentLimit}&keyword=${keywordQuery}`
+      )
+      .then(({ data }) => {
+        setProducts(data.data);
+        setTotalPages(data.pagination.totalPages);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(24);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalPageFilter, setTotalPageFilter] = useState(0);
+  const [allProducts, setAllProducts] = useState()
+
+  const getAllProducts = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const keywordQuery =
+      urlParams.get("searchValue") || urlParams.get("keyword");
+    setKeyWord(keywordQuery);
+    await axiosClient
+      .get(
+        `/products?page=${currentPage}&limit=${Number.MAX_SAFE_INTEGER}&keyword=${keywordQuery}`
+      )
+      .then(({ data }) => {
+        setAllProducts(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
   };
@@ -172,47 +193,55 @@ export default function AllProducts() {
     return mostFrequentElements;
   };
 
-  const handleSortChange = (event) => {
+  const handleSortChange = async (event) => {
     const sortOption = event.target.value;
     setSortProducts(sortOption);
-    if (sortOption === "default") return;
+    if (sortOption === "default") {
+      setFilteredProducts([])
+      return;
+    } 
     if (sortOption === "A-Z") {
-      products.sort((a, b) => a.name.localeCompare(b.name));
+      allProducts.sort((a, b) => a.name.localeCompare(b.name));
       if (filteredProducts)
-        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+        filteredProducts[currentPage - 1]?.sort((a, b) => a.name.localeCompare(b.name));
+      filterProducts();
       return;
     }
     if (sortOption === "Z-A") {
-      products.sort((a, b) => b.name.localeCompare(a.name));
+      allProducts.sort((a, b) => b.name.localeCompare(a.name));
       if (filteredProducts)
-        filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-
+        filteredProducts[currentPage - 1]?.sort((a, b) => b.name.localeCompare(a.name));
+      filterProducts();
       return;
     }
     if (sortOption === "priceIncrease") {
-      products.sort((a, b) => a.price - b.price);
-      if (filteredProducts) filteredProducts.sort((a, b) => a.price - b.price);
+      allProducts.sort((a, b) => a.price - b.price);
+      if (filteredProducts) filteredProducts[currentPage - 1]?.sort((a, b) => a.price - b.price);
+      filterProducts();
       return;
     }
     if (sortOption === "priceDecrease") {
-      products.sort((a, b) => b.price - a.price);
-      if (filteredProducts) filteredProducts.sort((a, b) => b.price - a.price);
+      allProducts.sort((a, b) => b.price - a.price);
+      if (filteredProducts) filteredProducts[currentPage - 1]?.sort((a, b) => b.price - a.price);
+      filterProducts();
       return;
     }
     if (sortOption === "oldest") {
-      products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      allProducts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
       if (filteredProducts)
-        filteredProducts.sort(
+        filteredProducts[currentPage - 1]?.sort(
           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
         );
+      filterProducts();
       return;
     }
     if (sortOption === "newest") {
-      products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      allProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       if (filteredProducts)
-        filteredProducts.sort(
+        filteredProducts[currentPage - 1]?.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+      filterProducts();
       return;
     }
   };
@@ -234,6 +263,7 @@ export default function AllProducts() {
   }
 
   const filterProducts = () => {
+    console.log(allProducts?.length)
     let amountPrice = 0;
     let amountType = 0;
     let amountColor = 0;
@@ -246,33 +276,33 @@ export default function AllProducts() {
 
     // priceFilter
     if (selectedFilter.includes(priceFilter[0])) {
-      let tempProduct = officialProducts.filter((product) => (product.price - product.price * product.discount / 100) < 100);
+      let tempProduct = allProducts.filter((product) => (product.price - product.price * product.discount / 100) < 100);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[1])) {
-      let tempProduct = officialProducts.filter(
+      let tempProduct = allProducts.filter(
         (product) => (product.price - product.price * product.discount / 100) >= 100 && (product.price - product.price * product.discount / 100) <= 200
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[2])) {
-      let tempProduct = officialProducts.filter(
+      let tempProduct = allProducts.filter(
         (product) => (product.price - product.price * product.discount / 100) >= 200 && (product.price - product.price * product.discount / 100) <= 500
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[3])) {
-      let tempProduct = officialProducts.filter(
+      let tempProduct = allProducts.filter(
         (product) => (product.price - product.price * product.discount / 100) >= 500 && (product.price - product.price * product.discount / 100) <= 1000
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[4])) {
-      let tempProduct = officialProducts.filter((product) => (product.price - product.price * product.discount / 100) > 1000);
+      let tempProduct = allProducts.filter((product) => (product.price - product.price * product.discount / 100) > 1000);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
@@ -280,7 +310,7 @@ export default function AllProducts() {
     // typeFilter
     for (let i = 0; i < typeFilter.length; i++) {
       if (selectedFilter.includes(typeFilter[i])) {
-        let tempProduct = officialProducts.filter((product) =>
+        let tempProduct = allProducts.filter((product) =>
           product.category.categoryDetail.includes(typeFilter[i])
         );
         if (amountType === 0) {
@@ -297,7 +327,7 @@ export default function AllProducts() {
     // colorFilter
     for (let i = 0; i < colorFilter.length; i++) {
       if (selectedFilter.includes(colorFilter[i])) {
-        let tempProduct = officialProducts.filter((product) =>
+        let tempProduct = allProducts.filter((product) =>
           product.colors.some(cl => cl.colorName.toLowerCase() === colorFilter[i].toLowerCase())
         );
         if (amountColor === 0) {
@@ -314,7 +344,7 @@ export default function AllProducts() {
     // fabricFilter
     for (let i = 0; i < fabricTypeFilter.length; i++) {
       if (selectedFilter.includes(fabricTypeFilter[i])) {
-        let tempProduct = officialProducts.filter((product) =>
+        let tempProduct = allProducts.filter((product) =>
           product.category.fabricType.includes(fabricTypeFilter[i])
         );
         if (amountFabric === 0) {
@@ -340,13 +370,18 @@ export default function AllProducts() {
       return;
     }
     let filterTemp = [
-      ...filteredProductsByPrice,
+      ...new Set(filteredProductsByPrice),
       ...filteredProductsByType,
       ...filteredProductsByColor,
       ...filteredProductsByFabric,
     ];
 
-    filterResult = findCommonProducts(filterTemp);
+    let filteredTemp = selectedFilter?.length ? findCommonProducts(filterTemp) : allProducts;
+    for (let i = 0; i < filteredTemp?.length; i += 24) {
+      filterResult.push(filteredTemp.slice(i, i + 24));
+    }
+
+    setTotalPageFilter(filterResult?.length)
     setFilteredProducts(filterResult);
   };
 
@@ -405,11 +440,13 @@ export default function AllProducts() {
     };
 
     fetchData();
+    getAllProducts();
   }, [location.search]);
 
   useEffect(() => {
     filterProducts();
-  }, [selectedFilter]);
+  }, [selectedFilter])
+
   return (
     <div className={cx("container")}>
       {sideBarVisible ? (
@@ -600,9 +637,9 @@ export default function AllProducts() {
             </div>
           </div>
           <div className={cx("productsContainer")}>
-            {officialProducts ? (
-              selectedFilter.length > 0 ? (
-                filteredProducts.map((product, index) => (
+            {officialProducts && allProducts ? (
+              filteredProducts?.length ? (
+                filteredProducts[currentPage - 1]?.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
                     <Product
                       discount={product.discount ? true : false}
@@ -630,30 +667,57 @@ export default function AllProducts() {
           </div>
         </div>
       </div>
-      {totalPages > 1 && (
-        <div className={cx("paginations-container")}>
-          <ReactPaginate
-            nextLabel={<GrNext />}
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={2}
-            pageCount={totalPages}
-            previousLabel={<GrPrevious />}
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            breakLabel="..."
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            activeClassName="active"
-            renderOnZeroPageCount={null}
-          />
-        </div>
-      )}
+      {
+        allProducts?.length && filteredProducts?.length ?
+          totalPageFilter > 1 && (
+            <div className={cx("paginations-container")}>
+              <ReactPaginate
+                nextLabel={<GrNext />}
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={totalPageFilter}
+                previousLabel={<GrPrevious />}
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+              />
+            </div>
+          )
+          :
+          totalPages > 1 && (
+            <div className={cx("paginations-container")}>
+              <ReactPaginate
+                nextLabel={<GrNext />}
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={totalPages}
+                previousLabel={<GrPrevious />}
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+              />
+            </div>
+          )}
       <Toast ref={toast} />
       {showPopupQuickView &&
         <QuickViewPopup
