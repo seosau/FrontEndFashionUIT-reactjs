@@ -25,6 +25,7 @@ export default function Home() {
   const [tabIndex, setTabIndex] = useState(0);
   const [tabProductIndex, setProductTabIndex] = useState(0);
   const [products, setProducts] = useState();
+  const [officialProducts, setOfficialProducts] = useState();
   const [bestSellerProducts, setBestSellerProducts] = useState();
   const [maleProducts, setMaleProducts] = useState();
   const [femaleProducts, setFemaleProducts] = useState();
@@ -57,10 +58,10 @@ export default function Home() {
       const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
       const saleProducts = response.data;
 
-      const itemInTabIndex0 = saleProducts.filter(saleProduct => saleProduct.saleHour === 1);
-      const itemInTabIndex1 = saleProducts.filter(saleProduct => saleProduct.saleHour === 7);
-      const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 13);
-      const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 21);
+      const itemInTabIndex0 = saleProducts.filter(saleProduct => saleProduct.saleHour === 0);
+      const itemInTabIndex1 = saleProducts.filter(saleProduct => saleProduct.saleHour === 6);
+      const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 12);
+      const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 18);
       const saleProductsInTabIndex0 = await Promise.all(itemInTabIndex0.map(async (item) => {
         const product = await getProductById(item.productId);
         product.saleCount = item.saleCount;
@@ -85,6 +86,45 @@ export default function Home() {
         product.discount = item.discountPercent
         return product;
       }));
+
+      const productsCopy = [...products]
+      if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
+        for (let item of itemInTabIndex0) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (6 <= currentTime.getHours()  && currentTime.getHours() < 12) {
+        for (let item of itemInTabIndex1) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
+        for (let item of itemInTabIndex2) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
+        for (let item of itemInTabIndex3) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      setOfficialProducts(productsCopy)
       setSaleProductsInTabIndex([saleProductsInTabIndex0, saleProductsInTabIndex1, saleProductsInTabIndex2, saleProductsInTabIndex3])
     }
     catch (error) {
@@ -104,25 +144,25 @@ export default function Home() {
   };
 
   const getBestSellerProduct = () => {
-    const productsCopy = [...products];
+    const productsCopy = [...officialProducts];
     const sortedProducts = productsCopy.sort((a, b) => b.sold - a.sold);
     setBestSellerProducts(sortedProducts.slice(0, 6));
   }
 
   const getMaleProducts = () => {
-    const productsCopy = [...products];
+    const productsCopy = [...officialProducts];
     const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nam')
     setMaleProducts(tmpProducts);
   }
 
   const getFemaleProducts = () => {
-    const productsCopy = [...products];
+    const productsCopy = [...officialProducts];
     const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nữ')
     setFemaleProducts(tmpProducts);
   }
 
   const getGymProducts = () => {
-    const productsCopy = [...products];
+    const productsCopy = [...officialProducts];
     const tmpProducts = productsCopy.filter(product => product.category.categoryDetail.toLowerCase().includes('gym'))
     setGymProducts(tmpProducts);
   }
@@ -208,7 +248,7 @@ export default function Home() {
   }
 
   const show = () => {
-    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!" });
+    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!", life: 3000 });
   };
 
   useEffect(() => {
@@ -217,24 +257,30 @@ export default function Home() {
 
   useEffect(() => {
     if (products) {
+      getSaleProducts()
+    }
+  }, [products])
+
+  useEffect(() => {
+    if (officialProducts) {
       getBestSellerProduct()
       getMaleProducts()
       getFemaleProducts()
       getGymProducts()
     }
-  }, [products])
+  }, [officialProducts])
 
   useEffect(() => {
     if (currentTime.getHours() >= 0 && currentTime.getHours() < 6) {
       setTabIndex(0);
     } else if (currentTime.getHours() >= 6 && currentTime.getHours() < 12) {
       setTabIndex(1);
-    } else if (currentTime.getHours() >= 12 && currentTime.getHours() < 20) {
+    } else if (currentTime.getHours() >= 12 && currentTime.getHours() < 18) {
       setTabIndex(2);
-    } else if (currentTime.getHours() >= 20 && currentTime.getHours() < 24) {
+    } else if (currentTime.getHours() >= 18 && currentTime.getHours() < 24) {
       setTabIndex(3);
     }
-    getSaleProducts()
+    
   }, []);
 
   return (
@@ -338,14 +384,14 @@ export default function Home() {
                         <div className={cx("title-time")}>
                           {index === 0 && "00:00 - 06:00"}
                           {index === 1 && "06:00 - 12:00"}
-                          {index === 2 && "12:00 - 20:00"}
-                          {index === 3 && "20:00 - 24:00"}
+                          {index === 2 && "12:00 - 18:00"}
+                          {index === 3 && "18:00 - 24:00"}
                         </div>
                         <div className={cx("text-timing")}>
                           {(index === 0 && currentTime.getHours() >= 0 && currentTime.getHours() < 6) ||
                             (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
-                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 20) ||
-                            (index === 3 && currentTime.getHours() >= 20 && currentTime.getHours() < 24)
+                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 18) ||
+                            (index === 3 && currentTime.getHours() >= 18 && currentTime.getHours() < 24)
                             ? "Đang diễn ra"
                             : "Sắp diễn ra"}
                         </div>

@@ -17,7 +17,7 @@ export default function ProductCart() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [cart, setCart] = useState([]);
   const tmpCartItems = cartItems ? [...new Set(cartItems.map((item) => item.productId))] : [];
-
+  const [officialProducts, setOfficialProducts] = useState();
   const toast = useRef(null);
 
   const reject = () => {
@@ -38,6 +38,66 @@ export default function ProductCart() {
       accept: () => removeFromCart(product),
       reject,
     });
+  }
+
+  const currentTime = new Date();
+
+  const getSaleProducts = async () => {
+    try {
+      const month = currentTime.getMonth() + 1;
+      const paddedMonth = month < 10 ? `0${month}` : month;
+      const day = currentTime.getDate();
+      const paddedDay = day < 10 ? `0${day}` : day;
+      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const saleProducts = response.data;
+
+      const itemInTabIndex0 = saleProducts.filter(saleProduct => saleProduct.saleHour === 0);
+      const itemInTabIndex1 = saleProducts.filter(saleProduct => saleProduct.saleHour === 6);
+      const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 12);
+      const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 18);
+      const productsCopy = [...productItem]
+
+      if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
+        for (let item of itemInTabIndex0) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (6 <= currentTime.getHours()  && currentTime.getHours() < 12) {
+        for (let item of itemInTabIndex1) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
+        for (let item of itemInTabIndex2) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
+        for (let item of itemInTabIndex3) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      setOfficialProducts(productsCopy)
+    }
+    catch (error) {
+      console.error(error);
+    }
   }
 
   const removeFromCart = (product) => {
@@ -96,7 +156,7 @@ export default function ProductCart() {
   const getCart = () => {
     const newCart = [];
     for (let item of cartItems) {
-      const product = productItem.find((product) => product._id === item.productId && product.sizes.includes(item.size) && product.images.some((img) => img.color === item.color));
+      const product = officialProducts.find((product) => product._id === item.productId && product.sizes.includes(item.size) && product.images.some((img) => img.color === item.color));
       if (product) {
         const img = product.images.find((img) => img.color === item.color);
         newCart.push({
@@ -130,10 +190,16 @@ export default function ProductCart() {
   }, [quantityInCart, cartItems]);
 
   useEffect(() => {
-    if (productItem.length > 0 || quantityInCart) {
+    if (officialProducts) {
       getCart();
     }
-  }, [productItem, quantityInCart]);
+  }, [officialProducts]);
+
+  useEffect(() => {
+    if (productItem) {
+      getSaleProducts()
+    }
+  }, [productItem, quantityInCart])
 
   useEffect(() => {
     calculateTotalPrice();
@@ -349,7 +415,7 @@ export default function ProductCart() {
                         <div className={cx("cart-subtotal")}>
                           <div className={cx("cart-subtotal-text")}>Tổng tiền:</div>
                           <div className={cx("cart-subtotal-price")}>
-                            <div className={cx("total-price")}>{totalPrice ? totalPrice.toLocaleString("de-DE") + ".000" : 0}đ</div>
+                            <div className={cx("total-price")}>{totalPrice ? (totalPrice*1000).toLocaleString("de-DE") : 0}đ</div>
                           </div>
                         </div>
                         <div className={cx("cart-btn-continue")}>
