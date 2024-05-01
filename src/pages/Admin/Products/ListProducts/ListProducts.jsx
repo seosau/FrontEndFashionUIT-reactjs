@@ -181,16 +181,6 @@ function ListProducts() {
         setSaleHour(-1)
         setSaleDay(new Date())
       })
-      .then((res) => {
-        console.log(res);
-        toast.current.show({
-          severity: "success",
-          summary: "Thành công",
-          detail: "Thêm sản phẩm thành công",
-          life: 3000,
-        });
-        setHidePopup((prevState) => !prevState);
-      })
       .catch((error) => {
         toast.current.show({
           severity: "error",
@@ -430,10 +420,10 @@ function ListProducts() {
                                   onChange={(e) => setSaleHour(e.target.value)}
                                 >
                                   <option value={-1}>Chọn khung giờ</option>
-                                  <option value={1}>00:00 - 06:00</option>
-                                  <option value={7}>06:00 - 12:00</option>
-                                  <option value={13}>12:00 - 20:00</option>
-                                  <option value={21}>20:00 - 24:00</option>
+                                  <option value={0}>00:00 - 06:00</option>
+                                  <option value={6}>06:00 - 12:00</option>
+                                  <option value={12}>12:00 - 18:00</option>
+                                  <option value={18}>18:00 - 24:00</option>
                                 </select>
                               </div>
                               <div className={cx("date")}>

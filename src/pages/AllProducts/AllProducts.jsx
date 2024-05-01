@@ -55,28 +55,88 @@ export default function AllProducts() {
 
   // products
   const [products, setProducts] = useState();
+  const [officialProducts, setOfficialProducts] = useState();
   const [keyword, setKeyWord] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [sortProducts, setSortProducts] = useState("default");
+
+  const currentTime = new Date();
+  const getSaleProducts = async () => {
+    try {
+      const month = currentTime.getMonth() + 1;
+      const paddedMonth = month < 10 ? `0${month}` : month;
+      const day = currentTime.getDate();
+      const paddedDay = day < 10 ? `0${day}` : day;
+      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const saleProducts = response.data;
+
+      const itemInTabIndex0 = saleProducts.filter(saleProduct => saleProduct.saleHour === 0);
+      const itemInTabIndex1 = saleProducts.filter(saleProduct => saleProduct.saleHour === 6);
+      const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 12);
+      const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 18);
+      const productsCopy = [...products]
+
+      if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
+        for (let item of itemInTabIndex0) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (6 <= currentTime.getHours()  && currentTime.getHours() < 12) {
+        for (let item of itemInTabIndex1) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
+        for (let item of itemInTabIndex2) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
+        for (let item of itemInTabIndex3) {
+          for (let product of productsCopy) {
+            if (item.productId === product._id) {
+              product.discount = Math.max(item.discountPercent, product.discount);
+            }
+          }
+        }
+      }
+      setOfficialProducts(productsCopy)
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
   // lấy url
   const location = useLocation();
   // lấy products
   const getProducts = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const keywordQuery =
-      urlParams.get("searchValue") || urlParams.get("keyword");
+    urlParams.get("searchValue") || urlParams.get("keyword");
     setKeyWord(keywordQuery);
     await axiosClient
-      .get(
-        `/products?page=${currentPage}&limit=${currentLimit}&keyword=${keywordQuery}`
-      )
-      .then(({ data }) => {
-        setProducts(data.data);
-        setTotalPages(data.pagination.totalPages);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .get(
+      `/products?page=${currentPage}&limit=${currentLimit}&keyword=${keywordQuery}`
+    )
+    .then(({ data }) => {
+      setProducts(data.data);
+      setTotalPages(data.pagination.totalPages);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -186,33 +246,33 @@ export default function AllProducts() {
 
     // priceFilter
     if (selectedFilter.includes(priceFilter[0])) {
-      let tempProduct = products.filter((product) => (product.price - product.price * product.discount / 100) < 100);
+      let tempProduct = officialProducts.filter((product) => (product.price - product.price * product.discount / 100) < 100);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[1])) {
-      let tempProduct = products.filter(
+      let tempProduct = officialProducts.filter(
         (product) => (product.price - product.price * product.discount / 100) >= 100 && (product.price - product.price * product.discount / 100) <= 200
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[2])) {
-      let tempProduct = products.filter(
+      let tempProduct = officialProducts.filter(
         (product) => (product.price - product.price * product.discount / 100) >= 200 && (product.price - product.price * product.discount / 100) <= 500
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[3])) {
-      let tempProduct = products.filter(
+      let tempProduct = officialProducts.filter(
         (product) => (product.price - product.price * product.discount / 100) >= 500 && (product.price - product.price * product.discount / 100) <= 1000
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[4])) {
-      let tempProduct = products.filter((product) => (product.price - product.price * product.discount / 100) > 1000);
+      let tempProduct = officialProducts.filter((product) => (product.price - product.price * product.discount / 100) > 1000);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
@@ -220,7 +280,7 @@ export default function AllProducts() {
     // typeFilter
     for (let i = 0; i < typeFilter.length; i++) {
       if (selectedFilter.includes(typeFilter[i])) {
-        let tempProduct = products.filter((product) =>
+        let tempProduct = officialProducts.filter((product) =>
           product.category.categoryDetail.includes(typeFilter[i])
         );
         if (amountType === 0) {
@@ -237,7 +297,7 @@ export default function AllProducts() {
     // colorFilter
     for (let i = 0; i < colorFilter.length; i++) {
       if (selectedFilter.includes(colorFilter[i])) {
-        let tempProduct = products.filter((product) =>
+        let tempProduct = officialProducts.filter((product) =>
           product.colors.some(cl => cl.colorName.toLowerCase() === colorFilter[i].toLowerCase())
         );
         if (amountColor === 0) {
@@ -254,7 +314,7 @@ export default function AllProducts() {
     // fabricFilter
     for (let i = 0; i < fabricTypeFilter.length; i++) {
       if (selectedFilter.includes(fabricTypeFilter[i])) {
-        let tempProduct = products.filter((product) =>
+        let tempProduct = officialProducts.filter((product) =>
           product.category.fabricType.includes(fabricTypeFilter[i])
         );
         if (amountFabric === 0) {
@@ -307,6 +367,11 @@ export default function AllProducts() {
   useEffect(() => {
     getProducts();
   }, [currentPage]);
+
+  useEffect(() => {
+    if (products)
+      getSaleProducts();
+  }, [products])
 
   const toast = useRef(null);
 
@@ -535,7 +600,7 @@ export default function AllProducts() {
             </div>
           </div>
           <div className={cx("productsContainer")}>
-            {products ? (
+            {officialProducts ? (
               selectedFilter.length > 0 ? (
                 filteredProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
@@ -548,7 +613,7 @@ export default function AllProducts() {
                   </div>
                 ))
               ) : (
-                products.map((product, index) => (
+                officialProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
                     <Product
                       product={product}

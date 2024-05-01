@@ -1,7 +1,6 @@
 import style from "./ResetPass.module.scss";
 import className from "classnames/bind";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
 import { useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -26,7 +25,7 @@ function ResetPass() {
       return false;
     } else {
       if (!isFullFilled) setIsFullFilled(true);
-      if (pass != cpass) {
+      if (pass !== cpass) {
         setIsPassValid(false);
         return false;
       } else {
@@ -41,21 +40,24 @@ function ResetPass() {
       axiosClient
         .post(`/auth/reset`, { newPassword: pass, token, email })
         .then(({ data }) => {
-          toast.current.show({ severity: 'success', summary: 'Thành công', detail: "Đổi mật khẩu thành công. Vui lòng đăng nhập lại!", life: 3000 });
+          toast.current.show({ severity: "success", summary: "Thành công", detail: "Đổi mật khẩu thành công. Vui lòng đăng nhập lại!", life: 3000 });
           navigate("/login");
         })
         .catch((error) => {
           switch (error.response.status) {
             case 403: {
-              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "OTP đã hết hạn. Vui lòng thử lại!", life: 3000 });
+              toast.current.show({ severity: "error", summary: "Lỗi", detail: "OTP đã hết hạn. Vui lòng thử lại!", life: 3000 });
               break;
             }
             case 404: {
-              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Email không tồn tại!", life: 3000 });
+              toast.current.show({ severity: "error", summary: "Lỗi", detail: "Email không tồn tại!", life: 3000 });
               break;
             }
             case 500: {
-              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
+              toast.current.show({ severity: "error", summary: "Lỗi", detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
+              break;
+            }
+            default: {
               break;
             }
           }

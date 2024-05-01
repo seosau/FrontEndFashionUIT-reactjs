@@ -30,38 +30,8 @@ export default function NewsDetail() {
   }, [slug]);
   return (
     <article className={cx("article-main")}>
-      <section className={cx("bread-crumb")}>
-        <div className={cx("container-this")}>
-          <ul className={cx("breadcrumb")}>
-            <li className={cx("home")}>
-              <Link className={cx("changeurl")} to="/" title="Trang chủ">
-                <span>Trang chủ</span>
-              </Link>
-              <FaChevronRight className={cx("mr_lr")} />
-            </li>
-            <li>
-              <Link
-                className={cx("changeurl")}
-                to="/news"
-                title="Sản phẩm bán chạy"
-              >
-                <span>Tin tức</span>
-              </Link>
-              <FaChevronRight className={cx("mr_lr")} />
-            </li>
-            <li>
-              <strong>
-                <span>{blog.title}</span>
-              </strong>
-            </li>
-            <li></li>
-          </ul>
-        </div>
-      </section>
       <div className={cx("row")}>
-        <div
-          className={cx("right-content", "col-lg-9", "col-12", "order-lg-2")}
-        >
+        <div className={cx("right-content", "col-lg-9", "col-12", "order-lg-2")}>
           <div className={cx("article-details", "clearfix")}>
             <h1 className={cx("article-title")}>{blog.title}</h1>
             <div className={cx("posts")}>
@@ -74,38 +44,19 @@ export default function NewsDetail() {
                 <span>Bean Fashion</span>
               </div>
             </div>
-            <div
-              className={cx("blog__description")}
-              dangerouslySetInnerHTML={{ __html: blog.description }}
-            />
+            <div className={cx("blog__description")} dangerouslySetInnerHTML={{ __html: blog.description }} />
           </div>
-          <img src="https://bizweb.dktcdn.net/100/423/358/files/4-kieu-trang-phuc-demin-hot-nhat-1.jpg?v=1646494601635" alt="" width="81"
-          />
-          <form
-            method="post"
-            action="/posts/nha-thiet-ke-vi-dai-dau-tien-cua-nam-2022/comments"
-            id="article_comments"
-            acceptCharset="UTF-8"
-          >
+          <img src="https://bizweb.dktcdn.net/100/423/358/files/4-kieu-trang-phuc-demin-hot-nhat-1.jpg?v=1646494601635" alt="" width="81" />
+          <form method="post" action="/posts/nha-thiet-ke-vi-dai-dau-tien-cua-nam-2022/comments" id="article_comments" acceptCharset="UTF-8">
             <div className={cx("form-coment")}>
               <div className={cx("margin-top-0", "w-100")}>
-                <h5 className={cx("title-form-coment")}>
-                  Viết bình luận của bạn
-                </h5>
+                <h5 className={cx("title-form-coment")}>Viết bình luận của bạn</h5>
               </div>
               <div className={cx("form-row")}>
                 <div className={cx("user-info")}>
                   <div className={cx("col-md-6", "col-12")}>
                     <fieldset className={cx("form-group", "padding-0")}>
-                      <input
-                        placeholder="Họ và tên"
-                        type="text"
-                        className={cx("form-control", "form-control-lg")}
-                        defaultValue=""
-                        id="full-name"
-                        name="Author"
-                        required=""
-                      />
+                      <input placeholder="Họ và tên" type="text" className={cx("form-control", "form-control-lg")} defaultValue="" id="full-name" name="Author" required="" />
                     </fieldset>
                   </div>
                   <div className={cx("col-md-6", "col-12")}>
@@ -122,40 +73,11 @@ export default function NewsDetail() {
                     </fieldset>
                   </div>
                 </div>
-                <div
-                  className={cx(
-                    "col-lg-12",
-                    "col-md-12",
-                    "col-sm-12",
-                    "col-xs-12"
-                  )}
-                >
-                  <textarea
-                    placeholder="Nội dung"
-                    className={cx(
-                      "form-control",
-                      "form-control-lg",
-                      "form-control-textarea"
-                    )}
-                    id="comment"
-                    name="Body"
-                    rows={6}
-                    required=""
-                    defaultValue={""}
-                  />
+                <div className={cx("col-lg-12", "col-md-12", "col-sm-12", "col-xs-12")}>
+                  <textarea placeholder="Nội dung" className={cx("form-control", "form-control-lg", "form-control-textarea")} id="comment" name="Body" rows={6} required="" defaultValue={""} />
                 </div>
-                <div
-                  className={cx(
-                    "col-lg-12",
-                    "col-md-12",
-                    "col-sm-12",
-                    "col-xs-12"
-                  )}
-                >
-                  <button
-                    type="submit"
-                    className={cx("btn", "btn-primary", "button_45")}
-                  >
+                <div className={cx("col-lg-12", "col-md-12", "col-sm-12", "col-xs-12")}>
+                  <button type="submit" className={cx("btn", "btn-primary", "button_45")}>
                     Gửi thông tin
                   </button>
                 </div>
@@ -164,9 +86,7 @@ export default function NewsDetail() {
             {/* End form mail */}
           </form>
         </div>
-        <div
-          className={cx("blog_left_base", "col-lg-3", "col-12", "order-lg-1")}
-        >
+        <div className={cx("blog_left_base", "col-lg-3", "col-12", "order-lg-1")}>
           <div className={cx("side-right-stick")}>
             <Category />
             <Tags />
