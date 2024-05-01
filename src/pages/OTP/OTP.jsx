@@ -1,6 +1,5 @@
 import style from "./OTP.module.scss";
 import className from "classnames/bind";
-import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
 import { useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -34,19 +33,22 @@ function OTP() {
         .catch((error) => {
           switch (error.response.status) {
             case 403: {
-              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "OTP đã hết hạn.", life: 3000 });
+              toast.current.show({ severity: "error", summary: "Lỗi", detail: "OTP đã hết hạn.", life: 3000 });
               break;
             }
             case 404: {
-              if (error.response.data.type == "email") {
-                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Email không tồn tại!", life: 3000 });
-              } else if (error.response.data.type == "otp") {
-                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "OTP không đúng, vui lòng thử lại!", life: 3000 });
+              if (error.response.data.type === "email") {
+                toast.current.show({ severity: "error", summary: "Lỗi", detail: "Email không tồn tại!", life: 3000 });
+              } else if (error.response.data.type === "otp") {
+                toast.current.show({ severity: "error", summary: "Lỗi", detail: "OTP không đúng, vui lòng thử lại!", life: 3000 });
               }
               break;
             }
             case 500: {
-              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
+              toast.current.show({ severity: "error", summary: "Lỗi", detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
+              break;
+            }
+            default: {
               break;
             }
           }
