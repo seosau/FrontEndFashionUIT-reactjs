@@ -45,6 +45,7 @@ function CheckOut() {
     totalPrice != null ? setTotalPrice(null) : setTotalPrice(location?.state?.totalPrice);
     checkoutItems != null ? setCheckoutItems(null) : setCheckoutItems(location?.state?.checkoutItems);
   }, []);
+  console.log(checkoutItems)
   const validate = () => {
     if (address === null) {
       setPickedAddress(false);
@@ -260,10 +261,11 @@ function CheckOut() {
                     </div>
                     <div className={cx("priceField")}>
                       <div className={cx("price")}>
-                        {checkoutItem.price > 1000
+                        {((checkoutItem.price - checkoutItem.price * checkoutItem.discount / 100) * 1000).toLocaleString('de-DE')}đ
+                        {/* {checkoutItem.price > 1000
                           ? Math.floor(checkoutItem.price / 1000) + "." + (checkoutItem.price % 1000 > 100 ? checkoutItem.price % 1000 : "0" + (checkoutItem.price % 1000))
                           : checkoutItem.price}
-                        .000đ
+                        .000đ */}
                       </div>
                       <div className={cx("productQuantity")}>x{checkoutItem.quantity}</div>
                     </div>
@@ -283,7 +285,8 @@ function CheckOut() {
               <div className={cx("tmpCount")}>
                 <div className={cx("tmpCountTitle")}>Tạm tính</div>
                 <div className={cx("tmpCountValue")}>
-                  {totalPrice > 1000 ? Math.floor(totalPrice / 1000) + "." + (totalPrice % 1000 > 100 ? totalPrice % 1000 : "0" + (totalPrice % 1000)) : totalPrice}.000đ
+                  {(totalPrice * 1000).toLocaleString('de-DE')}đ
+                  {/* {totalPrice > 1000 ? Math.floor(totalPrice / 1000) + "." + (totalPrice % 1000 > 100 ? totalPrice % 1000 : "0" + (totalPrice % 1000)) : totalPrice}.000đ */}
                 </div>
               </div>
               <div className={cx("shippingCostContainer")}>
@@ -297,10 +300,11 @@ function CheckOut() {
               <div className={cx("finalPrice")}>
                 <div className={cx("finalTitle")}>Tổng cộng</div>
                 <div className={cx("finalValue")}>
-                  {totalPrice + 40 > 1000
+                  {((totalPrice + 40) * 1000).toLocaleString('de-DE')}đ
+                  {/* {totalPrice + 40 > 1000
                     ? Math.floor((totalPrice + 40) / 1000) + "." + ((totalPrice + 40) % 1000 > 100 ? (totalPrice + 40) % 1000 : "0" + ((totalPrice + 40) % 1000))
                     : totalPrice + 40}
-                  .000đ
+                  .000đ */}
                 </div>
               </div>
               <div className={cx("finalOptContainer")}>
