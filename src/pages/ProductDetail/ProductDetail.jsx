@@ -33,7 +33,7 @@ export default function ProductDetail() {
   }
 
   const show = () => {
-    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!" });
+    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!", life: 3000 });
   };
 
   const [activeTab, setActiveTab] = useState(0);
