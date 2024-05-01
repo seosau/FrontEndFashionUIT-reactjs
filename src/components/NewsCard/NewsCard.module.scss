@@ -39,7 +39,7 @@
   .item-blog .block-thumb .thumb img {
     /* width: auto !important; */
     width: 100%;
-    max-height: 100%;
+    // max-height: 100%;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -51,8 +51,13 @@
   .item-blog .block-thumb img {
     border: 0 none;
     max-width: 100%;
-    height: auto;
+    // height: auto;
     vertical-align: middle;
+  }
+  .item-blog .block-thumb .fixed-size-image {
+    width: 100%; /* Chiều rộng ảnh */
+    height: 180px; /* Chiều cao ảnh */
+    object-fit: cover;
   }
 
   .item-blog .block-content {
@@ -63,7 +68,7 @@
     -webkit-box-direction: normal;
     flex-direction: column;
     background: #fff;
-    width: 100%;
+    width: 95%;
     margin: 0 auto;
     margin-top: -30px;
     position: relative;

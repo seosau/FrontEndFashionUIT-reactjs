@@ -1,8 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Switch } from "react-router-dom";
 import { routes, adminRoutes } from "./routes/routes";
 import { DefaultLayout } from "./layouts";
 import { Fragment, useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import { AccessDeny, Forbiden } from "./pages";
+import NoneLayout from "./layouts/NoneLayout/NoneLayout";
 function RouterCpn() {
   const { decodedToken } = useContext(AuthContext);
   return (
@@ -45,7 +47,47 @@ function RouterCpn() {
                 />
               );
             })
-          : null}
+          : adminRoutes.map((route, index) => {
+              const Layout = NoneLayout;
+              const Page = AccessDeny;
+              return (
+                <Route
+                  key={index}
+                  path={"route.path"}
+                  element={
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  }
+                />
+              );
+            })}
+        {decodedToken
+          ? null
+          : adminRoutes.map((route, index) => {
+              const Layout = NoneLayout;
+              const Page = AccessDeny;
+              return (
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  }
+                />
+              );
+            })}
+        <Route
+          key={"0"}
+          path={"*"}
+          element={
+            <NoneLayout>
+              <Forbiden />
+            </NoneLayout>
+          }
+        />
       </Routes>
     </Router>
   );

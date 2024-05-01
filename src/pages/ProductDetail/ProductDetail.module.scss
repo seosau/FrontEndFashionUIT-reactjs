@@ -485,3 +485,108 @@
   position: relative;
   z-index: 9999;
 }
+
+//============================================================
+@media (max-width: 1024px) {
+  .small-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+    flex-wrap: wrap;
+  }  
+  .right-features-side {
+    width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .small-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 750px;
+  }  
+  .product-detail-side {
+  width: 100%;
+  }
+  .right-features-side {
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
+    // flex-direction: column;
+    width: 30em;
+  }
+  .trending {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 750px;
+  }
+}
+
+@media (max-width: 426px) {
+  .small-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 420px;
+  }  
+  .product-detail-side {
+  width: 100%;
+  }
+  .right-features-side {
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
+    // flex-direction: column;
+    width: 100%;
+  }
+  .trending {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 420px;
+  }
+}
+
+@media (max-width: 376px) {
+  .small-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 370px;
+  }  
+  .product-detail-side {
+  width: 100%;
+  }
+  .right-features-side {
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
+    // flex-direction: column;
+    width: 100%;
+  }
+  .trending {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 370px;
+  }
+}
+
+@media (max-width: 320px) {
+  .small-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 320px;
+  }  
+  .product-detail-side {
+  width: 100%;
+  }
+  .right-features-side {
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
+    // flex-direction: column;
+    width: 100%;
+  }
+  .trending {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 320px;
+  }
+}

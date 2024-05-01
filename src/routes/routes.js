@@ -1,5 +1,6 @@
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
-import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct, EditBlog, ListBlogs, ListUsers } from "../pages/Admin";
+import NoneLayout from "../layouts/NoneLayout/NoneLayout";
+import { Dashboard, CreateProduct, CreateBlog, ListProducts, EditProduct, EditBlog, ListBlogs, ListUsers, ListOrders, adminOrderDetail } from "../pages/Admin";
 import Inquiries from "../components/Footer/SupportLinks/Inquiries/Inquiries";
 import ExchangeReturn from "../components/Footer/SupportLinks/ExchangeReturn/ExchangeReturn";
 import Size from "../components/Footer/SupportLinks/Size/Size";
@@ -37,6 +38,7 @@ import {
   OrderDetail,
   PaymentStatus,
   OrderSuccess,
+  Forbiden,
 } from "../pages";
 
 const routes = [
@@ -192,6 +194,11 @@ const routes = [
     path: "/order/success",
     component: OrderSuccess,
   },
+  {
+    path: "/forbiden",
+    component: Forbiden,
+    layout: NoneLayout,
+  },
 ];
 const adminRoutes = [
   {
@@ -199,6 +206,7 @@ const adminRoutes = [
     component: Dashboard,
     layout: AdminLayout,
   },
+
   {
     path: "/admin/product/create",
     component: CreateProduct,
@@ -232,6 +240,16 @@ const adminRoutes = [
   {
     path: "/admin/accounts",
     component: ListUsers,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/orders",
+    component: ListOrders,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/order-detail/:orderId",
+    component: adminOrderDetail,
     layout: AdminLayout,
   },
 ];
