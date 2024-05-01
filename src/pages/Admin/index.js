@@ -9,13 +9,8 @@ import EditBlog from "./Blogs/EditBlog/EditBlog";
 import ListBlogs from "./Blogs/ListBlogs/ListBlogs";
 // Component user
 import ListUsers from "./ListUsers/ListUsers";
-export {
-  Dashboard,
-  CreateProduct,
-  ListProducts,
-  EditProduct,
-  CreateBlog,
-  EditBlog,
-  ListBlogs,
-  ListUsers
-};
+// Component order
+
+import ListOrders from "./Order/ListOrders/ListOrders";
+import OrderDetail from "./Order/OrderDetail/OrderDetail";
+export { Dashboard, CreateProduct, ListProducts, EditProduct, CreateBlog, EditBlog, ListBlogs, ListUsers, ListOrders, OrderDetail as adminOrderDetail };

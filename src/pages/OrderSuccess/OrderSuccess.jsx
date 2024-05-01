@@ -13,21 +13,20 @@ const cx = className.bind(style);
 function OrderSuccess() {
   const { cartItems, setCartItems, quantityInCart, setQuantityInCart } = useStateContext();
   const navigate = useNavigate();
-  const getCartItems = async () => {
-    try {
-      const response = await axiosClient.get(`/cart/get`);
-      console.log(1);
-      setQuantityInCart(response.data.quantity);
-      setCartItems(response.data.quantity != 0 ? response.data.products : []);
-    } catch (error) {
-      console.error("Đã có lỗi xảy ra", error);
-    }
-  };
   useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const response = await axiosClient.put(`/cart/updateQuantity`);
+        setQuantityInCart(response.data.quantity);
+        setCartItems(response.data.quantity != 0 ? response.data.products : []);
+      } catch (error) {
+        console.error("Đã có lỗi xảy ra", error);
+      }
+    };
     getCartItems();
-    setTimeout(() => {
-      navigate("/account/orders");
-    }, 3000);
+    // setTimeout(() => {
+    //   navigate("/account/orders");
+    // }, 3000);
   }, []);
   const successOptions = {
     loop: false,

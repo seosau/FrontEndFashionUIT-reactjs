@@ -695,7 +695,7 @@ export default function Category() {
     <div className={cx("category-aside-content-blog")}>
       <div className={cx("title-head")}>Danh mục</div>
       <nav className={cx("nav-category")}>
-        <ul className={cx("nav", "navbar-pills")}>
+        <ul className={cx("navbar-pills")}>
           {data.map((e) => (
             <li className={cx("nav-item", "relative", isVisible === e.index ? "showing-detail" : "not-show-detail")}>
               <div className={cx("category-title")}>

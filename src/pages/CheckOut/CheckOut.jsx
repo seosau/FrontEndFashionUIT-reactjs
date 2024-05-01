@@ -75,8 +75,9 @@ function CheckOut() {
     axiosClient
       .post(`/order/create`, { orderInfo: checkoutInfoTmp })
       .then(({ data }) => {
-        toast.current.show({ severity: 'success', summary: 'Thành công', detail: "Đặt hàng thành công", life: 3000 });
-        navigate("/order/success");
+        setTimeout(() => {
+          navigate("/order/success");
+        }, 2000);
       })
       .catch((error) => {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
@@ -106,6 +107,7 @@ function CheckOut() {
         })
         .then(({ data }) => {
           window.open(data.vnpUrl, "_blank");
+          navigate("/products");
           setTimeout(function () {
             window.close();
           }, 100);
@@ -125,7 +127,7 @@ function CheckOut() {
         }
       }
     } else {
-      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Đơn hàng trống', life: 3000 });
+      toast.current.show({ severity: "error", summary: "Lỗi", detail: "Đơn hàng trống", life: 3000 });
     }
   };
   return (
@@ -257,7 +259,12 @@ function CheckOut() {
                       </div>
                     </div>
                     <div className={cx("priceField")}>
-                      <div className={cx("price")}>{checkoutItem.price}.000đ</div>
+                      <div className={cx("price")}>
+                        {checkoutItem.price > 1000
+                          ? Math.floor(checkoutItem.price / 1000) + "." + (checkoutItem.price % 1000 > 100 ? checkoutItem.price % 1000 : "0" + (checkoutItem.price % 1000))
+                          : checkoutItem.price}
+                        .000đ
+                      </div>
                       <div className={cx("productQuantity")}>x{checkoutItem.quantity}</div>
                     </div>
                   </div>
@@ -275,7 +282,9 @@ function CheckOut() {
             <div className={cx("tmpContainer")}>
               <div className={cx("tmpCount")}>
                 <div className={cx("tmpCountTitle")}>Tạm tính</div>
-                <div className={cx("tmpCountValue")}>{totalPrice > 1000 ? Math.floor(totalPrice / 1000) + "." + (totalPrice % 1000) : totalPrice}.000đ</div>
+                <div className={cx("tmpCountValue")}>
+                  {totalPrice > 1000 ? Math.floor(totalPrice / 1000) + "." + (totalPrice % 1000 > 100 ? totalPrice % 1000 : "0" + (totalPrice % 1000)) : totalPrice}.000đ
+                </div>
               </div>
               <div className={cx("shippingCostContainer")}>
                 <div className={cx("shippingCostTitle")}>Phí vận chuyển</div>
@@ -287,7 +296,12 @@ function CheckOut() {
             <div className={cx("finalContainer")}>
               <div className={cx("finalPrice")}>
                 <div className={cx("finalTitle")}>Tổng cộng</div>
-                <div className={cx("finalValue")}>{totalPrice + 40 > 1000 ? Math.floor((totalPrice + 40) / 1000) + "." + ((totalPrice + 40) % 1000) : totalPrice + 40}.000đ</div>
+                <div className={cx("finalValue")}>
+                  {totalPrice + 40 > 1000
+                    ? Math.floor((totalPrice + 40) / 1000) + "." + ((totalPrice + 40) % 1000 > 100 ? (totalPrice + 40) % 1000 : "0" + ((totalPrice + 40) % 1000))
+                    : totalPrice + 40}
+                  .000đ
+                </div>
               </div>
               <div className={cx("finalOptContainer")}>
                 <Link to={"/cart"} className={cx("backBtn")}>
