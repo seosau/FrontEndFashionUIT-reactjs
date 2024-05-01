@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar/Sidebar";
 
 import style from "./AdminLayout.module.scss";
 import className from "classnames/bind";
-const cx = className.bind(style)
+const cx = className.bind(style);
 function AdminLayout({ children }) {
   return (
     <div className={cx("main")}>

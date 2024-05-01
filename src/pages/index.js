@@ -19,6 +19,8 @@ import PaymentStatus from "./PaymentStatus/PaymentStatus";
 import OrderDetail from "./OrderDetail/OrderDetail";
 import OrderSuccess from "./OrderSuccess/OrderSuccess";
 import OTP from "./OTP/OTP";
+import Forbiden from "./Forbiden/Forbiden";
+import AccessDeny from "./AccessDeny/AccessDeny";
 export {
   Home,
   AllProducts,
@@ -41,4 +43,6 @@ export {
   PaymentStatus,
   OrderDetail,
   OrderSuccess,
+  Forbiden,
+  AccessDeny,
 };
