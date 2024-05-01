@@ -13,7 +13,7 @@
     justify-content: space-between;
     background-color: #fff;
     border-radius: 10px;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
   /* CSS cho hình ảnh sản phẩm chính */
@@ -257,5 +257,30 @@
     text-align: center;
     border-radius: 5px;
     font-weight: bold;
+  }
+}
+
+//===============================================================
+@media (max-width: 426px) {
+  .ProductMainInfo-container .small-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 376px) {
+  .ProductMainInfo-container .small-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 370px;
+  }
+}
+
+@media (max-width: 320px) {
+  .ProductMainInfo-container .small-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 320px;
   }
 }

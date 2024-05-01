@@ -92,7 +92,7 @@ export default function ProductMainInfo({ product }) {
           <div className={cx("small-container")}>
             <div className={cx("left-image")}>
               <div className={cx("main-image")}>
-                <img src={product.images[0].imgUrl} />
+                <img src={product.images[mainImgIndex].imgUrl} />
               </div>
               <div className={cx("small-images")}>
                 <Swiper
@@ -149,8 +149,12 @@ export default function ProductMainInfo({ product }) {
                   <span className={cx("currency-symbols")}>₫</span>
                 </h3>
                 <h3 className={cx("old-price")}>
-                  {product.price - product.discount * product.price}.000
-                  <span className={cx("currency-symbols")}>₫</span>
+                  {product.discount !== 0 ? 
+                   <>
+                    {product.price - product.discount * product.price}.000
+                    <span className={cx("currency-symbols")}>₫</span>
+                   </>
+                   : ""}
                 </h3>
               </div>
               <p className={cx("short-descripions")}>
