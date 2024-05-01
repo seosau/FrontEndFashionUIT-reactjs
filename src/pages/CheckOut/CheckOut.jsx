@@ -1,7 +1,7 @@
 import style from "./CheckOut.module.scss";
 import className from "classnames/bind";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosClient from "../../config/axios";
@@ -11,6 +11,7 @@ import { TiArrowBackOutline } from "react-icons/ti";
 import { BsBank2 } from "react-icons/bs";
 import { CiCirclePlus } from "react-icons/ci";
 import AddAddressForm from "../../components/AddAddressForm/AddAddressForm";
+import { Toast } from "primereact/toast";
 const cx = className.bind(style);
 
 function CheckOut() {
@@ -26,6 +27,8 @@ function CheckOut() {
   const [pickedPayment, setPickedPayment] = useState(true);
   const [note, setNote] = useState("");
   const [hiddenForm, setHiddenForm] = useState(true);
+
+  const toast = useRef(null);
 
   useEffect(() => {
     axiosClient
@@ -72,7 +75,7 @@ function CheckOut() {
     axiosClient
       .post(`/order/create`, { orderInfo: checkoutInfoTmp })
       .then(({ data }) => {
-        window.alert("Đặt hàng thành công");
+        toast.current.show({ severity: 'success', summary: 'Thành công', detail: "Đặt hàng thành công", life: 3000 });
         navigate("/order/success");
       })
       .catch((error) => {
@@ -123,11 +126,12 @@ function CheckOut() {
         }
       }
     } else {
-      window.alert("Đơn hàng trống!");
+      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Đơn hàng trống', life: 3000 });
     }
   };
   return (
     <div className={cx("main")}>
+      <Toast ref={toast} />
       {!hiddenForm ? <div className={cx("isOverlay")}></div> : null}
       {!hiddenForm ? <AddAddressForm hiddenForm={hiddenForm} setHiddenForm={setHiddenForm} /> : null}
       <div className={cx("wrapper")}>

@@ -2,12 +2,13 @@ import style from "./OTP.module.scss";
 import className from "classnames/bind";
 import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { Toast } from "primereact/toast";
 const cx = className.bind(style);
 function OTP() {
   const [isFullFilled, setIsFullFilled] = useState(true);
+  const toast = useRef(null);
 
   const [otp, setOtp] = useState("");
   const validateForm = () => {
@@ -33,19 +34,19 @@ function OTP() {
         .catch((error) => {
           switch (error.response.status) {
             case 403: {
-              window.alert("OTP đã hết hạn!");
+              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "OTP đã hết hạn.", life: 3000 });
               break;
             }
             case 404: {
               if (error.response.data.type == "email") {
-                window.alert("Email không tồn tại!");
+                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Email không tồn tại!", life: 3000 });
               } else if (error.response.data.type == "otp") {
-                window.alert("OTP không đúng, vui lòng thử lại!");
+                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "OTP không đúng, vui lòng thử lại!", life: 3000 });
               }
               break;
             }
             case 500: {
-              window.alert("Đã có lỗi xãy ra, vui lòng thử lại!");
+              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
               break;
             }
           }
@@ -54,6 +55,7 @@ function OTP() {
   };
   return (
     <div>
+      <Toast ref={toast} />
       <div className={cx("mainContainer")}>
         <form className={cx("formContainer")}>
           <div className={cx("title")}>Nhập mã OTP</div>

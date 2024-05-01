@@ -2,16 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import style from "./Login.module.scss";
 import className from "classnames/bind";
 import { FaFacebookF, FaGooglePlusG, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import axiosClient from "../../config/axios";
 import { AuthContext } from "../../context/AuthContext";
+import { Toast } from "primereact/toast";
 const cx = className.bind(style);
 function Login() {
   const [isPrivate, setIsPrivate] = useState(true);
   const [isFullFilled, setIsFullFilled] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isRemember, setIsRemember] = useState(false);
+  const toast = useRef(null);
 
   const [loginInfo, setLoginInfo] = useState({
     email: "",
@@ -54,29 +56,30 @@ function Login() {
               setIsAuth(true);
               navigate("/");
             } else {
-              window.alert("Please verify your email!");
+              toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Vui lòng xác thực email!", life: 3000 });
               console.log("Please verify your email!");
             }
           })
           .catch((error) => {
             switch (error.response.status) {
               case 401: {
-                window.alert("Email hoặc mật khẩu không đúng!");
+                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Email hoặc mật khẩu không đúng!", life: 3000 });
                 break;
               }
               case 500: {
-                window.alert("Đã có lỗi xãy ra, vui lòng thử lại!");
+                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đã có lỗi xãy ra, vui lòng thử lại!", life: 3000 });
                 break;
               }
             }
           });
       }
     } else {
-      window.alert("Bạn đã đăng nhập. Vui lòng đăng xuất trước khi đăng nhập tài khoản khác!");
+      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Bạn đã đăng nhập. Vui lòng đăng xuất trước khi đăng nhập tài khoản khác!", life: 3000 });
     }
   };
   return (
     <div>
+      <Toast ref={toast} />
       <div className={cx("mainContainer")}>
         <form className={cx("formContainer")}>
           <div className={cx("title")}>ĐĂNG NHẬP</div>
