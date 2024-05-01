@@ -62,11 +62,11 @@ function Register() {
       axiosClient
         .post(`/auth/register`, user)
         .then((response) => {
-          toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản của bạn.", life: 3000 });
+          toast.current.show({ severity: "error", summary: "Lỗi", detail: "Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản của bạn.", life: 3000 });
           navigate("/login");
         })
         .catch((error) => {
-          toast.current.show({ severity: 'error', summary: 'Lỗi', detail: "Đăng ký không thành công! Vui lòng thử lại.", life: 3000 });
+          toast.current.show({ severity: "error", summary: "Lỗi", detail: "Đăng ký không thành công! Vui lòng thử lại.", life: 3000 });
           console.log(error.response);
         });
     }
