@@ -317,7 +317,7 @@ export default function ProductCart() {
                                 </div>
                                 <div className={cx("grid-price")}>
                                   <div className={cx("grid-item-cart-price")}>
-                                    <span className={cx("cart-price")}>{parseInt(item.price).toLocaleString("de-DE")}.000đ</span>
+                                    <span className={cx("cart-price")}>{(item.discount).toLocaleString("de-DE")}đ</span>
                                   </div>
                                 </div>
                                 <div className={cx("grid-qty")}>

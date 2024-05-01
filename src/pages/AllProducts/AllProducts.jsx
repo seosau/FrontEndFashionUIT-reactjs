@@ -22,11 +22,11 @@ export default function AllProducts() {
     "Thời Trang Tập Gym",
   ];
   const priceFilter = [
-    "Dưới 2 triệu",
-    "Từ 2 triệu - 4 triệu",
-    "Từ 4 triệu - 7 triệu",
-    "Từ 7 triệu - 13 triệu",
-    "Trên 13 triệu",
+    "Dưới 100.000 đ",
+    "Từ 100.000 đ - 200.000 đ",
+    "Từ 200.000 đ - 500.000 đ",
+    "Từ 500.000 đ - 1.000.000 đ",
+    "Trên 1.000.000 đ",
   ];
   const typeFilter = [
     "Áo Cotton",
@@ -186,33 +186,33 @@ export default function AllProducts() {
 
     // priceFilter
     if (selectedFilter.includes(priceFilter[0])) {
-      let tempProduct = products.filter((product) => product.price < 2000);
+      let tempProduct = products.filter((product) => (product.price - product.price * product.discount / 100) < 100);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[1])) {
       let tempProduct = products.filter(
-        (product) => product.price >= 2000 && product.price <= 4000
+        (product) => (product.price - product.price * product.discount / 100) >= 100 && (product.price - product.price * product.discount / 100) <= 200
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[2])) {
       let tempProduct = products.filter(
-        (product) => product.price >= 4000 && product.price <= 7000
+        (product) => (product.price - product.price * product.discount / 100) >= 200 && (product.price - product.price * product.discount / 100) <= 500
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[3])) {
       let tempProduct = products.filter(
-        (product) => product.price >= 7000 && product.price <= 13000
+        (product) => (product.price - product.price * product.discount / 100) >= 500 && (product.price - product.price * product.discount / 100) <= 1000
       );
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
     if (selectedFilter.includes(priceFilter[4])) {
-      let tempProduct = products.filter((product) => product.price > 13000);
+      let tempProduct = products.filter((product) => (product.price - product.price * product.discount / 100) > 1000);
       filteredProductsByPrice = [...filteredProductsByPrice, ...tempProduct];
       amountPrice++;
     }
@@ -238,7 +238,7 @@ export default function AllProducts() {
     for (let i = 0; i < colorFilter.length; i++) {
       if (selectedFilter.includes(colorFilter[i])) {
         let tempProduct = products.filter((product) =>
-          product.color.includes(colorFilter[i].toLowerCase())
+          product.colors.some(cl => cl.colorName.toLowerCase() === colorFilter[i].toLowerCase())
         );
         if (amountColor === 0) {
           filteredProductsByColor.push(...tempProduct);
@@ -540,6 +540,7 @@ export default function AllProducts() {
                 filteredProducts.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
                     <Product
+                      discount={product.discount ? true : false}
                       product={product}
                       handleClickCart={() => handleClickCart(product)}
                       handleClickEye={() => handleClickEye(product)}
@@ -551,6 +552,7 @@ export default function AllProducts() {
                   <div className={cx("productCard")} key={index}>
                     <Product
                       product={product}
+                      discount={product.discount ? true : false}
                       handleClickCart={() => handleClickCart(product)}
                       handleClickEye={() => handleClickEye(product)}
                     />

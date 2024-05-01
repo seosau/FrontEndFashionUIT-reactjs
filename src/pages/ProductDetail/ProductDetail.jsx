@@ -14,8 +14,8 @@ import style from "./ProductDetail.module.scss";
 import Product from "../../components/Product/Product";
 import ProductMainInfo from "../../components/ProductMainInfo/ProductMainInfo";
 import QuickViewInfo from "../../components/QuickViewInfo/QuickViewInfo";
-import Category from "../../components/Category/Category";
 import axiosClient from "../../config/axios";
+import { Toast } from "primereact/toast";
 
 const cx = classNames.bind(style);
 
@@ -25,6 +25,15 @@ export default function ProductDetail() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const openPopup = () => {
     setIsPopupOpen(!isPopupOpen);
+  };
+  const toast = useRef(null);
+
+  const error = () => {
+    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Thêm sản phẩm thất bại', life: 3000 });
+  }
+
+  const show = () => {
+    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!" });
   };
 
   const [activeTab, setActiveTab] = useState(0);
@@ -89,6 +98,7 @@ export default function ProductDetail() {
   };
   return (
     <>
+    <Toast ref={toast} />
       <div className={cx("set-z-index")}>
         {isPopupOpen && <QuickViewInfo openPopup={openPopup} />}
       </div>
@@ -127,7 +137,7 @@ export default function ProductDetail() {
           <div className={cx("product-detail-side")}>
             {/* Chi tiết sản phẩm chính */}
             {Object.keys(product).length > 0 && (
-              <ProductMainInfo product={product} />
+              <ProductMainInfo product={product} addToCartFail={error} addToCartSuccess={show} />
             )}
             {/* Mô tả và chính sách */}
             <div className={cx("description-policy")}>

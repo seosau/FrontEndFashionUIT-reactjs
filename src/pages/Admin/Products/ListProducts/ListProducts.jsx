@@ -138,9 +138,11 @@ function ListProducts() {
   };
 
   // sale hour
-  const [saleHour, setSaleHour] = useState(-1);
-  const [hidePopup, setHidePopup] = useState(true);
-  const [slug, setSlug] = useState("");
+
+  const [saleHour, setSaleHour] = useState(-1)
+  const [hidePopup, setHidePopup] = useState(true)
+  const [productId, setProductId] = useState('')
+
   const currentDate = new Date();
   const initialSaleDay = new Date(
     currentDate.getFullYear(),
@@ -148,31 +150,36 @@ function ListProducts() {
     currentDate.getDate()
   );
   const [saleDay, setSaleDay] = useState(initialSaleDay);
+  const [discountPercent, setDiscountPercent] = useState(0)
   const toast = useRef(null);
   const handleChangeSaleDay = (event) => {
     setSaleDay(event.target.value);
   };
 
   const addProductToSale = async () => {
-    const tmp = [...products];
-    const productToSale = tmp.find((product) => product.slug === slug);
-    console.log(productToSale.slug);
 
-    if (saleHour === -1) {
-      toast.current.show({
-        severity: "error",
-        summary: "Lỗi",
-        detail: "Vui lòng chọn khung giờ",
-        life: 3000,
-      });
-      return;
+    if (parseInt(saleHour) === -1) {
+      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn khung giờ', life: 3000 });
+      return
     }
 
-    await axiosClient
-      .post("/admin/sale/add", {
-        slug: productToSale.slug,
-        saleHour: saleHour,
-        saleDay: saleDay,
+    if (parseInt(discountPercent) > 100) {
+      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Mức giảm giá từ 0 - 100%', life: 3000 });
+      return
+    }
+
+    await axiosClient.post('/admin/sale/add', {
+      productId: productId,
+      saleHour: saleHour,
+      saleDay: saleDay,
+      discountPercent: discountPercent
+    })
+      .then(res => {
+        console.log(res)
+        toast.current.show({ severity: 'success', summary: 'Thành công', detail: 'Thêm sản phẩm thành công', life: 3000 });
+        setHidePopup(prevState => !prevState)
+        setSaleHour(-1)
+        setSaleDay(new Date())
       })
       .then((res) => {
         console.log(res);
@@ -195,10 +202,10 @@ function ListProducts() {
       });
   };
 
-  const togglePopup = (slug = "") => {
-    setHidePopup((prevState) => !prevState);
-    setSlug(slug);
-  };
+  const togglePopup = (productId = '') => {
+    setHidePopup(prevState => !prevState)
+    setProductId(productId)
+  }
 
   // confirm popup
   const accept = (slug) => {
@@ -393,8 +400,8 @@ function ListProducts() {
                         <CiSquareRemove className={cx("icon", "icon-remove")} />
                         Remove
                       </li>
-                      <li className={cx("product-action-item")}>
-                        <div onClick={() => togglePopup(product.slug)}>
+                      <li className={cx("product-action-item")} >
+                        <div onClick={() => togglePopup(product._id)}>
                           <CiSquarePlus
                             className={cx("icon", "icon-add-sale")}
                           />
@@ -435,6 +442,18 @@ function ListProducts() {
                                   type="date"
                                   value={saleDay}
                                   onChange={handleChangeSaleDay}
+                                />
+                              </div>
+                              <div className={cx("discount")}>
+                                <span>Phần trăm giảm giá:</span>
+                                <input 
+                                type="number" 
+                                value={discountPercent} 
+                                onChange={(e) => setDiscountPercent(e.target.value)} 
+                                min={0}
+                                max={99}
+                                maxLength={2}
+                                pattern="[0-9]*"
                                 />
                               </div>
                               <div className={cx("popup-button-group")}>
