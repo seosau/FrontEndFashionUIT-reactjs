@@ -94,14 +94,7 @@ function ListProducts() {
     var gio = date.getHours();
     var phut = date.getMinutes();
     var giay = date.getSeconds();
-    const chuoiNgayThangNam =
-      (ngay < 10 ? "0" : "") +
-      ngay +
-      "/" +
-      (thang < 10 ? "0" : "") +
-      thang +
-      "/" +
-      nam;
+    const chuoiNgayThangNam = (ngay < 10 ? "0" : "") + ngay + "/" + (thang < 10 ? "0" : "") + thang + "/" + nam;
     return {
       date: chuoiNgayThangNam,
       time: gio + "h" + phut + "m" + giay + "s",
@@ -114,9 +107,7 @@ function ListProducts() {
   // selected 1 product
   const selectedProduct = (slug) => {
     if (selectedProducts.includes(slug)) {
-      const fillteredArr = selectedProducts.filter(
-        (productSlug) => productSlug !== slug
-      );
+      const fillteredArr = selectedProducts.filter((productSlug) => productSlug !== slug);
       setSelectedProducts([...fillteredArr]);
     } else {
       setSelectedProducts([...selectedProducts, slug]);
@@ -124,7 +115,7 @@ function ListProducts() {
   };
   // selected all producsts
   const selectedAllProducts = () => {
-    const slugArr = products.map((product) => product.slug);
+    const slugArr = products.map((product) => product?.slug);
     if (selectedProducts.length > 0) {
       setSelectedProducts([]);
     } else {
@@ -134,52 +125,48 @@ function ListProducts() {
   // delete many products
   const deleteSelectedproduct = (e) => {
     e.preventDefault();
-    confirm("")
+    confirm("");
   };
 
   // sale hour
 
-  const [saleHour, setSaleHour] = useState(-1)
-  const [hidePopup, setHidePopup] = useState(true)
-  const [productId, setProductId] = useState('')
+  const [saleHour, setSaleHour] = useState(-1);
+  const [hidePopup, setHidePopup] = useState(true);
+  const [productId, setProductId] = useState("");
 
   const currentDate = new Date();
-  const initialSaleDay = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    currentDate.getDate()
-  );
+  const initialSaleDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
   const [saleDay, setSaleDay] = useState(initialSaleDay);
-  const [discountPercent, setDiscountPercent] = useState(0)
+  const [discountPercent, setDiscountPercent] = useState(0);
   const toast = useRef(null);
   const handleChangeSaleDay = (event) => {
     setSaleDay(event.target.value);
   };
 
   const addProductToSale = async () => {
-
     if (parseInt(saleHour) === -1) {
-      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn khung giờ', life: 3000 });
-      return
+      toast.current.show({ severity: "error", summary: "Lỗi", detail: "Vui lòng chọn khung giờ", life: 3000 });
+      return;
     }
 
     if (parseInt(discountPercent) > 100) {
-      toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Mức giảm giá từ 0 - 100%', life: 3000 });
-      return
+      toast.current.show({ severity: "error", summary: "Lỗi", detail: "Mức giảm giá từ 0 - 100%", life: 3000 });
+      return;
     }
 
-    await axiosClient.post('/admin/sale/add', {
-      productId: productId,
-      saleHour: saleHour,
-      saleDay: saleDay,
-      discountPercent: discountPercent
-    })
-      .then(res => {
-        console.log(res)
-        toast.current.show({ severity: 'success', summary: 'Thành công', detail: 'Thêm sản phẩm thành công', life: 3000 });
-        setHidePopup(prevState => !prevState)
-        setSaleHour(-1)
-        setSaleDay(new Date())
+    await axiosClient
+      .post("/admin/sale/add", {
+        productId: productId,
+        saleHour: saleHour,
+        saleDay: saleDay,
+        discountPercent: discountPercent,
+      })
+      .then((res) => {
+        console.log(res);
+        toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm thành công", life: 3000 });
+        setHidePopup((prevState) => !prevState);
+        setSaleHour(-1);
+        setSaleDay(new Date());
       })
       .catch((error) => {
         toast.current.show({
@@ -192,10 +179,10 @@ function ListProducts() {
       });
   };
 
-  const togglePopup = (productId = '') => {
-    setHidePopup(prevState => !prevState)
-    setProductId(productId)
-  }
+  const togglePopup = (productId = "") => {
+    setHidePopup((prevState) => !prevState);
+    setProductId(productId);
+  };
 
   // confirm popup
   const accept = (slug) => {
@@ -206,9 +193,7 @@ function ListProducts() {
         detail: "Xóa sản phẩm thành công",
         life: 3000,
       });
-      setProducts((prevProducts) =>
-        prevProducts.filter((product) => product.slug !== slug)
-      );
+      setProducts((prevProducts) => prevProducts.filter((product) => product?.slug !== slug));
       axiosClient
         .delete(`/admin/product/delete/${slug}`)
         .then((res) => {
@@ -221,11 +206,7 @@ function ListProducts() {
       axiosClient
         .delete("/admin/product/delete/all", { data: selectedProducts })
         .then((res) => {
-          setProducts((prevProducts) =>
-            prevProducts.filter(
-              (product) => !selectedProducts.includes(product.slug)
-            )
-          );
+          setProducts((prevProducts) => prevProducts.filter((product) => !selectedProducts.includes(product?.slug)));
           setSelectedProducts([]);
         })
         .catch((error) => {
@@ -263,10 +244,7 @@ function ListProducts() {
       <ConfirmDialog />
       <div className={cx("addproduct__header")}>
         <h1 className={cx("addproduct__header-title")}>Danh sách sản phẩm</h1>
-        <Link
-          to="/admin/product/create"
-          className={cx("addproduct__header-btn-create")}
-        >
+        <Link to="/admin/product/create" className={cx("addproduct__header-btn-create")}>
           <IoMdAdd />
           <span>Thêm sản phẩm</span>
         </Link>
@@ -284,20 +262,13 @@ function ListProducts() {
           </select> */}
           <div className={cx("action-search")}>
             <GoSearch className={cx("action-search-icon")} />
-            <input
-              type="text"
-              className={cx("action-search-input")}
-              placeholder="Tìm kiếm sản phẩm..."
-              onChange={handleChange}
-            />
+            <input type="text" className={cx("action-search-input")} placeholder="Tìm kiếm sản phẩm..." onChange={handleChange} />
           </div>
           <div className={cx("action-delete")}>
             {selectedProducts.length > 0 ? (
               <>
                 <FaTrashAlt />
-                <button onClick={deleteSelectedproduct}>
-                  Delete {selectedProducts.length}
-                </button>
+                <button onClick={deleteSelectedproduct}>Delete {selectedProducts.length}</button>
               </>
             ) : null}
           </div>
@@ -306,12 +277,7 @@ function ListProducts() {
           <thead className={cx("table-head-list")}>
             <tr>
               <th className={cx("table-head-item")}>
-                <input
-                  type="checkbox"
-                  className={cx("action-checkbox")}
-                  onChange={selectedAllProducts}
-                  checked={selectedProducts.length > 0}
-                />
+                <input type="checkbox" className={cx("action-checkbox")} onChange={selectedAllProducts} checked={selectedProducts.length > 0} />
               </th>
               <th className={cx("table-head-item")}>Tên sản phẩm</th>
               <th className={cx("table-head-item")}>Thời gian tạo</th>
@@ -327,98 +293,66 @@ function ListProducts() {
               products.map((product, index) => (
                 <tr className={cx("product-item")} key={index}>
                   <td className={cx("action-checkbox")}>
-                    <input
-                      type="checkbox"
-                      onChange={() => selectedProduct(product.slug)}
-                      checked={selectedProducts.includes(product.slug)}
-                    />
+                    <input type="checkbox" onChange={() => selectedProduct(product?.slug)} checked={selectedProducts.includes(product?.slug)} />
                   </td>
                   <td>
                     <div className={cx("product-info")}>
-                      <img
-                        src={product.images[0].imgUrl}
-                        alt={product.slug}
-                        className={cx("product-img")}
-                      />
+                      <img src={product?.images[0]?.imgUrl} alt={product?.slug} className={cx("product-img")} />
                       <div className={cx("product-info-detail")}>
                         <p className={cx("product-name")}>
-                          <strong>{product.name}</strong>
+                          <strong>{product?.name}</strong>
                         </p>
-                        <span className={cx("product-category")}>
-                          {product.category.categoryDetail}
-                        </span>
+                        <span className={cx("product-category")}>{product?.category.categoryDetail}</span>
                       </div>
                     </div>
                   </td>
                   <td className={cx("product-time")}>
                     <p className={cx("product-date")}>
-                      <strong>
-                        {convertStringDate(product.updatedAt).date}
-                      </strong>
+                      <strong>{convertStringDate(product?.updatedAt).date}</strong>
                     </p>
-                    <span className={cx("product-time-detail")}>
-                      {convertStringDate(product.updatedAt).time}
-                    </span>
+                    <span className={cx("product-time-detail")}>{convertStringDate(product?.updatedAt).time}</span>
                   </td>
                   <td className={cx("product-stock")}>
-                    {product.stock.map((stockItem, index) => (
+                    {product?.stock.map((stockItem, index) => (
                       <p className={cx("product-stock-detail")} key={index}>
-                        Size : {stockItem.size} - Màu : {stockItem.color} -{" "}
-                        {stockItem.quantity} cái
+                        Size : {stockItem.size} - Màu : {stockItem.color} - {stockItem.quantity} cái
                       </p>
                     ))}
                   </td>
-                  <td className={cx("product-price")}>
-                    {product.price}.000vnd
-                  </td>
-                  <td className={cx("product-status")}>
-                    {product?.status ? "Có" : "Không"}
-                  </td>
+                  <td className={cx("product-price")}>{product?.price}.000vnd</td>
+                  <td className={cx("product-status")}>{product?.status ? "Có" : "Không"}</td>
                   <td className={cx("product-action")}>
                     <ul className={cx("product-action-list")}>
                       <li className={cx("product-action-item")}>
-                        <Link to={`/admin/product/edit/${product.slug}`}>
+                        <Link to={`/admin/product/edit/${product?.slug}`}>
                           <TbEdit className={cx("icon", "icon-edit")} />
                           Edit
                         </Link>
                       </li>
 
-                      <li
-                        className={cx("product-action-item")}
-                        onClick={() => deleteProduct(product.slug)}
-                      >
+                      <li className={cx("product-action-item")} onClick={() => deleteProduct(product?.slug)}>
                         <CiSquareRemove className={cx("icon", "icon-remove")} />
                         Remove
                       </li>
-                      <li className={cx("product-action-item")} >
-                        <div onClick={() => togglePopup(product._id)}>
-                          <CiSquarePlus
-                            className={cx("icon", "icon-add-sale")}
-                          />
+                      <li className={cx("product-action-item")}>
+                        <div onClick={() => togglePopup(product?._id)}>
+                          <CiSquarePlus className={cx("icon", "icon-add-sale")} />
                           Add Sale
                         </div>
-                        {!hidePopup && (
-                          <div className={cx("popup-backdrop")}></div>
-                        )}
+                        {!hidePopup && <div className={cx("popup-backdrop")}></div>}
                         {!hidePopup && (
                           <div className={cx("popup-container")}>
                             <div className={cx("popup-header")}>
                               <span>
                                 <CiSquarePlus className={cx("popup-icon")} />
                                 Nhập thông tin
-                                <IoClose
-                                  className={cx("popup-close-icon")}
-                                  onClick={() => setHidePopup(true)}
-                                />
+                                <IoClose className={cx("popup-close-icon")} onClick={() => setHidePopup(true)} />
                               </span>
                             </div>
                             <div className={cx("popup-content")}>
                               <div className={cx("hour")}>
                                 <span>Chọn khung giờ:</span>
-                                <select
-                                  value={saleHour}
-                                  onChange={(e) => setSaleHour(e.target.value)}
-                                >
+                                <select value={saleHour} onChange={(e) => setSaleHour(e.target.value)}>
                                   <option value={-1}>Chọn khung giờ</option>
                                   <option value={0}>00:00 - 06:00</option>
                                   <option value={6}>06:00 - 12:00</option>
@@ -428,37 +362,17 @@ function ListProducts() {
                               </div>
                               <div className={cx("date")}>
                                 <span>Chọn ngày:</span>
-                                <input
-                                  type="date"
-                                  value={saleDay}
-                                  onChange={handleChangeSaleDay}
-                                />
+                                <input type="date" value={saleDay} onChange={handleChangeSaleDay} />
                               </div>
                               <div className={cx("discount")}>
                                 <span>Phần trăm giảm giá:</span>
-                                <input 
-                                type="number" 
-                                value={discountPercent} 
-                                onChange={(e) => setDiscountPercent(e.target.value)} 
-                                min={0}
-                                max={99}
-                                maxLength={2}
-                                pattern="[0-9]*"
-                                />
+                                <input type="number" value={discountPercent} onChange={(e) => setDiscountPercent(e.target.value)} min={0} max={99} maxLength={2} pattern="[0-9]*" />
                               </div>
                               <div className={cx("popup-button-group")}>
-                                <button
-                                  type="button"
-                                  className={cx("btn-continue")}
-                                  onClick={() => togglePopup()}
-                                >
+                                <button type="button" className={cx("btn-continue")} onClick={() => togglePopup()}>
                                   Hủy
                                 </button>
-                                <button
-                                  type="button"
-                                  className={cx("btn-checkout")}
-                                  onClick={addProductToSale}
-                                >
+                                <button type="button" className={cx("btn-checkout")} onClick={addProductToSale}>
                                   Thêm
                                 </button>
                               </div>
