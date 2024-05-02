@@ -32,7 +32,7 @@ export default function Home() {
   const [gymProducts, setGymProducts] = useState();
   const [saleProductsInTabIndex, setSaleProductsInTabIndex] = useState()
   const currentTime = new Date();
-
+  const [status, setStatus] = useState([false, false, false, false]);
   const [width, setWidth] = useState(window.innerWidth);
 
   // pagination
@@ -271,16 +271,28 @@ export default function Home() {
   }, [officialProducts])
 
   useEffect(() => {
+    const newStatus = [...status];
+
     if (currentTime.getHours() >= 0 && currentTime.getHours() < 6) {
       setTabIndex(0);
+      newStatus[0] = true;
     } else if (currentTime.getHours() >= 6 && currentTime.getHours() < 12) {
       setTabIndex(1);
+      newStatus[0] = true;
+      newStatus[1] = true;
     } else if (currentTime.getHours() >= 12 && currentTime.getHours() < 18) {
       setTabIndex(2);
+      newStatus[0] = true;
+      newStatus[1] = true;
+      newStatus[2] = true;
     } else if (currentTime.getHours() >= 18 && currentTime.getHours() < 24) {
       setTabIndex(3);
+      newStatus[0] = true;
+      newStatus[1] = true;
+      newStatus[2] = true;
+      newStatus[3] = true;
     }
-    
+    setStatus(newStatus);
   }, []);
 
   return (
@@ -393,7 +405,7 @@ export default function Home() {
                             (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 18) ||
                             (index === 3 && currentTime.getHours() >= 18 && currentTime.getHours() < 24)
                             ? "Đang diễn ra"
-                            : "Sắp diễn ra"}
+                            : status[index] ? "Đã diễn ra" : "Sắp diễn ra"}
                         </div>
                       </Tab>
                     ))}
