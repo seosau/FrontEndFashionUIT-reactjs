@@ -175,11 +175,15 @@ export default function Search() {
                     </div>
                     <div className={cx("product-smart__info_price")}>
                       <span className={cx("price-box")}>
-                        {product.price}.000đ
+                        {(product.price * 1000).toLocaleString('de-DE')}đ
+                        {/* {product.price}.000đ */}
                       </span>
                       <span className={cx("compare-price")}>
-                        {product.price - product.discount * product.price}
-                        .000đ
+                        {
+                          ((product.price - (product.price * product.discount) / 100) * 1000).toLocaleString('de-DE')
+                        }đ
+                        {/* {product.price - product.discount * product.price}
+                        .000đ */}
                       </span>
                     </div>
                   </div>

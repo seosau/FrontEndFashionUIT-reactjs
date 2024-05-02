@@ -214,7 +214,7 @@ function ListProducts() {
         });
     }
   };
-  const reject = () => {};
+  const reject = () => { };
   const confirm = (slug) => {
     if (!!slug) {
       confirmDialog({
@@ -319,7 +319,7 @@ function ListProducts() {
                       </p>
                     ))}
                   </td>
-                  <td className={cx("product-price")}>{product?.price}.000vnd</td>
+                  <td className={cx("product-price")}>{(product?.price * 1000).toLocaleString('de-DE')}đ</td>
                   <td className={cx("product-status")}>{product?.status ? "Có" : "Không"}</td>
                   <td className={cx("product-action")}>
                     <ul className={cx("product-action-list")}>

@@ -132,7 +132,12 @@ function OrderDetail() {
                     </div>
                     <div className={cx("priceCol")}>
                       <div className={cx("priceValue")}>
-                        <div className={cx("priceTxt")}>{product.price > 1000 ? Math.floor(product.price / 1000) + "." + (product.price % 1000) : product.price}.000đ</div>
+                        <div className={cx("priceTxt")}>
+                          {
+                            (product.price*1000).toLocaleString('de-DE')
+                          }đ
+                          {/* {product.price > 1000 ? Math.floor(product.price / 1000) + "." + (product.price % 1000) : product.price}.000đ */}
+                          </div>
                       </div>
                     </div>
                     <div className={cx("quantityCol")}>
@@ -143,10 +148,13 @@ function OrderDetail() {
                     <div className={cx("totalCol")}>
                       <div className={cx("totalValue")}>
                         <div className={cx("totalTxt")}>
-                          {product.price * product.quantity > 1000
+                          {
+                            (product.price * product.quantity * 1000).toLocaleString('de-DE')
+                          }đ
+                          {/* {product.price * product.quantity > 1000
                             ? Math.floor((product.price * product.quantity) / 1000) + "." + ((product.price * product.quantity) % 1000)
                             : product.price * product.quantity}
-                          .000đ
+                          .000đ */}
                         </div>
                       </div>
                     </div>
@@ -165,7 +173,12 @@ function OrderDetail() {
                 </div>
                 <div className={cx("finalValueCol")}>
                   <div className={cx("shippingValue")}>40.000đ</div>
-                  <div className={cx("finalPriceValue")}>{order.totalPrice > 1000 ? Math.floor(order.totalPrice / 1000) + "." + (order.totalPrice % 1000) : order.totalPrice}.000đ</div>
+                  <div className={cx("finalPriceValue")}>
+                    {
+                      (order.totalPrice * 1000).toLocaleString('de-DE')
+                    }đ
+                    {/* {order.totalPrice > 1000 ? Math.floor(order.totalPrice / 1000) + "." + (order.totalPrice % 1000) : order.totalPrice}.000đ */}
+                    </div>
                 </div>
               </div>
             </div>

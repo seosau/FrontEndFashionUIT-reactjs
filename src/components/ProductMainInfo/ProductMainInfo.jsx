@@ -164,16 +164,19 @@ export default function ProductMainInfo({
               </div>
               <div className={cx("product-price")}>
                 <h3 className={cx("new-price")}>
-                  {Math.floor(
+                  {
+                    ((product.price - (product.price * product.discount) / 100) * 1000).toLocaleString('de-DE')
+                  }
+                  {/* {Math.floor(
                     product.price - (product.price * product.discount) / 100
                   ).toLocaleString("vi-VN")}
-                  .000
+                  .000 */}
                   <span className={cx("currency-symbols")}>₫</span>
                 </h3>
                 <h3 className={cx("old-price")}>
                   {product.discount > 0 ? (
                     <>
-                      {product.price}.000
+                      {(product.price * 1000).toLocaleString('de-DE')}
                       <span className={cx("currency-symbols")}>₫</span>
                     </>
                   ) : (
@@ -259,7 +262,7 @@ export default function ProductMainInfo({
                   </button>
                 </div>
               </div>
-             
+
             </div>
           </div>
         </div>

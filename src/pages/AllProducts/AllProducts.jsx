@@ -51,7 +51,7 @@ export default function AllProducts() {
         for (let item of itemInTabIndex0) {
           for (let product of productsCopy) {
             if (item.productId === product?._id) {
-              product.discount = Math.max(item.discountPercent, product?.discount);
+              product.discount = item.discountPercent;
             }
           }
         }
@@ -60,7 +60,7 @@ export default function AllProducts() {
         for (let item of itemInTabIndex1) {
           for (let product of productsCopy) {
             if (item.productId === product?._id) {
-              product.discount = Math.max(item.discountPercent, product?.discount);
+              product.discount = item.discountPercent;
             }
           }
         }
@@ -68,7 +68,7 @@ export default function AllProducts() {
         for (let item of itemInTabIndex2) {
           for (let product of productsCopy) {
             if (item.productId === product?._id) {
-              product.discount = Math.max(item.discountPercent, product?.discount);
+              product.discount = item.discountPercent;
             }
           }
         }
@@ -76,7 +76,7 @@ export default function AllProducts() {
         for (let item of itemInTabIndex3) {
           for (let product of productsCopy) {
             if (item.productId === product?._id) {
-              product.discount = Math.max(item.discountPercent, product?.discount);
+              product.discount = item.discountPercent;
             }
           }
         }
