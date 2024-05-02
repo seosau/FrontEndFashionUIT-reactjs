@@ -309,7 +309,7 @@ export default function Home() {
                 <img src={require("../../assets/image/banner2.jpg")} draggable={false} alt="slider" />
               </div>
               <div className={cx("imgBox")}>
-                <img src={require("../../assets/image/banner3.webp")} draggable={false} alt="slider" />
+                <img src={require("../../assets/image/banner3.jpg")} draggable={false} alt="slider" />
               </div>
             </Carousel>
           </div>

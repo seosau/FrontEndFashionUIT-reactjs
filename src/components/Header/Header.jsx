@@ -549,14 +549,7 @@ function Header({ setShowModal }) {
                               Bông Tai Nữ
                             </Link>
                           </li>
-                          <li className={cx("level2")}>
-                            <Link
-                              to={"/products?keyword=phụ kiện nữ"}
-                              title="Tất Cả Phụ Kiện"
-                            >
-                              Tất Cả Phụ Kiện
-                            </Link>
-                          </li>
+                        
                         </ul>
                       </li>
                       <li
