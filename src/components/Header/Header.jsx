@@ -689,7 +689,7 @@ function Header({ setShowModal }) {
                           </li>
                           <li className={cx("level2")}>
                             <Link
-                              to={"/products?keyword=áo ba lỗn nam"}
+                              to={"/products?keyword=áo ba lỗ nam"}
                               title="Áo ba lỗ"
                             >
                               Áo ba lỗ

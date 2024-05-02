@@ -31,9 +31,9 @@ export default function Search() {
     if (searchValue === "") {
       return;
     }
-    handleHideResult();
+    setShowResult(false);
     handleClear();
-    return navigate(`/searchresult/${searchValue}`);
+    return navigate(`/products?searchValue=${searchValue}`);
   };
   const handleHideResult = () => {
     setShowResult(false);
