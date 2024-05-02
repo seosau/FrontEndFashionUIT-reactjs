@@ -590,3 +590,17 @@
     width: 320px;
   }
 }
+
+.cart-popup-backdrop {
+  position: fixed;
+  opacity: 0.5;
+  width: 100%;
+  left: 0;
+  top: 0 !important;
+  right: 0;
+  bottom: 0;
+  background-color: #363636;
+  z-index: 999;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
