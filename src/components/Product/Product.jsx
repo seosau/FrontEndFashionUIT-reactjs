@@ -36,7 +36,7 @@ export default function Product({ product, ranking, newPrice, productCount, prod
             </div>
           </div>
           <div className={cx("product-info")}>
-            <Link className={cx("no-underline")}>
+            <Link className={cx("no-underline")} to={`/product/detail/${product.slug}`}>
               <h3 className={cx("product-name")}>{product.name}</h3>
             </Link>
             <div className={cx("price-box")}>
