@@ -53,7 +53,7 @@ function RouterCpn() {
               return (
                 <Route
                   key={index}
-                  path={"route.path"}
+                  path={route.path}
                   element={
                     <Layout>
                       <Page />
