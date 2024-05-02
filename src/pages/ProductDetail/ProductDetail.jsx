@@ -16,6 +16,8 @@ import ProductMainInfo from "../../components/ProductMainInfo/ProductMainInfo";
 import QuickViewInfo from "../../components/QuickViewInfo/QuickViewInfo";
 import axiosClient from "../../config/axios";
 import { Toast } from "primereact/toast";
+import AddToCartPopup from "../../components/AddToCartPopup/AddToCartPopup";
+import QuickViewPopup from "../../components/QuickViewPopup/QuickViewPopup";
 
 const cx = classNames.bind(style);
 
@@ -24,7 +26,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState();
   const [officialProduct, setOfficialProduct] = useState();
   const [relatedProducts, setRelatedProducts] = useState();
-  const [relatedProductsOfficial, setRelatedProductsOfficial] = useState([]);
+  const [relatedProductsOfficial, setRelatedProductsOfficial] = useState();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const openPopup = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -118,6 +120,62 @@ export default function ProductDetail() {
     }
   };
 
+  const getSaleRelatedProducts = async () => {
+    try {
+      const month = currentTime.getMonth() + 1;
+      const paddedMonth = month < 10 ? `0${month}` : month;
+      const day = currentTime.getDate();
+      const paddedDay = day < 10 ? `0${day}` : day;
+      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const saleProducts = response.data;
+
+      const relatedProductsCopy = [...relatedProducts];
+
+      const itemInTabIndex0 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 0);
+      const itemInTabIndex1 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 6);
+      const itemInTabIndex2 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 12);
+      const itemInTabIndex3 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 18);
+
+      if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
+        for (let item of itemInTabIndex0) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      }
+      else if (6 <= currentTime.getHours() && currentTime.getHours() < 12) {
+        for (let item of itemInTabIndex1) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      } else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
+        for (let item of itemInTabIndex2) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      } else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
+        for (let item of itemInTabIndex3) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      }
+      setRelatedProductsOfficial(relatedProductsCopy);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   useEffect(() => {
     async function fetchData() {
@@ -137,6 +195,11 @@ export default function ProductDetail() {
       getSaleProducts()
   }, [product]);
 
+  useEffect(() => {
+    if (relatedProducts) {
+      getSaleRelatedProducts()
+    }
+  }, [relatedProducts])
   const tabContents = [
     <div
       className={cx("description")}
@@ -177,9 +240,38 @@ export default function ProductDetail() {
       // alert("Mã đã được sao chép vào clipboard!");
     }
   };
+
+  const [hidePopup, setHidePopup] = useState(true);
+  const [cartProduct, setCartProduct] = useState()
+  const [showPopupQuickView, setShowPopupQuickView] = useState(false);
+  const [quickViewProduct, setQuickViewProduct] = useState()
+  const handleClickCart = (product = {}) => {
+    setCartProduct(product)
+    setHidePopup(!hidePopup);
+  };
+
+  const handleClickEye = (product = {}) => {
+    setQuickViewProduct(product)
+    setShowPopupQuickView(!showPopupQuickView);
+  }
   return (
     <>
       <Toast ref={toast} />
+      {showPopupQuickView &&
+        <QuickViewPopup
+          product={quickViewProduct}
+          togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
+      {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
+      {!hidePopup &&
+        <AddToCartPopup
+          product={cartProduct}
+          togglePopup={() => setHidePopup(prevState => !prevState)}
+          addToCartSuccess={show}
+          addToCartFail={error}
+        />}
       <div className={cx("set-z-index")}>{isPopupOpen && <QuickViewInfo openPopup={openPopup} />}</div>
       <div className={cx("container")}>
         {/* Thanh tiêu đề (điều hướng) */}
@@ -227,13 +319,16 @@ export default function ProductDetail() {
                             modules={[Navigation]}
                             navigation
                           >
-                            {relatedProducts ? relatedProducts.map((product, productIndex) => (
+                            {relatedProductsOfficial ? relatedProductsOfficial.map((product, productIndex) => (
                               <SwiperSlide
                                 key={productIndex}
                                 className={cx("product-container")}
                               >
                                 <Product
                                   product={product}
+                                  discount={product.discount ? true : false}
+                                  handleClickEye={() => handleClickEye(product)}
+                                  handleClickCart={() => handleClickCart(product)}
                                   openPopup={openPopup}
                                 />
                               </SwiperSlide>
@@ -328,7 +423,7 @@ export default function ProductDetail() {
                 </Link>
               </h2>
               <div className={cx("blog_content")}>
-                {relatedProducts? relatedProducts.slice(0, 4).map((product, index) => (
+                {relatedProductsOfficial ? relatedProductsOfficial.slice(0, 4).map((product, index) => (
                   <div className={cx("item")} key={index}>
                     <div className={cx("post-thumb")}>
                       <Link
