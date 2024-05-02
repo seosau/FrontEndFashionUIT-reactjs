@@ -19,7 +19,7 @@ export default function AllProducts() {
   const priceFilter = ["Dưới 100.000 đ", "Từ 100.000 đ - 200.000 đ", "Từ 200.000 đ - 500.000 đ", "Từ 500.000 đ - 1.000.000 đ", "Trên 1.000.000 đ"];
   const typeFilter = ["Áo Cotton", "Áo Khoác", "Áo phông", "Áo Polo", "Chân váy", "Đồ tập Gym"];
   const colorFilter = ["Xanh lá", "Đen", "Trắng", "Hồng", "Đỏ", "Cam", "Vàng", "Tím"];
-  const fabricTypeFilter = ["Cotton", "Kaki", "Kate", "Jeans", "Len"];
+  const fabricTypeFilter = ["Cotton", "Kaki", "Kate", "Jean", "Len"];
   const [selectedFilter, setSelectedFilter] = useState([]);
   const [sideBarVisible, setSideBarVisible] = useState(window.innerWidth > 980 ? true : false);
   // Lấy keyword
@@ -162,7 +162,7 @@ export default function AllProducts() {
     const sortOption = event.target.value;
     setSortProducts(sortOption);
     if (sortOption === "default") {
-      setFilteredProducts([])
+      // setFilteredProducts([])
       return;
     } 
     if (sortOption === "A-Z") {
@@ -276,7 +276,7 @@ export default function AllProducts() {
     for (let i = 0; i < typeFilter.length; i++) {
       if (selectedFilter.includes(typeFilter[i])) {
         let tempProduct = allProducts.filter((product) =>
-          product.category.categoryDetail.includes(typeFilter[i])
+          product.category.categoryDetail.toLowerCase().includes(typeFilter[i].toLowerCase())
         );
         if (amountType === 0) {
           filteredProductsByType.push(...tempProduct);
@@ -306,7 +306,7 @@ export default function AllProducts() {
     for (let i = 0; i < fabricTypeFilter.length; i++) {
       if (selectedFilter.includes(fabricTypeFilter[i])) {
         let tempProduct = allProducts.filter((product) =>
-          product.category.fabricType.includes(fabricTypeFilter[i])
+          product.category.fabricType.toLowerCase().includes(fabricTypeFilter[i].toLowerCase())
         );
         if (amountFabric === 0) {
           filteredProductsByFabric.push(...tempProduct);
@@ -325,6 +325,7 @@ export default function AllProducts() {
       (amountType !== 0 && filteredProductsByType.length === 0)
     ) {
       filterResult = [];
+      setTotalPageFilter(1)
       setFilteredProducts([[]]);
       return;
     }
@@ -339,7 +340,6 @@ export default function AllProducts() {
     for (let i = 0; i < filteredTemp?.length; i += 24) {
       filterResult.push(filteredTemp.slice(i, i + 24));
     }
-
     setTotalPageFilter(filterResult?.length)
     setFilteredProducts(filterResult);
   };
@@ -527,7 +527,7 @@ export default function AllProducts() {
           </div>
           <div className={cx("productsContainer")}>
             {officialProducts && allProducts ? (
-              filteredProducts?.length ? (
+              selectedFilter?.length ? (
                 filteredProducts[currentPage - 1]?.map((product, index) => (
                   <div className={cx("productCard")} key={index}>
                     <Product discount={product?.discount ? true : false} product={product} handleClickCart={() => handleClickCart(product)} handleClickEye={() => handleClickEye(product)} />
@@ -547,7 +547,7 @@ export default function AllProducts() {
         </div>
       </div>
       {
-        allProducts?.length && filteredProducts?.length ?
+        allProducts && selectedFilter?.length ?
           totalPageFilter > 1 && (
             <div className={cx("paginations-container")}>
               <ReactPaginate
