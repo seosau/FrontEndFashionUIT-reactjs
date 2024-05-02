@@ -784,7 +784,7 @@
     right: 0;
     bottom: 0;
     background-color: #363636;
-    z-index: 9999;
+    z-index: 999;
     visibility: visible;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
   }
@@ -799,7 +799,7 @@
     width: 100%;
     position: fixed;
     visibility: visible;
-    z-index: 10000;
+    z-index: 1000;
     opacity: 1 !important;
     transform: translate(-50%, -35%);
     border-radius: 7px;

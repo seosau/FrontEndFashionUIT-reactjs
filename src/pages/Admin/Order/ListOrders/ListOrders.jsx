@@ -227,10 +227,13 @@ function ListOrders() {
                       <span className={cx("order-time-detail")}>{convertStringDate(order?.updatedAt).time}</span>
                     </td>
                     <td className={cx("order-price")}>
-                      {order?.totalPrice > 1000
+                      {
+                        (order?.totalPrice * 1000).toLocaleString('de-DE')
+                      }đ
+                      {/* {order?.totalPrice > 1000
                         ? Math.floor(order?.totalPrice / 1000) + "." + (order?.totalPrice % 1000 > 100 ? order?.totalPrice % 1000 : "0" + (order?.totalPrice % 1000))
                         : order?.totalPrice}
-                      .000đ
+                      .000đ */}
                     </td>
                     <td className={cx("order-stock")}>
                       <p className={cx("order-stock-detail")} key={index}>

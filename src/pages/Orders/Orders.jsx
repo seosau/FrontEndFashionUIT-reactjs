@@ -62,7 +62,12 @@ function Orders() {
                       </div>
                     </td>
                     <td className={cx("tableData")}>
-                      <div className={cx("tableDataContainer")}>{order?.totalPrice > 1000 ? Math.floor(order?.totalPrice / 1000) + "." + (order?.totalPrice % 1000) : order?.totalPrice}.000đ</div>
+                      <div className={cx("tableDataContainer")}>
+                        {
+                          (order?.totalPrice*1000).toLocaleString('de-DE')
+                        }đ
+                      {/* {order?.totalPrice > 1000 ? Math.floor(order?.totalPrice / 1000) + "." + (order?.totalPrice % 1000) : order?.totalPrice}.000đ */}
+                      </div>
                     </td>
                     <td className={cx("tableData")}>
                       <div className={order?.paid === true ? cx("tableDataContainer", "paid") : cx("tableDataContainer", "noPaid")}>{order?.paid === true ? "Đã thanh toán" : "Chưa thanh toán"}</div>
