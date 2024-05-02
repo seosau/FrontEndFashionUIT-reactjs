@@ -21,7 +21,10 @@ const cx = classNames.bind(style);
 
 export default function ProductDetail() {
   const { slug } = useParams();
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState();
+  const [officialProduct, setOfficialProduct] = useState();
+  const [relatedProducts, setRelatedProducts] = useState();
+  const [relatedProductsOfficial, setRelatedProductsOfficial] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const openPopup = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -65,7 +68,113 @@ export default function ProductDetail() {
     }
     fetchData();
   }, [slug]);
-  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  const currentTime = new Date();
+  const getSaleProducts = async () => {
+    try {
+      const month = currentTime.getMonth() + 1;
+      const paddedMonth = month < 10 ? `0${month}` : month;
+      const day = currentTime.getDate();
+      const paddedDay = day < 10 ? `0${day}` : day;
+      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const saleProducts = response.data;
+
+      const productCopy = { ...product };
+
+      const itemInTabIndex0 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 0);
+      const itemInTabIndex1 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 6);
+      const itemInTabIndex2 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 12);
+      const itemInTabIndex3 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 18);
+
+      if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
+        for (let item of itemInTabIndex0) {
+          if (item.productId === productCopy?._id) {
+            productCopy.discount = item.discountPercent;
+          }
+        }
+      }
+      else if (6 <= currentTime.getHours() && currentTime.getHours() < 12) {
+        for (let item of itemInTabIndex1) {
+          if (item.productId === productCopy?._id) {
+            productCopy.discount = item.discountPercent;
+          }
+        }
+      } else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
+        for (let item of itemInTabIndex2) {
+          if (item.productId === productCopy?._id) {
+            productCopy.discount = item.discountPercent;
+          }
+        }
+      } else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
+        for (let item of itemInTabIndex3) {
+          if (item.productId === productCopy?._id) {
+            productCopy.discount = item.discountPercent;
+          }
+        }
+      }
+      setOfficialProduct(productCopy);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getSaleRelatedProducts = async () => {
+    try {
+      const month = currentTime.getMonth() + 1;
+      const paddedMonth = month < 10 ? `0${month}` : month;
+      const day = currentTime.getDate();
+      const paddedDay = day < 10 ? `0${day}` : day;
+      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const saleProducts = response.data;
+
+      const relatedProductsCopy = [relatedProducts ? [...relatedProducts] : []];
+
+      const itemInTabIndex0 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 0);
+      const itemInTabIndex1 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 6);
+      const itemInTabIndex2 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 12);
+      const itemInTabIndex3 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 18);
+
+      if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
+        for (let item of itemInTabIndex0) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      }
+      else if (6 <= currentTime.getHours() && currentTime.getHours() < 12) {
+        for (let item of itemInTabIndex1) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      } else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
+        for (let item of itemInTabIndex2) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      } else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
+        for (let item of itemInTabIndex3) {
+          for (let prod of relatedProductsCopy) {
+            if (item.productId === prod._id) {
+              prod.discount = item.discountPercent;
+            }
+          }
+        }
+      }
+      setRelatedProductsOfficial(relatedProductsCopy);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   useEffect(() => {
     async function fetchData() {
       if (product?.category?.categoryType) {
@@ -80,11 +189,19 @@ export default function ProductDetail() {
       }
     }
     fetchData();
+    if (product)
+      getSaleProducts()
   }, [product]);
+
+  useEffect(() => {
+    if (officialProduct) {
+      getSaleRelatedProducts()
+    }
+  }, [officialProduct])
   const tabContents = [
     <div
       className={cx("description")}
-      dangerouslySetInnerHTML={{ __html: product.description }}
+      dangerouslySetInnerHTML={{ __html: product?.description }}
     ></div>,
 
     <div className={cx("policy")}>
@@ -131,13 +248,14 @@ export default function ProductDetail() {
         <div className={cx("small-container")}>
           <div className={cx("product-detail-side")}>
             {/* Chi tiết sản phẩm chính */}
-            {Object.keys(product).length > 0 && (
-              <ProductMainInfo
-                product={product}
-                addToCartFail={error}
-                addToCartSuccess={show}
-              />
-            )}
+            {officialProduct ?
+              (
+                <ProductMainInfo
+                  product={officialProduct}
+                  addToCartFail={error}
+                  addToCartSuccess={show}
+                />
+              ) : <></>}
             {/* Mô tả và chính sách */}
             <div className={cx("description-policy")}>
               <div>
@@ -170,7 +288,7 @@ export default function ProductDetail() {
                             modules={[Navigation]}
                             navigation
                           >
-                            {relatedProducts.map((product, productIndex) => (
+                            {relatedProductsOfficial ? relatedProductsOfficial.map((product, productIndex) => (
                               <SwiperSlide
                                 key={productIndex}
                                 className={cx("product-container")}
@@ -180,7 +298,7 @@ export default function ProductDetail() {
                                   openPopup={openPopup}
                                 />
                               </SwiperSlide>
-                            ))}
+                            )) : <></>}
                           </Swiper>
                         </div>
                       </div>
@@ -271,7 +389,7 @@ export default function ProductDetail() {
                 </Link>
               </h2>
               <div className={cx("blog_content")}>
-                {relatedProducts.slice(0,4).map((product, index) => (
+                {relatedProductsOfficial? relatedProductsOfficial.slice(0, 4).map((product, index) => (
                   <div className={cx("item")} key={index}>
                     <div className={cx("post-thumb")}>
                       <Link
@@ -281,7 +399,7 @@ export default function ProductDetail() {
                       >
                         <img
                           className={cx("img_blog", "lazyload", "loaded")}
-                          src={product.images[0].imgUrl}
+                          src={product?.images[0]?.imgUrl}
                           alt={product.name}
                           data-was-processed="true"
                         />
@@ -300,7 +418,7 @@ export default function ProductDetail() {
 
                       <div className={cx("product-price")}>
                         <h3 className={cx("new-price")}>
-                        {((product.price - (product.price * product.discount) / 100) * 1000).toLocaleString('de-DE')}
+                          {((product.price - (product.price * product.discount) / 100) * 1000).toLocaleString('de-DE')}
                           {/* {Math.floor(
                             product.price -
                               (product.price * product.discount) / 100
@@ -309,13 +427,13 @@ export default function ProductDetail() {
                           <span className={cx("currency-symbols")}>₫</span>
                         </h3>
                         <h3 className={cx("old-price")}>
-                          {(product.price*1000).toLocaleString('de-DE')}
+                          {(product.price * 1000).toLocaleString('de-DE')}
                           <span className={cx("currency-symbols")}>₫</span>
                         </h3>
                       </div>
                     </div>
                   </div>
-                ))}
+                )) : <></>}
               </div>
             </div>
 
