@@ -47,15 +47,14 @@ export default function ProductMainInfo({
 
   const handleAddToCart = async () => {
     if (isAuth) {
-      if (product.stock === 0) {
-        toast.current.show({
-          severity: "error",
-          summary: "Lỗi",
-          detail: "Xin lỗi! Sản phẩm này đã bán hết",
-          life: 3000,
-        });
+      if (product.stock.find(it => it.color === product.colors[activeColor].colorName && it.size === product.sizes[activeSize]).quantity === 0) {
+        toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Xin lỗi! Sản phẩm này đã bán hết', life: 3000 });
         return;
-      }
+    }
+
+    if (product.stock.find(it => it.color === product.colors[activeColor].colorName && it.size === product.sizes[activeSize]).quantity < count) {
+        return toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Xin lỗi! Vượt quá số lượng trong kho!', life: 3000 });
+    }
 
       const data = {
         products: {
