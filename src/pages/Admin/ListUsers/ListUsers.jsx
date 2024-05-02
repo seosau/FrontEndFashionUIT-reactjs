@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import { CiSquareRemove } from "react-icons/ci";
@@ -13,9 +13,11 @@ import { ConfirmDialog } from "primereact/confirmdialog";
 import { confirmDialog } from "primereact/confirmdialog";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
+import {AuthContext} from "../../../context/AuthContext"
 const cx = classNames.bind(style);
 
 function ListUsers() {
+  const {decodedToken} = useContext(AuthContext);
   const [accounts, setAccounts] = useState([]);
   const [selectedAccounts, setSelectedAccounts] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -181,7 +183,10 @@ function ListUsers() {
               accounts.map((account, index) => (
                 <tr className={cx("product-item")} key={index}>
                   <td className={cx("action-checkbox")}>
-                    <input type="checkbox" onChange={() => selectedAccount(account.email)} checked={selectedAccounts.includes(account.email)} />
+                    <input 
+                    disabled = {decodedToken.email ===account.email ? true : false}
+                    type="checkbox" 
+                    onChange={() => selectedAccount(account.email)} checked={selectedAccounts.includes(account.email)} />
                   </td>
                   <td>
                     <div className={cx("product-info")}>
@@ -224,11 +229,12 @@ function ListUsers() {
                       placeholder="Tình trạng đơn hàng"
                       checkmark={true}
                       className="w-full md:w-14rem"
+                      disabled={decodedToken.email ===account.email ? true : false}
                     />
                   </td>
                   <td className={cx("product-action")}>
                     <ul className={cx("product-action-list")}>
-                      <li className={cx("product-action-item")}>
+                      <li className={cx("product-action-item")} style={{display: decodedToken.email ===account.email ? "none" : "inline-block"}}>
                         <CiSquareRemove className={cx("icon", "icon-remove")} onClick={() => deleteAccount(account.email)} />
                         Remove
                       </li>
