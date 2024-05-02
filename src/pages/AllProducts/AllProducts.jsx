@@ -228,7 +228,7 @@ export default function AllProducts() {
   };
 
   const filterProducts = () => {
-    console.log(allProducts?.length)
+    
     let amountPrice = 0;
     let amountType = 0;
     let amountColor = 0;
@@ -325,7 +325,7 @@ export default function AllProducts() {
       (amountType !== 0 && filteredProductsByType.length === 0)
     ) {
       filterResult = [];
-      setFilteredProducts([]);
+      setFilteredProducts([[]]);
       return;
     }
     let filterTemp = [
@@ -335,7 +335,7 @@ export default function AllProducts() {
       ...filteredProductsByFabric,
     ];
 
-    let filteredTemp = selectedFilter?.length ? findCommonProducts(filterTemp) : allProducts;
+    let filteredTemp = filterTemp?.length ? findCommonProducts(filterTemp) : allProducts;
     for (let i = 0; i < filteredTemp?.length; i += 24) {
       filterResult.push(filteredTemp.slice(i, i + 24));
     }
@@ -346,7 +346,7 @@ export default function AllProducts() {
 
   const handleFilterSelect = (item) => {
     // console.log(item);
-    // console.log(selectedFilter.indexOf(item));
+    // console.log(selectedFilter);
     if (selectedFilter.indexOf(item) !== -1) {
       removeFilter(item);
     } else {
