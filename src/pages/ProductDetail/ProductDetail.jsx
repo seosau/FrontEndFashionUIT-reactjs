@@ -70,7 +70,7 @@ export default function ProductDetail() {
     async function fetchData() {
       if (product?.category?.categoryType) {
         await axiosClient
-          .get(`/products?keyword=${product?.category?.categoryType}`)
+          .get(`/products?keyword=${product?.category?.categoryDetail}`)
           .then(({ data }) => {
             setRelatedProducts(data.data);
           })

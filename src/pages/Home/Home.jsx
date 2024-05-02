@@ -458,7 +458,7 @@ export default function Home() {
                 <div className={cx("content-banner")}>
                   <p>Men's</p>
                 </div>
-                <Link to="" className={cx("link")}></Link>
+                <Link to="/products?keyword=nam" className={cx("link")}></Link>
               </div>
             </div>
             <div className={cx("box")}>
@@ -467,7 +467,7 @@ export default function Home() {
                 <div className={cx("content-banner")}>
                   <p>Women's</p>
                 </div>
-                <Link to="" className={cx("link")}></Link>
+                <Link to="/products?keyword=nữ" className={cx("link")}></Link>
               </div>
             </div>
             <div className={cx("box")}>
@@ -476,7 +476,7 @@ export default function Home() {
                 <div className={cx("content-banner")}>
                   <p>Kid's</p>
                 </div>
-                <Link to="" className={cx("link")}></Link>
+                <Link to="/products?keyword=trẻ em" className={cx("link")}></Link>
               </div>
             </div>
             <div className={cx("box")}>
@@ -485,7 +485,7 @@ export default function Home() {
                 <div className={cx("content-banner")}>
                   <p>Gym's</p>
                 </div>
-                <Link to="" className={cx("link")}></Link>
+                <Link to="/products?keyword=gym" className={cx("link")}></Link>
               </div>
             </div>
           </div>

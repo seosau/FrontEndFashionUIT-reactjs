@@ -673,7 +673,7 @@ function Header({ setShowModal }) {
                           </li>
                           <li className={cx("level2")}>
                             <Link
-                              to={"/products?keyword=áo thun nam"}
+                              to={"/products?keyword=áo polo"}
                               title="Áo Polo"
                             >
                               Áo Polo
@@ -1302,7 +1302,7 @@ function Header({ setShowModal }) {
                               to={"/products?keyword=áo tập gym"}
                               title="Áo Bra Tops"
                             >
-                              áo tập gyn
+                              áo tập gym
                             </Link>
                           </li>
                           <li className={cx("level2")}>
