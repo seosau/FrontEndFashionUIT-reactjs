@@ -118,62 +118,6 @@ export default function ProductDetail() {
     }
   };
 
-  const getSaleRelatedProducts = async () => {
-    try {
-      const month = currentTime.getMonth() + 1;
-      const paddedMonth = month < 10 ? `0${month}` : month;
-      const day = currentTime.getDate();
-      const paddedDay = day < 10 ? `0${day}` : day;
-      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
-      const saleProducts = response.data;
-
-      const relatedProductsCopy = [relatedProducts ? [...relatedProducts] : []];
-
-      const itemInTabIndex0 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 0);
-      const itemInTabIndex1 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 6);
-      const itemInTabIndex2 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 12);
-      const itemInTabIndex3 = saleProducts.filter((saleProduct) => saleProduct.saleHour === 18);
-
-      if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
-        for (let item of itemInTabIndex0) {
-          for (let prod of relatedProductsCopy) {
-            if (item.productId === prod._id) {
-              prod.discount = item.discountPercent;
-            }
-          }
-        }
-      }
-      else if (6 <= currentTime.getHours() && currentTime.getHours() < 12) {
-        for (let item of itemInTabIndex1) {
-          for (let prod of relatedProductsCopy) {
-            if (item.productId === prod._id) {
-              prod.discount = item.discountPercent;
-            }
-          }
-        }
-      } else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
-        for (let item of itemInTabIndex2) {
-          for (let prod of relatedProductsCopy) {
-            if (item.productId === prod._id) {
-              prod.discount = item.discountPercent;
-            }
-          }
-        }
-      } else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
-        for (let item of itemInTabIndex3) {
-          for (let prod of relatedProductsCopy) {
-            if (item.productId === prod._id) {
-              prod.discount = item.discountPercent;
-            }
-          }
-        }
-      }
-      setRelatedProductsOfficial(relatedProductsCopy);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
 
   useEffect(() => {
     async function fetchData() {
@@ -193,11 +137,6 @@ export default function ProductDetail() {
       getSaleProducts()
   }, [product]);
 
-  useEffect(() => {
-    if (officialProduct) {
-      getSaleRelatedProducts()
-    }
-  }, [officialProduct])
   const tabContents = [
     <div
       className={cx("description")}
@@ -288,7 +227,7 @@ export default function ProductDetail() {
                             modules={[Navigation]}
                             navigation
                           >
-                            {relatedProductsOfficial ? relatedProductsOfficial.map((product, productIndex) => (
+                            {relatedProducts ? relatedProducts.map((product, productIndex) => (
                               <SwiperSlide
                                 key={productIndex}
                                 className={cx("product-container")}
@@ -389,7 +328,7 @@ export default function ProductDetail() {
                 </Link>
               </h2>
               <div className={cx("blog_content")}>
-                {relatedProductsOfficial? relatedProductsOfficial.slice(0, 4).map((product, index) => (
+                {relatedProducts? relatedProducts.slice(0, 4).map((product, index) => (
                   <div className={cx("item")} key={index}>
                     <div className={cx("post-thumb")}>
                       <Link
