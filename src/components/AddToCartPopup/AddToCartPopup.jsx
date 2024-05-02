@@ -34,9 +34,13 @@ export default function AddToCartPopup({ product, togglePopup, addToCartSuccess,
 
     const handleAddToCart = async () => {
         if (isAuth) {
-            if (product.stock === 0) {
+            if (product.stock.find(it => it.color === selectedColor && it.size === selectedSize).quantity === 0) {
                 toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Xin lỗi! Sản phẩm này đã bán hết', life: 3000 });
                 return;
+            }
+
+            if (product.stock.find(it => it.color === selectedColor && it.size === selectedSize).quantity < quantity) {
+                return toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Xin lỗi! Vượt quá số lượng trong kho!', life: 3000 });
             }
 
             if (!selectedSize) {
@@ -72,7 +76,7 @@ export default function AddToCartPopup({ product, togglePopup, addToCartSuccess,
                             item.productId === data.products.productId &&
                             item.size === data.products.size &&
                             item.color === data.products.color
-                        );
+                    );
 
                     if (existingItemIndex !== -1) {
                         tmp[existingItemIndex].quantity += parseInt(data.products.quantity);
@@ -94,7 +98,7 @@ export default function AddToCartPopup({ product, togglePopup, addToCartSuccess,
 
     return (
         <>
-            <Toast ref={toast} /> 
+            <Toast ref={toast} />
             <div className={cx("cart-popup-container")}>
                 <div className={cx("cart-popup-header")}>
                     <span>
