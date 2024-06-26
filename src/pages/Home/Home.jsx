@@ -1,23 +1,32 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import { Link } from "react-router-dom";
-import Product from "../../components/Product/Product";
-import { Toast } from "primereact/toast";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/scss";
+
+import io from "socket.io-client";
+
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import CountdownTimer from "../../components/CountdownTimer/CountdownTimer";
+
+import { Toast } from "primereact/toast";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/scss";
 import { Navigation } from "swiper/modules";
 import "swiper/scss/navigation";
+
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+
+import { FiInfo } from "react-icons/fi";
+
 import styles from "./Home.module.scss";
 import className from "classnames/bind";
+
 import axiosClient from "../../config/axios";
-import { FiInfo } from "react-icons/fi";
+import CountdownTimer from "../../components/CountdownTimer/CountdownTimer";
 import AddToCartPopup from "../../components/AddToCartPopup/AddToCartPopup";
 import QuickViewPopup from "../../components/QuickViewPopup/QuickViewPopup";
-
+import Product from "../../components/Product/Product";
 
 const cx = className.bind(styles);
 
@@ -30,14 +39,14 @@ export default function Home() {
   const [maleProducts, setMaleProducts] = useState();
   const [femaleProducts, setFemaleProducts] = useState();
   const [gymProducts, setGymProducts] = useState();
-  const [saleProductsInTabIndex, setSaleProductsInTabIndex] = useState()
+  const [saleProductsInTabIndex, setSaleProductsInTabIndex] = useState();
   const currentTime = new Date();
   const [status, setStatus] = useState([false, false, false, false]);
   const [width, setWidth] = useState(window.innerWidth);
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(Number.MAX_SAFE_INTEGER);
+  const [currentLimit, setCurrentLimit] = useState(10);
   const getProducts = async () => {
     await axiosClient
       .get(`/products?page=${currentPage}&limit=${currentLimit}`)
@@ -55,39 +64,57 @@ export default function Home() {
       const paddedMonth = month < 10 ? `0${month}` : month;
       const day = currentTime.getDate();
       const paddedDay = day < 10 ? `0${day}` : day;
-      const response = await axiosClient.get(`/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`);
+      const response = await axiosClient.get(
+        `/sale/get/${currentTime.getFullYear()}-${paddedMonth}-${paddedDay}`
+      );
       const saleProducts = response.data;
 
-      const itemInTabIndex0 = saleProducts.filter(saleProduct => saleProduct.saleHour === 0);
-      const itemInTabIndex1 = saleProducts.filter(saleProduct => saleProduct.saleHour === 6);
-      const itemInTabIndex2 = saleProducts.filter(saleProduct => saleProduct.saleHour === 12);
-      const itemInTabIndex3 = saleProducts.filter(saleProduct => saleProduct.saleHour === 18);
-      const saleProductsInTabIndex0 = await Promise.all(itemInTabIndex0.map(async (item) => {
-        const product = await getProductById(item.productId);
-        product.saleCount = item.saleCount;
-        product.discount = item.discountPercent
-        return product;
-      }));
-      const saleProductsInTabIndex1 = await Promise.all(itemInTabIndex1.map(async (item) => {
-        const product = await getProductById(item.productId);
-        product.saleCount = item.saleCount;
-        product.discount = item.discountPercent
-        return product;
-      }));
-      const saleProductsInTabIndex2 = await Promise.all(itemInTabIndex2.map(async (item) => {
-        const product = await getProductById(item.productId);
-        product.saleCount = item.saleCount;
-        product.discount = item.discountPercent
-        return product;
-      }));
-      const saleProductsInTabIndex3 = await Promise.all(itemInTabIndex3.map(async (item) => {
-        const product = await getProductById(item.productId);
-        product.saleCount = item.saleCount;
-        product.discount = item.discountPercent
-        return product;
-      }));
+      const itemInTabIndex0 = saleProducts.filter(
+        (saleProduct) => saleProduct.saleHour === 0
+      );
+      const itemInTabIndex1 = saleProducts.filter(
+        (saleProduct) => saleProduct.saleHour === 6
+      );
+      const itemInTabIndex2 = saleProducts.filter(
+        (saleProduct) => saleProduct.saleHour === 12
+      );
+      const itemInTabIndex3 = saleProducts.filter(
+        (saleProduct) => saleProduct.saleHour === 18
+      );
+      const saleProductsInTabIndex0 = await Promise.all(
+        itemInTabIndex0.map(async (item) => {
+          const product = await getProductById(item.productId);
+          product.saleCount = item.saleCount;
+          product.discount = item.discountPercent;
+          return product;
+        })
+      );
+      const saleProductsInTabIndex1 = await Promise.all(
+        itemInTabIndex1.map(async (item) => {
+          const product = await getProductById(item.productId);
+          product.saleCount = item.saleCount;
+          product.discount = item.discountPercent;
+          return product;
+        })
+      );
+      const saleProductsInTabIndex2 = await Promise.all(
+        itemInTabIndex2.map(async (item) => {
+          const product = await getProductById(item.productId);
+          product.saleCount = item.saleCount;
+          product.discount = item.discountPercent;
+          return product;
+        })
+      );
+      const saleProductsInTabIndex3 = await Promise.all(
+        itemInTabIndex3.map(async (item) => {
+          const product = await getProductById(item.productId);
+          product.saleCount = item.saleCount;
+          product.discount = item.discountPercent;
+          return product;
+        })
+      );
 
-      const productsCopy = [...products]
+      const productsCopy = [...products];
       if (0 <= currentTime.getHours() && currentTime.getHours() < 6) {
         for (let item of itemInTabIndex0) {
           for (let product of productsCopy) {
@@ -96,8 +123,7 @@ export default function Home() {
             }
           }
         }
-      }
-      else if (6 <= currentTime.getHours()  && currentTime.getHours() < 12) {
+      } else if (6 <= currentTime.getHours() && currentTime.getHours() < 12) {
         for (let item of itemInTabIndex1) {
           for (let product of productsCopy) {
             if (item.productId === product._id) {
@@ -105,8 +131,7 @@ export default function Home() {
             }
           }
         }
-      }
-      else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
+      } else if (12 <= currentTime.getHours() && currentTime.getHours() < 18) {
         for (let item of itemInTabIndex2) {
           for (let product of productsCopy) {
             if (item.productId === product._id) {
@@ -114,8 +139,7 @@ export default function Home() {
             }
           }
         }
-      }
-      else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
+      } else if (18 <= currentTime.getHours() && currentTime.getHours() < 24) {
         for (let item of itemInTabIndex3) {
           for (let product of productsCopy) {
             if (item.productId === product._id) {
@@ -124,13 +148,17 @@ export default function Home() {
           }
         }
       }
-      setOfficialProducts(productsCopy)
-      setSaleProductsInTabIndex([saleProductsInTabIndex0, saleProductsInTabIndex1, saleProductsInTabIndex2, saleProductsInTabIndex3])
-    }
-    catch (error) {
+      setOfficialProducts(productsCopy);
+      setSaleProductsInTabIndex([
+        saleProductsInTabIndex0,
+        saleProductsInTabIndex1,
+        saleProductsInTabIndex2,
+        saleProductsInTabIndex3,
+      ]);
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const getProductById = async (productId) => {
     try {
@@ -147,25 +175,31 @@ export default function Home() {
     const productsCopy = [...officialProducts];
     const sortedProducts = productsCopy.sort((a, b) => b.sold - a.sold);
     setBestSellerProducts(sortedProducts.slice(0, 6));
-  }
+  };
 
   const getMaleProducts = () => {
     const productsCopy = [...officialProducts];
-    const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nam')
+    const tmpProducts = productsCopy.filter(
+      (product) => product.category.sex.toLowerCase() === "nam"
+    );
     setMaleProducts(tmpProducts);
-  }
+  };
 
   const getFemaleProducts = () => {
     const productsCopy = [...officialProducts];
-    const tmpProducts = productsCopy.filter(product => product.category.sex.toLowerCase() === 'nữ')
+    const tmpProducts = productsCopy.filter(
+      (product) => product.category.sex.toLowerCase() === "nữ"
+    );
     setFemaleProducts(tmpProducts);
-  }
+  };
 
   const getGymProducts = () => {
     const productsCopy = [...officialProducts];
-    const tmpProducts = productsCopy.filter(product => product.category.categoryDetail.toLowerCase().includes('gym'))
+    const tmpProducts = productsCopy.filter((product) =>
+      product.category.categoryDetail.toLowerCase().includes("gym")
+    );
     setGymProducts(tmpProducts);
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -224,51 +258,64 @@ export default function Home() {
     />
   );
 
-
   const [hidePopup, setHidePopup] = useState(true);
   const [showPopupQuickView, setShowPopupQuickView] = useState(false);
 
-  const [cartProduct, setCartProduct] = useState()
-  const [quickViewProduct, setQuickViewProduct] = useState()
+  const [cartProduct, setCartProduct] = useState();
+  const [quickViewProduct, setQuickViewProduct] = useState();
 
   const handleClickCart = (product = {}) => {
-    setCartProduct(product)
+    setCartProduct(product);
     setHidePopup(!hidePopup);
   };
 
   const handleClickEye = (product = {}) => {
-    setQuickViewProduct(product)
+    setQuickViewProduct(product);
     setShowPopupQuickView(!showPopupQuickView);
-  }
+  };
 
   const toast = useRef(null);
 
   const error = () => {
-    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Thêm sản phẩm thất bại', life: 3000 });
-  }
+    toast.current.show({
+      severity: "error",
+      summary: "Lỗi",
+      detail: "Thêm sản phẩm thất bại",
+      life: 3000,
+    });
+  };
 
   const show = () => {
-    toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm vào giỏ hàng thành công!", life: 3000 });
+    toast.current.show({
+      severity: "success",
+      summary: "Thành công",
+      detail: "Thêm sản phẩm vào giỏ hàng thành công!",
+      life: 3000,
+    });
   };
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    const socket = io("http://localhost:3002");
+    socket.on("saleProduct", (msg) => {
+      getProducts();
+    });
+    getProducts();
+  }, []);
 
   useEffect(() => {
     if (products) {
-      getSaleProducts()
+      getSaleProducts();
     }
-  }, [products])
+  }, [products]);
 
   useEffect(() => {
     if (officialProducts) {
-      getBestSellerProduct()
-      getMaleProducts()
-      getFemaleProducts()
-      getGymProducts()
+      getBestSellerProduct();
+      getMaleProducts();
+      getFemaleProducts();
+      getGymProducts();
     }
-  }, [officialProducts])
+  }, [officialProducts]);
 
   useEffect(() => {
     const newStatus = [...status];
@@ -303,13 +350,25 @@ export default function Home() {
           <div className={cx("slider")}>
             <Carousel {...settings} customDot={<CustomDot />}>
               <div className={cx("imgBox")}>
-                <img src={require("../../assets/image/slider_1.webp")} draggable={false} alt="slider" />
+                <img
+                  src={require("../../assets/image/slider_1.webp")}
+                  draggable={false}
+                  alt="slider"
+                />
               </div>
               <div className={cx("imgBox")}>
-                <img src={require("../../assets/image/banner2.jpg")} draggable={false} alt="slider" />
+                <img
+                  src={require("../../assets/image/banner2.jpg")}
+                  draggable={false}
+                  alt="slider"
+                />
               </div>
               <div className={cx("imgBox")}>
-                <img src={require("../../assets/image/banner3.jpg")} draggable={false} alt="slider" />
+                <img
+                  src={require("../../assets/image/banner3.jpg")}
+                  draggable={false}
+                  alt="slider"
+                />
               </div>
             </Carousel>
           </div>
@@ -320,7 +379,10 @@ export default function Home() {
           <div className={cx("box-container")}>
             <div className={cx("box")}>
               <div className={cx("icon")}>
-                <img src={require("../../assets/image/package.png")} alt="delivery" />
+                <img
+                  src={require("../../assets/image/package.png")}
+                  alt="delivery"
+                />
               </div>
               <div className={cx("detail")}>
                 Vận chuyển <span>Miễn phí</span> <br />
@@ -329,7 +391,10 @@ export default function Home() {
             </div>
             <div className={cx("box")}>
               <div className={cx("icon")}>
-                <img src={require("../../assets/image/box.png")} alt="exchange" />
+                <img
+                  src={require("../../assets/image/box.png")}
+                  alt="exchange"
+                />
               </div>
               <div className={cx("detail")}>
                 Đổi trả <span>Miễn phí</span> <br />
@@ -338,7 +403,10 @@ export default function Home() {
             </div>
             <div className={cx("box")}>
               <div className={cx("icon")}>
-                <img src={require("../../assets/image/credit-card.png")} alt="payment" />
+                <img
+                  src={require("../../assets/image/credit-card.png")}
+                  alt="payment"
+                />
               </div>
               <div className={cx("detail")}>
                 Tiến hành <span>Thanh toán</span> <br />
@@ -347,7 +415,10 @@ export default function Home() {
             </div>
             <div className={cx("box")}>
               <div className={cx("icon")}>
-                <img src={require("../../assets/image/refund.png")} alt="refund" />
+                <img
+                  src={require("../../assets/image/refund.png")}
+                  alt="refund"
+                />
               </div>
               <div className={cx("detail")}>
                 <span>100% hoàn tiền</span> <br />
@@ -367,19 +438,28 @@ export default function Home() {
                 </Link>
               </h2>
             </div>
-            <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
-              {products ? bestSellerProducts?.map((product, index) => (
-                <SwiperSlide key={index} className={cx("product-container")}>
-                  <Product
-                    product={product}
-                    ranking={index + 1}
-                    productCount={true}
-                    handleClickEye={() => handleClickEye(product)}
-                    handleClickCart={() => handleClickCart(product)}
-                    discount={product.discount ? true : false}
-                  />
-                </SwiperSlide>
-              )) : <></>}
+            <Swiper
+              spaceBetween={10}
+              slidesPerView={width > 768 ? 4 : 2}
+              modules={[Navigation]}
+              navigation
+            >
+              {products ? (
+                bestSellerProducts?.map((product, index) => (
+                  <SwiperSlide key={index} className={cx("product-container")}>
+                    <Product
+                      product={product}
+                      ranking={index + 1}
+                      productCount={true}
+                      handleClickEye={() => handleClickEye(product)}
+                      handleClickCart={() => handleClickCart(product)}
+                      discount={product.discount ? true : false}
+                    />
+                  </SwiperSlide>
+                ))
+              ) : (
+                <></>
+              )}
             </Swiper>
           </div>
         </div>
@@ -388,11 +468,20 @@ export default function Home() {
         <div className={cx("container")}>
           <div className={cx("time-flash-sale")}>
             <div className={cx("clearfix")}>
-              <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+              <Tabs
+                selectedIndex={tabIndex}
+                onSelect={(index) => setTabIndex(index)}
+              >
                 <div className={cx("tab-time-container", "box-container")}>
                   <TabList className={cx("timeline", "tab-title")}>
                     {[0, 1, 2, 3].map((index) => (
-                      <Tab key={index} className={cx("tab-link", tabIndex === index ? "current" : "")}>
+                      <Tab
+                        key={index}
+                        className={cx(
+                          "tab-link",
+                          tabIndex === index ? "current" : ""
+                        )}
+                      >
                         <div className={cx("title-time")}>
                           {index === 0 && "00:00 - 06:00"}
                           {index === 1 && "06:00 - 12:00"}
@@ -400,12 +489,22 @@ export default function Home() {
                           {index === 3 && "18:00 - 24:00"}
                         </div>
                         <div className={cx("text-timing")}>
-                          {(index === 0 && currentTime.getHours() >= 0 && currentTime.getHours() < 6) ||
-                            (index === 1 && currentTime.getHours() >= 6 && currentTime.getHours() < 12) ||
-                            (index === 2 && currentTime.getHours() >= 12 && currentTime.getHours() < 18) ||
-                            (index === 3 && currentTime.getHours() >= 18 && currentTime.getHours() < 24)
+                          {(index === 0 &&
+                            currentTime.getHours() >= 0 &&
+                            currentTime.getHours() < 6) ||
+                          (index === 1 &&
+                            currentTime.getHours() >= 6 &&
+                            currentTime.getHours() < 12) ||
+                          (index === 2 &&
+                            currentTime.getHours() >= 12 &&
+                            currentTime.getHours() < 18) ||
+                          (index === 3 &&
+                            currentTime.getHours() >= 18 &&
+                            currentTime.getHours() < 24)
                             ? "Đang diễn ra"
-                            : status[index] ? "Đã diễn ra" : "Sắp diễn ra"}
+                            : status[index]
+                            ? "Đã diễn ra"
+                            : "Sắp diễn ra"}
                         </div>
                       </Tab>
                     ))}
@@ -416,34 +515,64 @@ export default function Home() {
                 {[0, 1, 2, 3].map((index) => (
                   <TabPanel key={index}>
                     <div className={cx("tab-products")}>
-                      <div className={cx("tab-content", "tab-time", tabIndex === index ? "current" : "")}>
+                      <div
+                        className={cx(
+                          "tab-content",
+                          "tab-time",
+                          tabIndex === index ? "current" : ""
+                        )}
+                      >
                         <div className={cx("box-container")}>
-                          {saleProductsInTabIndex ? saleProductsInTabIndex[index].length > 0 ? (
-                            <Swiper spaceBetween={10} slidesPerView={width > 768 ? 5 : 2} modules={[Navigation]} navigation>
-                              {saleProductsInTabIndex[index].map((product, productIndex) => (
-                                <SwiperSlide key={productIndex} className={cx("product-container")}>
-                                  <Product
-                                    productCountSale={true}
-                                    product={product}
-                                    handleClickCart={() => handleClickCart(product)}
-                                    handleClickEye={() => handleClickEye(product)}
-                                    discount={product.discount ? true : false}
-                                  />
-                                </SwiperSlide>
-                              ))}
-                            </Swiper>
+                          {saleProductsInTabIndex ? (
+                            saleProductsInTabIndex[index].length > 0 ? (
+                              <Swiper
+                                spaceBetween={10}
+                                slidesPerView={width > 768 ? 5 : 2}
+                                modules={[Navigation]}
+                                navigation
+                              >
+                                {saleProductsInTabIndex[index].map(
+                                  (product, productIndex) => (
+                                    <SwiperSlide
+                                      key={productIndex}
+                                      className={cx("product-container")}
+                                    >
+                                      <Product
+                                        productCountSale={true}
+                                        product={product}
+                                        handleClickCart={() =>
+                                          handleClickCart(product)
+                                        }
+                                        handleClickEye={() =>
+                                          handleClickEye(product)
+                                        }
+                                        discount={
+                                          product.discount ? true : false
+                                        }
+                                      />
+                                    </SwiperSlide>
+                                  )
+                                )}
+                              </Swiper>
+                            ) : (
+                              <div className={cx("no-sale-product")}>
+                                <FiInfo
+                                  className={cx("no-sale-product-icon")}
+                                />
+                                <p>
+                                  Không có sản phẩm nào được giảm giá vào khung
+                                  giờ này
+                                </p>
+                              </div>
+                            )
                           ) : (
-                            <div className={cx("no-sale-product")}>
-                              <FiInfo className={cx("no-sale-product-icon")} />
-                              <p>Không có sản phẩm nào được giảm giá vào khung giờ này</p>
-                            </div>
-                          ) : <></>}
+                            <></>
+                          )}
                         </div>
                       </div>
                     </div>
                   </TabPanel>
                 ))}
-
               </Tabs>
             </div>
           </div>
@@ -454,7 +583,11 @@ export default function Home() {
           <div className={cx("box-container")}>
             <div className={cx("box")}>
               <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_1.webp")} alt="Men" />
+                <img
+                  className={cx("lazyload", "loaded")}
+                  src={require("../../assets/image/img_banner_1.webp")}
+                  alt="Men"
+                />
                 <div className={cx("content-banner")}>
                   <p>Men's</p>
                 </div>
@@ -463,7 +596,11 @@ export default function Home() {
             </div>
             <div className={cx("box")}>
               <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_2.webp")} alt="Women" />
+                <img
+                  className={cx("lazyload", "loaded")}
+                  src={require("../../assets/image/img_banner_2.webp")}
+                  alt="Women"
+                />
                 <div className={cx("content-banner")}>
                   <p>Women's</p>
                 </div>
@@ -472,16 +609,27 @@ export default function Home() {
             </div>
             <div className={cx("box")}>
               <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_3.webp")} alt="Kid" />
+                <img
+                  className={cx("lazyload", "loaded")}
+                  src={require("../../assets/image/img_banner_3.webp")}
+                  alt="Kid"
+                />
                 <div className={cx("content-banner")}>
                   <p>Kid's</p>
                 </div>
-                <Link to="/products?keyword=trẻ em" className={cx("link")}></Link>
+                <Link
+                  to="/products?keyword=trẻ em"
+                  className={cx("link")}
+                ></Link>
               </div>
             </div>
             <div className={cx("box")}>
               <div className={cx("snip-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_4.webp")} alt="Gym" />
+                <img
+                  className={cx("lazyload", "loaded")}
+                  src={require("../../assets/image/img_banner_4.webp")}
+                  alt="Gym"
+                />
                 <div className={cx("content-banner")}>
                   <p>Gym's</p>
                 </div>
@@ -504,26 +652,54 @@ export default function Home() {
             <div className={cx("banner-tab-container")}>
               <div className={cx("banner-tab")}>
                 <a className={cx("linear")}>
-                  <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_banner_tab.webp")} alt="banner tab" />
+                  <img
+                    className={cx("lazyload", "loaded")}
+                    src={require("../../assets/image/img_banner_tab.webp")}
+                    alt="banner tab"
+                  />
                 </a>
               </div>
             </div>
             <div className={cx("tab-products-container")}>
-              <Tabs selectedIndex={tabProductIndex} onSelect={(index) => setProductTabIndex(index)}>
+              <Tabs
+                selectedIndex={tabProductIndex}
+                onSelect={(index) => setProductTabIndex(index)}
+              >
                 <TabPanel>
                   <div className={cx("tab-products")}>
-                    <div className={cx("tab-content", "tab-category", tabProductIndex === 0 ? "current" : "")}>
+                    <div
+                      className={cx(
+                        "tab-content",
+                        "tab-category",
+                        tabProductIndex === 0 ? "current" : ""
+                      )}
+                    >
                       <div className={cx("box-container")}>
-                        <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} modules={[Navigation]} navigation>
-                          {products ? maleProducts?.map((product, index) => (
-                            <SwiperSlide key={index} className={cx("product-container")}>
-                              <Product
-                                discount={product.discount ? true : false}
-                                product={product}
-                                handleClickCart={() => handleClickCart(product)}
-                                handleClickEye={() => handleClickEye(product)} />
-                            </SwiperSlide>
-                          )) : <></>}
+                        <Swiper
+                          spaceBetween={10}
+                          slidesPerView={width > 768 ? 4 : 2}
+                          modules={[Navigation]}
+                          navigation
+                        >
+                          {products ? (
+                            maleProducts?.map((product, index) => (
+                              <SwiperSlide
+                                key={index}
+                                className={cx("product-container")}
+                              >
+                                <Product
+                                  discount={product.discount ? true : false}
+                                  product={product}
+                                  handleClickCart={() =>
+                                    handleClickCart(product)
+                                  }
+                                  handleClickEye={() => handleClickEye(product)}
+                                />
+                              </SwiperSlide>
+                            ))
+                          ) : (
+                            <></>
+                          )}
                         </Swiper>
                       </div>
                     </div>
@@ -531,19 +707,39 @@ export default function Home() {
                 </TabPanel>
                 <TabPanel>
                   <div className={cx("tab-products")}>
-                    <div className={cx("tab-content", "tab-category", tabProductIndex === 1 ? "current" : "")}>
+                    <div
+                      className={cx(
+                        "tab-content",
+                        "tab-category",
+                        tabProductIndex === 1 ? "current" : ""
+                      )}
+                    >
                       <div className={cx("box-container")}>
-                        <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {products ? femaleProducts?.map((product, index) => (
-                            <SwiperSlide key={index} className={cx("product-container")}>
-                              <Product
-                                discount={product.discount ? true : false}
-                                product={product}
-                                handleClickCart={() => handleClickCart(product)}
-                                handleClickEye={() => handleClickEye(product)}
-                              />
-                            </SwiperSlide>
-                          )) : <></>}
+                        <Swiper
+                          spaceBetween={10}
+                          slidesPerView={width > 768 ? 4 : 2}
+                          navigation
+                          modules={[Navigation]}
+                        >
+                          {products ? (
+                            femaleProducts?.map((product, index) => (
+                              <SwiperSlide
+                                key={index}
+                                className={cx("product-container")}
+                              >
+                                <Product
+                                  discount={product.discount ? true : false}
+                                  product={product}
+                                  handleClickCart={() =>
+                                    handleClickCart(product)
+                                  }
+                                  handleClickEye={() => handleClickEye(product)}
+                                />
+                              </SwiperSlide>
+                            ))
+                          ) : (
+                            <></>
+                          )}
                         </Swiper>
                       </div>
                     </div>
@@ -551,46 +747,100 @@ export default function Home() {
                 </TabPanel>
                 <TabPanel>
                   <div className={cx("tab-products")}>
-                    <div className={cx("tab-content", "tab-category", tabProductIndex === 2 ? "current" : "")}>
+                    <div
+                      className={cx(
+                        "tab-content",
+                        "tab-category",
+                        tabProductIndex === 2 ? "current" : ""
+                      )}
+                    >
                       <div className={cx("box-container")}>
-                        <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation modules={[Navigation]}>
-                          {products ? gymProducts?.map((product, index) => (
-                            <SwiperSlide key={index} className={cx("product-container")}>
-                              <Product
-                                product={product}
-                                discount={product.discount ? true : false}
-                                handleClickCart={() => handleClickCart(product)}
-                                handleClickEye={() => handleClickEye(product)}
-                              />
-                            </SwiperSlide>
-                          )) : <></>}
+                        <Swiper
+                          spaceBetween={10}
+                          slidesPerView={width > 768 ? 4 : 2}
+                          navigation
+                          modules={[Navigation]}
+                        >
+                          {products ? (
+                            gymProducts?.map((product, index) => (
+                              <SwiperSlide
+                                key={index}
+                                className={cx("product-container")}
+                              >
+                                <Product
+                                  product={product}
+                                  discount={product.discount ? true : false}
+                                  handleClickCart={() =>
+                                    handleClickCart(product)
+                                  }
+                                  handleClickEye={() => handleClickEye(product)}
+                                />
+                              </SwiperSlide>
+                            ))
+                          ) : (
+                            <></>
+                          )}
                         </Swiper>
                       </div>
                     </div>
                   </div>
                 </TabPanel>
                 <TabList className={cx("categories", "clearfix")}>
-                  <Tab className={cx("tab-link", "item", tabProductIndex === 0 ? "current" : "")}>
+                  <Tab
+                    className={cx(
+                      "tab-link",
+                      "item",
+                      tabProductIndex === 0 ? "current" : ""
+                    )}
+                  >
                     <div className={cx("img-icon")}>
-                      <img className={cx("lazyload", "loaded")} src={require("../../assets/image/tab-nam.webp")} alt="tab nam" />
+                      <img
+                        className={cx("lazyload", "loaded")}
+                        src={require("../../assets/image/tab-nam.webp")}
+                        alt="tab nam"
+                      />
                     </div>
                     <p>
                       Thời trang Nam
-                      <span>{products ? maleProducts?.length : 0} sản phẩm</span>
+                      <span>
+                        {products ? maleProducts?.length : 0} sản phẩm
+                      </span>
                     </p>
                   </Tab>
-                  <Tab className={cx("tab-link", "item", tabProductIndex === 1 ? "current" : "")}>
+                  <Tab
+                    className={cx(
+                      "tab-link",
+                      "item",
+                      tabProductIndex === 1 ? "current" : ""
+                    )}
+                  >
                     <div className={cx("img-icon")}>
-                      <img className={cx("lazyload", "loaded")} src={require("../../assets/image/tab-nu.webp")} alt="tab nu" />
+                      <img
+                        className={cx("lazyload", "loaded")}
+                        src={require("../../assets/image/tab-nu.webp")}
+                        alt="tab nu"
+                      />
                     </div>
                     <p>
                       Thời trang Nữ
-                      <span>{products ? femaleProducts?.length : 0} sản phẩm</span>
+                      <span>
+                        {products ? femaleProducts?.length : 0} sản phẩm
+                      </span>
                     </p>
                   </Tab>
-                  <Tab className={cx("tab-link", "item", tabProductIndex === 2 ? "current" : "")}>
+                  <Tab
+                    className={cx(
+                      "tab-link",
+                      "item",
+                      tabProductIndex === 2 ? "current" : ""
+                    )}
+                  >
                     <div className={cx("img-icon")}>
-                      <img className={cx("lazyload", "loaded")} src={require("../../assets/image/tab-gym.webp")} alt="tab gym" />
+                      <img
+                        className={cx("lazyload", "loaded")}
+                        src={require("../../assets/image/tab-gym.webp")}
+                        alt="tab gym"
+                      />
                     </div>
                     <p>
                       Thời trang Gym
@@ -608,7 +858,11 @@ export default function Home() {
           <div className={cx("box-container")}>
             <div className={cx("box")}>
               <Link to="">
-                <img src={require("../../assets/image/img_banner_big.webp")} alt="banner big sale" className={cx("lazyload", "loaded", "img-animation")} />
+                <img
+                  src={require("../../assets/image/img_banner_big.webp")}
+                  alt="banner big sale"
+                  className={cx("lazyload", "loaded", "img-animation")}
+                />
               </Link>
             </div>
           </div>
@@ -624,7 +878,12 @@ export default function Home() {
                 </Link>
               </h2>
             </div>
-            <Swiper modules={[Navigation]} spaceBetween={10} slidesPerView={width > 768 ? 4 : 2} navigation>
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={10}
+              slidesPerView={width > 768 ? 4 : 2}
+              navigation
+            >
               {gymProducts?.map((product, index) => (
                 <SwiperSlide key={index} className={cx("product-container")}>
                   <Product
@@ -644,17 +903,29 @@ export default function Home() {
           <div className={cx("box-container")}>
             <div className={cx("box")}>
               <div className={cx("one-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_3banner_1.webp")} alt="banner 1" />
+                <img
+                  className={cx("lazyload", "loaded")}
+                  src={require("../../assets/image/img_3banner_1.webp")}
+                  alt="banner 1"
+                />
               </div>
             </div>
             <div className={cx("box")}>
               <div className={cx("one-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_3banner_2.webp")} alt="banner 2" />
+                <img
+                  className={cx("lazyload", "loaded")}
+                  src={require("../../assets/image/img_3banner_2.webp")}
+                  alt="banner 2"
+                />
               </div>
             </div>
             <div className={cx("box")}>
               <div className={cx("one-banner")}>
-                <img className={cx("lazyload", "loaded")} src={require("../../assets/image/img_3banner_3.webp")} alt="banner 3" />
+                <img
+                  className={cx("lazyload", "loaded")}
+                  src={require("../../assets/image/img_3banner_3.webp")}
+                  alt="banner 3"
+                />
               </div>
             </div>
           </div>
@@ -669,11 +940,22 @@ export default function Home() {
                 Bean <span>Instagram</span>
               </h2>
             </div>
-            <Swiper spaceBetween={10} slidesPerView={width > 768 ? 4 : 3} modules={[Navigation]} navigation>
+            <Swiper
+              spaceBetween={10}
+              slidesPerView={width > 768 ? 4 : 3}
+              modules={[Navigation]}
+              navigation
+            >
               {[...Array(6).keys()].map((productIndex) => (
                 <SwiperSlide key={productIndex}>
                   <Link to="">
-                    <img src={require(`../../assets/image/img_brand_${productIndex + 1}.webp`)} alt={`bean instagram ${productIndex + 1}`} className={cx("lazyload", "loaded")} />
+                    <img
+                      src={require(`../../assets/image/img_brand_${
+                        productIndex + 1
+                      }.webp`)}
+                      alt={`bean instagram ${productIndex + 1}`}
+                      className={cx("lazyload", "loaded")}
+                    />
                   </Link>
                 </SwiperSlide>
               ))}
@@ -681,21 +963,25 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {showPopupQuickView &&
+      {showPopupQuickView && (
         <QuickViewPopup
           product={quickViewProduct}
-          togglePopupQuickView={() => setShowPopupQuickView(prevState => !prevState)}
+          togglePopupQuickView={() =>
+            setShowPopupQuickView((prevState) => !prevState)
+          }
           addToCartSuccess={show}
           addToCartFail={error}
-        />}
+        />
+      )}
       {!hidePopup && <div className={cx("cart-popup-backdrop")}></div>}
-      {!hidePopup &&
+      {!hidePopup && (
         <AddToCartPopup
           product={cartProduct}
-          togglePopup={() => setHidePopup(prevState => !prevState)}
+          togglePopup={() => setHidePopup((prevState) => !prevState)}
           addToCartSuccess={show}
           addToCartFail={error}
-        />}
+        />
+      )}
     </main>
   );
 }

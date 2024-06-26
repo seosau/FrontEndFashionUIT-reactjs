@@ -65,8 +65,7 @@ function Header({ setShowModal }) {
     const parts = path.split("/");
     let tmpArr = [];
     parts.forEach((part, index) => {
-      console.log(part);
-      console.log("-----------");
+    
       if (part === "" && index === 1) {
       } else if (part !== "") {
         switch (part) {
@@ -203,6 +202,10 @@ function Header({ setShowModal }) {
           }
           case "register": {
             tmpArr.push({ label: "Hỗ trợ" });
+            break;
+          }
+          case "blog":{
+            tmpArr.push({ label: "Chi tiết bài viết" });
             break;
           }
         }

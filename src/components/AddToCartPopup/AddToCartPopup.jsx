@@ -12,8 +12,8 @@ const cx = className.bind(styles);
 
 export default function AddToCartPopup({ product, togglePopup, addToCartSuccess, addToCartFail }) {
 
-    const [selectedColor, setSelectedColor] = useState();
-    const [selectedSize, setSelectedSize] = useState();
+    const [selectedColor, setSelectedColor] = useState(0);
+    const [selectedSize, setSelectedSize] = useState(0);
     const [quantity, setquantity] = useState(1);
     const { cartItems, setQuantityInCart, setCartItems } = useStateContext();
     const { isAuth } = useContext(AuthContext);

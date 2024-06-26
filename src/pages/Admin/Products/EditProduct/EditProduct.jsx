@@ -50,7 +50,7 @@ function EditProduct() {
     async function fetchData() {
       setLoading(true);
       await axiosClient
-        .get(`/admin/product/${slug}`)
+        .get(`/admin/product/edit/${slug}`)
         .then((res) => {
           // console.log(res.data)
           setProductInfo(res.data);

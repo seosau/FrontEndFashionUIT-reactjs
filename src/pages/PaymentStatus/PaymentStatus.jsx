@@ -23,8 +23,7 @@ function PaymentStatus() {
   });
   const getCartItems = async () => {
     try {
-      const response = await axiosClient.get(`/cart/get`);
-      console.log(1);
+      const response = await axiosClient.get(`/cart/get`)
       setQuantityInCart(response.data.quantity);
       setCartItems(response.data.quantity !== 0 ? response.data.products : []);
     } catch (error) {
@@ -35,9 +34,7 @@ function PaymentStatus() {
     axiosClient
       .post(`order/vnpay/create`, params)
       .then(({ data }) => {
-        console.log(1);
         getCartItems();
-        console.log(data.status);
         setStatus(data.status === "00" ? "s" : "f");
         setIsStopped(false);
         setTimeout(() => {

@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+
+import io from "socket.io-client";
+
 import { TbEdit } from "react-icons/tb";
 import { CiSquareRemove } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
@@ -162,7 +165,8 @@ function ListProducts() {
         discountPercent: discountPercent,
       })
       .then((res) => {
-        console.log(res);
+        const socket = io("http://localhost:3002");
+        socket.emit("saleProduct", "có sale mới"); // Gửi dữ liệu đơn hàng mới qua WebSocket
         toast.current.show({ severity: "success", summary: "Thành công", detail: "Thêm sản phẩm thành công", life: 3000 });
         setHidePopup((prevState) => !prevState);
         setSaleHour(-1);

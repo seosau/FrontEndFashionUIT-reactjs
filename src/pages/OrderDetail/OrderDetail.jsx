@@ -27,8 +27,6 @@ function OrderDetail() {
     var orderId = order?._id;
     var language = "vn";
     var bankCode = "";
-
-    console.log(1);
     axiosClient
       .post(`/order/vnpay/re-pay`, {
         language,

@@ -35,18 +35,18 @@ export default function NewsDetail() {
           <div className={cx("article-details", "clearfix")}>
             <h1 className={cx("article-title")}>{blog.title}</h1>
             <div className={cx("posts")}>
-              <div className={cx("time-post", "f")}>
+              {/* <div className={cx("time-post", "f")}>
                 <MdOutlineWatchLater className={cx("time-post__icon")} />
                 Thứ Ba, 05/04/2022
               </div>
               <div className={cx("time-post")}>
                 <FaUser className={cx("time-post__icon")} />
                 <span>Bean Fashion</span>
-              </div>
+              </div> */}
             </div>
             <div className={cx("blog__description")} dangerouslySetInnerHTML={{ __html: blog.description }} />
           </div>
-          <img src="https://bizweb.dktcdn.net/100/423/358/files/4-kieu-trang-phuc-demin-hot-nhat-1.jpg?v=1646494601635" alt="" width="81" />
+        
           <form method="post" action="/posts/nha-thiet-ke-vi-dai-dau-tien-cua-nam-2022/comments" id="article_comments" acceptCharset="UTF-8">
             <div className={cx("form-coment")}>
               <div className={cx("margin-top-0", "w-100")}>

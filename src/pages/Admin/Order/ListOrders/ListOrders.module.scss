@@ -199,3 +199,12 @@
 .order-status-container-red > [class~="p-component"] > [class~="p-inputtext"] {
   color: red;
 }
+.order-status-container-yellow > [class~="p-component"] > [class~="p-inputtext"] {
+  color: rgb(6, 42, 222);
+}
+.order-status-container-blue > [class~="p-component"] > [class~="p-inputtext"] {
+  color: #0d6efd;
+}
+.order-status-container-orange > [class~="p-component"] > [class~="p-inputtext"] {
+  color: rgb(255 0 233);
+}

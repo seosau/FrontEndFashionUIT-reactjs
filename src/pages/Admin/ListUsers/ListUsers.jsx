@@ -46,7 +46,7 @@ function ListUsers() {
   const reject = () => {};
   const confirm = (email) => {
     confirmDialog({
-      message: "Bạn có muốn xóa đơn hàng này?",
+      message: "Bạn có muốn xóa người dùng này?",
       header: "Delete Confirmation",
       icon: "pi pi-info-circle",
       defaultFocus: "reject",
@@ -215,9 +215,9 @@ function ListUsers() {
                   </td>
                   <td className={cx("product-time")}>
                     <p className={cx("product-date")}>
-                      <strong>{convertStringDate(account.updatedAt).date}</strong>
+                      <strong>{convertStringDate(account.createdAt).date}</strong>
                     </p>
-                    <span className={cx("product-time-detail")}>{convertStringDate(account.updatedAt).time}</span>
+                    <span className={cx("product-time-detail")}>{convertStringDate(account.createdAt).time}</span>
                   </td>
                   <td className={cx("product-status")}>{account?.status ? "active" : "inactive"}</td>
                   <td className={cx("product-status")}>

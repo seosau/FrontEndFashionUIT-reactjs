@@ -16,7 +16,7 @@ const TopBox = ({ topDealUsers }) => {
                     src={
                       user.avatar
                         ? user.avatar
-                        : "https://scontent.fsgn7-1.fna.fbcdn.net/v/t39.30808-1/409605809_2046023819099995_2387937422268289495_n.jpg?stp=c2.0.160.160a_dst-jpg_p160x160&_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=14Lni8Td27sAb7q5qJZ&_nc_ht=scontent.fsgn7-1.fna&oh=00_AfBXewFoDn7R9lww6epB6tokvvPXmlmNKY_7uOcM2mzehQ&oe=66368794"
+                        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDRdeIgFbVAPB2l2jTnwUgpL-ddgm3bd-kBoCOPf8CVA&s"
                     }
                     alt={user.name}
                   />

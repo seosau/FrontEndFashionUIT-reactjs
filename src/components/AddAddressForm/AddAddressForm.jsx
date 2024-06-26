@@ -1,6 +1,7 @@
 import axios from "axios";
 import style from "./AddAddressForm.module.scss";
 import className from "classnames/bind";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { faL } from "@fortawesome/free-solid-svg-icons";
@@ -8,7 +9,13 @@ import axiosClient from "../../config/axios";
 import { Toast } from "primereact/toast";
 
 const cx = className.bind(style);
+const createAddress = async (address) => {
+  const { data } = await axiosClient.post(`/user/address/add`, {
+    address: address,
+  });
 
+  return data;
+};
 export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -26,9 +33,13 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
     ward: "",
     detail: "",
   });
+  const toast = useRef(null);
+
+  // Connect react-query
+  const queryClient = useQueryClient();
   useEffect(() => {
     axios
-      .get("https://vapi.vnappmob.com/api/province ")
+      .get("https://vapi.vnappmob.com/api/province/")
       .then(({ data }) => {
         setProvinces(data.results);
       })
@@ -64,10 +75,7 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
         });
     }
   };
-  const toast = useRef(null);
-  const show = () => {
-    toast.current.show({ severity: "success", summary: "Thông Báo", detail: "Thêm địa chỉ thành công!" });
-  };
+
   const fetchWard = () => {
     if (!district) {
       setWards([]);
@@ -85,7 +93,14 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
     }
   };
   const validateForm = () => {
-    if (province === "" || district === "" || ward === "" || address.name === "" || address.phoneNumber === "" || address.detail == "") {
+    if (
+      province === "" ||
+      district === "" ||
+      ward === "" ||
+      address.name === "" ||
+      address.phoneNumber === "" ||
+      address.detail == ""
+    ) {
       setIsFullFilled(false);
       return false;
     } else {
@@ -93,21 +108,29 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
       return true;
     }
   };
+  const createAddressMutation = useMutation(createAddress, {
+    onSuccess: (data) => {
+    
+      toast.current.show({
+        severity: "success",
+        summary: "Thông Báo",
+        detail: "Thêm địa chỉ thành công!",
+        life: 3000,
+      });
+      setHiddenForm(true);
+      queryClient.invalidateQueries("addresses");
+    },
+    onError: (e) => {
+      console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
+    },
+  });
   const handleSubmit = () => {
     if (validateForm()) {
       var addingObj = { ...address };
       addingObj.province = JSON.parse(province).name;
       addingObj.district = JSON.parse(district).name;
       addingObj.ward = ward;
-      axiosClient
-        .post(`/user/address/add`, { address: addingObj })
-        .then(({ data }) => {
-          show();
-          setHiddenForm(true);
-        })
-        .catch((error) => {
-          console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
-        });
+      createAddressMutation.mutate(addingObj);
     }
   };
   return (
@@ -119,11 +142,18 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
             <div className={cx("formHeading")}>
               <div className={cx("formTitleContainer")}>
                 <div className={cx("formTitleTxt")}>Thêm địa chỉ mới</div>
-                <div onClick={(e) => setHiddenForm(true)} className={cx("closeBtn")}>
+                <div
+                  onClick={(e) => setHiddenForm(true)}
+                  className={cx("closeBtn")}
+                >
                   <IoIosCloseCircleOutline size={24} />
                 </div>
               </div>
-              {!isFullFilled ? <div className={cx("warningTxt")}>Vui lòng nhập đầy đủ thông tin!</div> : null}
+              {!isFullFilled ? (
+                <div className={cx("warningTxt")}>
+                  Vui lòng nhập đầy đủ thông tin!
+                </div>
+              ) : null}
               <div className={cx("line")}></div>
             </div>
             <div className={cx("formBody")}>
@@ -131,13 +161,25 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
                 <div className={cx("formLabel")}>
                   Họ tên <span className={cx("require")}>*</span>{" "}
                 </div>
-                <input onChange={(e) => setAddress({ ...address, name: e.target.value })} className={cx("formInput")} placeholder=""></input>
+                <input
+                  onChange={(e) =>
+                    setAddress({ ...address, name: e.target.value })
+                  }
+                  className={cx("formInput")}
+                  placeholder=""
+                ></input>
               </div>
               <div className={cx("formInputField")}>
                 <div className={cx("formLabel")}>
                   Số điện thoại <span className={cx("require")}>*</span>
                 </div>
-                <input onChange={(e) => setAddress({ ...address, phoneNumber: e.target.value })} className={cx("formInput")} placeholder=""></input>
+                <input
+                  onChange={(e) =>
+                    setAddress({ ...address, phoneNumber: e.target.value })
+                  }
+                  className={cx("formInput")}
+                  placeholder=""
+                ></input>
               </div>
               <div className={cx("formSelectField")}>
                 <div className={cx("formSelectFlex")}>
@@ -145,13 +187,28 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
                     <div className={cx("formLabel")}>
                       Tỉnh thành <span className={cx("require")}>*</span>
                     </div>
-                    <select onChange={(e) => changeProvince(e.target.value)} className={cx("formInput")} placeholder="">
+                    <select
+                      onChange={(e) => changeProvince(e.target.value)}
+                      className={cx("formInput")}
+                      placeholder=""
+                    >
                       {provinces.map((province, index) => (
-                        <option key={index} value={JSON.stringify({ id: province.province_id, name: province.province_name })} className={cx("option")}>
+                        <option
+                          key={index}
+                          value={JSON.stringify({
+                            id: province.province_id,
+                            name: province.province_name,
+                          })}
+                          className={cx("option")}
+                        >
                           {province.province_name}
                         </option>
                       ))}
-                      <option defaultChecked value={""} className={cx("option", "defaultOpt")}>
+                      <option
+                        defaultChecked
+                        value={""}
+                        className={cx("option", "defaultOpt")}
+                      >
                         --Chọn tỉnh thành--
                       </option>
                     </select>
@@ -160,13 +217,29 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
                     <div className={cx("formLabel")}>
                       Quận huyện <span className={cx("require")}>*</span>
                     </div>
-                    <select onClick={(e) => fetchDistrict()} onChange={(e) => setDistrict(e.target.value)} className={cx("formInput")} placeholder="">
+                    <select
+                      onClick={(e) => fetchDistrict()}
+                      onChange={(e) => setDistrict(e.target.value)}
+                      className={cx("formInput")}
+                      placeholder=""
+                    >
                       {districts.map((district, index) => (
-                        <option key={index} value={JSON.stringify({ id: district.district_id, name: district.district_name })} className={cx("option")}>
+                        <option
+                          key={index}
+                          value={JSON.stringify({
+                            id: district.district_id,
+                            name: district.district_name,
+                          })}
+                          className={cx("option")}
+                        >
                           {district.district_name}
                         </option>
                       ))}
-                      <option defaultChecked value={""} className={cx("option", "defaultOpt")}>
+                      <option
+                        defaultChecked
+                        value={""}
+                        className={cx("option", "defaultOpt")}
+                      >
                         --Chọn quận huyện--
                       </option>
                     </select>
@@ -175,13 +248,26 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
                     <div className={cx("formLabel")}>
                       Phường xã <span className={cx("require")}>*</span>
                     </div>
-                    <select onClick={(e) => fetchWard()} onChange={(e) => setWard(e.target.value)} className={cx("formInput")} placeholder="">
+                    <select
+                      onClick={(e) => fetchWard()}
+                      onChange={(e) => setWard(e.target.value)}
+                      className={cx("formInput")}
+                      placeholder=""
+                    >
                       {wards.map((ward, index) => (
-                        <option key={index} value={ward.ward_name} className={cx("option")}>
+                        <option
+                          key={index}
+                          value={ward.ward_name}
+                          className={cx("option")}
+                        >
                           {ward.ward_name}
                         </option>
                       ))}
-                      <option defaultChecked value={""} className={cx("option", "defaultOpt")}>
+                      <option
+                        defaultChecked
+                        value={""}
+                        className={cx("option", "defaultOpt")}
+                      >
                         --Chọn phường xã--
                       </option>
                     </select>
@@ -192,13 +278,22 @@ export default function AddAddressForm({ hiddenForm, setHiddenForm, status }) {
                 <div className={cx("formLabel")}>
                   Địa chỉ <span className={cx("require")}>*</span>
                 </div>
-                <input onChange={(e) => setAddress({ ...address, detail: e.target.value })} className={cx("formInput")} placeholder=""></input>
+                <input
+                  onChange={(e) =>
+                    setAddress({ ...address, detail: e.target.value })
+                  }
+                  className={cx("formInput")}
+                  placeholder=""
+                ></input>
               </div>
             </div>
             <div className={cx("formOption")}>
               <div className={cx("exitBtn")}>
                 {" "}
-                <span onClick={(e) => setHiddenForm(true)} className={cx("btnTxt")}>
+                <span
+                  onClick={(e) => setHiddenForm(true)}
+                  className={cx("btnTxt")}
+                >
                   Hủy
                 </span>{" "}
               </div>

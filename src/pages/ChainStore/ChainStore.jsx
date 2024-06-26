@@ -8,7 +8,7 @@ import axios from "axios";
 import axiosClient from "../../config/axios";
 
 const cx = className.bind(style);
-const url = "https://vapi.vnappmob.com";
+const url = "https://vapi.vnappmob.com/api";
 
 function ChainStore() {
   const [listProvinces, setListProvinces] = useState();
@@ -78,17 +78,17 @@ function ChainStore() {
   };
 
   const getListProvinces = async () => {
-    const provincesData = await axios.get(url + "/api/province");
+    const provincesData = await axios.get(url + "/province/");
     setListProvinces(provincesData.data.results);
   };
 
   const getListDistricts = async (provinceId) => {
-    const districtsData = await axios.get(url + "/api/province/district/" + provinceId);
+    const districtsData = await axios.get(url + "/province/district/" + provinceId);
     setListDistricts(districtsData.data.results);
   };
 
   const getListTowns = async (districtId) => {
-    const townsData = await axios.get(url + "/api/province/ward/" + districtId);
+    const townsData = await axios.get(url + "/province/ward/" + districtId);
     setListTowns(townsData.data.results);
   };
 
@@ -106,7 +106,7 @@ function ChainStore() {
   }, [selectedDistrict]);
 
   return (
-    <>
+    <div className={cx("container")}>
       <div className={cx("main")}>
         <div className={cx("side-bar")}>
           <div className={cx("province")}>
@@ -204,11 +204,12 @@ function ChainStore() {
               loading={"lazy"}
               referrerpolicy={"no-referrer-when-downgrade"}
               title="Store Location"
+              
             ></iframe>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

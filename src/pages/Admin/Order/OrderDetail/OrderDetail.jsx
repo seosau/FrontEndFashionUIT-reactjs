@@ -9,7 +9,7 @@ import axiosClient from "../../../../config/axios";
 const cx = className.bind(style);
 
 function OrderDetail() {
-  const location = useLocation();
+ 
   const { orderId } = useParams();
   const [order, setOrder] = useState({});
   useEffect(() => {
@@ -23,25 +23,7 @@ function OrderDetail() {
         console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
       });
   }, []);
-  const handleCheckoutBanking = () => {
-    var orderId = order?._id;
-    var language = "vn";
-    var bankCode = "";
 
-    console.log(1);
-    axiosClient
-      .post(`/order/vnpay/re-pay`, {
-        language,
-        bankCode,
-        orderId,
-      })
-      .then(({ data }) => {
-        window.location.href = data.vnpUrl;
-      })
-      .catch((error) => {
-        console.log("Đã có lỗi xãy ra, vui lòng thử lại!");
-      });
-  };
   const date = new Date(order?.createdAt);
   return (
     <div className={cx("content")}>
